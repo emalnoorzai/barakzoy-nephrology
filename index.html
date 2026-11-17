@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barakzoy Nephrology | Ahmad S. Barakzoy, M.D., FASN — Orange Park & Jacksonville, FL</title>
+  <meta name="description" content="Board-certified Nephrology and Internal Medicine care in Orange Park, Fleming Island, and Jacksonville, FL. Dr. Ahmad S. Barakzoy, M.D., FASN." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Top Clinical Info Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-bar-left">
+        <span><strong>Office Hours:</strong> Mon–Fri 8:00 AM – 5:00 PM</span>
+        <span class="divider">•</span>
+        <span>2035 Professional Center Dr, Suite A, Orange Park, FL 32073</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="tel:9045793578" class="top-phone">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Call (904) 579-3578
+        </a>
+        <span class="divider">•</span>
+        <span>Fax: (904) 375-8568</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">
+        <div class="brand-icon">+</div>
+        <div class="brand-text">
+          <span class="brand-title">Barakzoy Nephrology</span>
+          <span class="brand-sub">Ahmad S. Barakzoy, M.D., FASN</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#physician" class="nav-link">Physician</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#payment" class="nav-link">Payment Policy</a>
+        <a href="#forms" class="nav-link">Forms</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <button class="btn btn-primary nav-cta" onclick="openBookingModal()">Book Appointment</button>
+      </nav>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="badge-pill">
+          <span class="pulse-dot"></span>
+          Accepting New Patients in Northeast Florida
+        </div>
+        <h1>Expert Kidney &amp; Hypertension Care You Can Trust.</h1>
+        <p class="hero-lead">
+          Diagnosed with a kidney condition, diabetes, or high blood pressure? 
+          <strong>Dr. Ahmad S. Barakzoy, M.D., FASN</strong> provides compassionate, 
+          double board-certified care in Internal Medicine and Nephrology across 
+          <strong>Orange Park, Fleming Island, and Jacksonville</strong>.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" onclick="openBookingModal()">
+            Request an Appointment
+          </button>
+          <a href="tel:9045793578" class="btn btn-outline btn-lg">
+            Call (904) 579-3578
+          </a>
+        </div>
+
+        <div class="hero-trust-row">
+          <div class="trust-item">
+            <strong>ABIM Certified</strong>
+            <span>Nephrology &amp; Internal Medicine</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <strong>20+ Years</strong>
+            <span>Northeast Florida Clinical Care</span>
+          </div>
+          <div class="trust-divider"></div>
+          <div class="trust-item">
+            <strong>FASN Fellow</strong>
+            <span>American Society of Nephrology</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-card-main">
+          <img src="assets/images/jacksonville-hero.jpg" alt="Northeast Florida Healthcare — Barakzoy Nephrology" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="img-fallback hero-fallback" style="display:none;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+            <h3>Comprehensive Renal &amp; Hypertension Care</h3>
+            <p>Serving Jacksonville, Orange Park &amp; Fleming Island</p>
+          </div>
+          <div class="floating-card">
+            <div class="floating-icon">✓</div>
+            <div>
+              <strong>Hospital &amp; Dialysis Coverage</strong>
+              <span>Ascension St. Vincent's, Baptist Health, HCA Florida, Fresenius &amp; DaVita</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK HIGHLIGHTS BAR -->
+  <section class="highlights-strip">
+    <div class="container highlights-grid">
+      <div class="highlight-box">
+        <div class="h-icon">🩺</div>
+        <div>
+          <h4>Dual Board Certification</h4>
+          <p>Certified by the American Board of Internal Medicine (ABIM) in both Nephrology and Internal Medicine.</p>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <div class="h-icon">🏥</div>
+        <div>
+          <h4>Seamless Hospital &amp; Dialysis Care</h4>
+          <p>Continuity of care across Northeast Florida hospitals, Kindred Hospital, Fresenius, and DaVita centers.</p>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <div class="h-icon">📋</div>
+        <div>
+          <h4>Second Opinions &amp; Consults</h4>
+          <p>Thorough diagnostic evaluations, ultrasound coordination, and personalized treatment plans.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHYSICIAN SECTION -->
+  <section class="section" id="physician">
+    <div class="container">
+      <div class="physician-grid">
+        <div class="physician-photo-col">
+          <div class="photo-frame">
+            <img src="assets/images/dr-barakzoy.jpg" alt="Dr. Ahmad S. Barakzoy, M.D., FASN" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="img-fallback doctor-fallback" style="display:none;">
+              <div class="monogram">AB</div>
+              <span>Ahmad S. Barakzoy, M.D.</span>
+              <small>Nephrologist &amp; Hypertension Specialist</small>
+            </div>
+          </div>
+          <div class="languages-card">
+            <span class="lang-label">Languages Spoken:</span>
+            <div class="lang-tags">
+              <span>English</span>
+              <span>Dari / Persian</span>
+              <span>Pashto</span>
+              <span>Urdu</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="physician-info-col">
+          <span class="eyebrow">Meet Your Physician</span>
+          <h2>Ahmad S. Barakzoy, M.D., FASN</h2>
+          <p class="subtitle">Nephrologist &amp; Hypertension Specialist • Internal Medicine Physician</p>
+          <p class="body-text">
+            Dr. Ahmad S. Barakzoy is dedicated to diagnosing, preventing, and treating complex kidney diseases, 
+            resistant hypertension, and electrolyte disorders throughout Northeast Florida. Known for listening carefully 
+            to each patient's health history, Dr. Barakzoy builds individualized care plans in close coordination with 
+            primary care physicians, transplant centers, and dialysis teams.
+          </p>
+
+          <div class="credentials-timeline">
+            <div class="cred-item">
+              <div class="cred-dot"></div>
+              <div>
+                <h4>Board Certifications</h4>
+                <p>American Board of Internal Medicine (ABIM) — <strong>Nephrology</strong> &amp; <strong>Internal Medicine</strong></p>
+              </div>
+            </div>
+            <div class="cred-item">
+              <div class="cred-dot"></div>
+              <div>
+                <h4>Nephrology Fellowship</h4>
+                <p>West Virginia University School of Medicine — Morgantown, WV</p>
+              </div>
+            </div>
+            <div class="cred-item">
+              <div class="cred-dot"></div>
+              <div>
+                <h4>Internal Medicine Residency</h4>
+                <p>West Virginia University School of Medicine — Morgantown, WV</p>
+              </div>
+            </div>
+            <div class="cred-item">
+              <div class="cred-dot"></div>
+              <div>
+                <h4>Medical Degree (M.D.)</h4>
+                <p>West Virginia University School of Medicine — Morgantown, WV</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="affiliations-box">
+            <h4>Hospital &amp; Dialysis Center Affiliations</h4>
+            <div class="pill-cloud">
+              <span>Ascension St. Vincent's (Clay, Riverside, Southside)</span>
+              <span>Baptist Medical Center (Jacksonville, Clay, South, Beaches)</span>
+              <span>HCA Florida Orange Park Hospital</span>
+              <span>Kindred Hospital Green Cove Springs</span>
+              <span>Fresenius Kidney Care</span>
+              <span>DaVita Dialysis Centers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section class="section section-alt" id="services">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Clinical Care &amp; Specialties</span>
+        <h2>Comprehensive Nephrology &amp; Medical Services</h2>
+        <p>
+          When you are facing an unexpected kidney illness, uncontrolled hypertension, or electrolyte imbalance, 
+          our board-certified physician, nurses, and clinical staff deliver coordinated care across our clinic, 
+          hospitals, and dialysis centers.
+        </p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Services</button>
+        <button class="filter-btn" data-filter="clinical">Clinical Specialties</button>
+        <button class="filter-btn" data-filter="dialysis">Dialysis &amp; Procedures</button>
+        <button class="filter-btn" data-filter="wellness">Medication &amp; Wellness</button>
+      </div>
+
+      <!-- Services Cards Grid -->
+      <div class="services-grid">
+        <div class="service-card" data-category="clinical">
+          <div class="service-icon">🫘</div>
+          <h3>Nephrology Services</h3>
+          <p>
+            Evidence-based management for Chronic Kidney Disease (CKD) caused by hypertension, diabetes, 
+            lupus, or polycystic kidney disease—focused on slowing progression and protecting long-term kidney function.
+          </p>
+        </div>
+
+        <div class="service-card" data-category="clinical">
+          <div class="service-icon">🫀</div>
+          <h3>Hypertension &amp; Internal Medicine</h3>
+          <p>
+            Specialized evaluation and treatment for complex or resistant high blood pressure, cardiovascular 
+            risk reduction, and comprehensive adult internal medicine consultations.
+          </p>
+        </div>
+
+        <div class="service-card" data-category="dialysis">
+          <div class="service-icon">🏥</div>
+          <h3>Dialysis Care &amp; Admissions</h3>
+          <p>
+            Ongoing physician oversight at Fresenius and DaVita Dialysis Centers throughout Northeast Florida. 
+            Our office coordinates directly with central admissions to place patients near their home.
+          </p>
+        </div>
+
+        <div class="service-card" data-category="dialysis">
+          <div class="service-icon">🔬</div>
+          <h3>Diagnostic Procedures &amp; Imaging</h3>
+          <p>
+            Kidney patients frequently require renal ultrasounds and specialized diagnostic testing. Our clinical 
+            staff arranges appointments at convenient imaging facilities tailored to your location.
+          </p>
+        </div>
+
+        <div class="service-card" data-category="wellness">
+          <div class="service-icon">💊</div>
+          <h3>Pharmacy &amp; Medication Guidance</h3>
+          <p>
+            Because insurance formularies vary, our clinical team reviews your medication essentials and 
+            discusses effective covered alternatives. Please contact your pharmacy directly for routine refills.
+          </p>
+        </div>
+
+        <div class="service-card" data-category="wellness">
+          <div class="service-icon">🥗</div>
+          <h3>Nutrition &amp; Preventive Lifestyle</h3>
+          <p>
+            Managing sodium intake, healthy weight, blood sugar, and daily low-impact walking directly supports 
+            healthy blood pressure, improves circulation, and reduces strain on your kidneys.
+          </p>
+        </div>
+      </div>
+
+      <!-- Conditions Treated Box -->
+      <div class="conditions-panel">
+        <div class="conditions-header">
+          <div>
+            <h3>Conditions We Diagnose &amp; Treat</h3>
+            <p>Click any condition below to schedule a consultation or second opinion with Dr. Barakzoy.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openBookingModal('Second Opinion / Condition Consultation')">Request Second Opinion</button>
+        </div>
+        <div class="conditions-tags">
+          <button class="cond-chip" onclick="openBookingModal('Chronic Kidney Disease (CKD)')">Chronic Kidney Disease (CKD)</button>
+          <button class="cond-chip" onclick="openBookingModal('Hypertension (High Blood Pressure)')">Hypertension</button>
+          <button class="cond-chip" onclick="openBookingModal('Acute Kidney Injury (AKI)')">Acute Kidney Injury (AKI)</button>
+          <button class="cond-chip" onclick="openBookingModal('End Stage Renal Disease (ESRD)')">End Stage Renal Disease (ESRD)</button>
+          <button class="cond-chip" onclick="openBookingModal('Kidney Transplant Care')">Kidney Transplant Care</button>
+          <button class="cond-chip" onclick="openBookingModal('Anemia of Kidney Disease')">Anemia</button>
+          <button class="cond-chip" onclick="openBookingModal('Proteinuria')">Proteinuria</button>
+          <button class="cond-chip" onclick="openBookingModal('Hematuria')">Hematuria</button>
+          <button class="cond-chip" onclick="openBookingModal('Electrolyte Imbalance')">Electrolyte Imbalances</button>
+          <button class="cond-chip" onclick="openBookingModal('Polycystic Kidney Disease')">Polycystic Kidney Disease</button>
+          <button class="cond-chip" onclick="openBookingModal('Lupus Nephritis')">Lupus Nephritis</button>
+        </div>
+      </div>
+
+      <!-- Kidney Awareness Banner -->
+      <div class="awareness-banner">
+        <div class="awareness-text">
+          <span class="awareness-badge">Community Kidney Health</span>
+          <h3>Make a Difference in Someone's Life</h3>
+          <p>
+            Early detection saves lives. Support kidney disease research, patient education, and organ donation awareness 
+            through the National Kidney Foundation.
+          </p>
+        </div>
+        <a href="https://www.kidney.org/" target="_blank" rel="noopener noreferrer" class="btn btn-light">
+          Learn About Kidney Donation →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAYMENT & CANCELLATION POLICY SECTION -->
+  <section class="section" id="payment">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Billing &amp; Office Guidelines</span>
+        <h2>Payment &amp; Cancellation Policy</h2>
+        <p>
+          Clear, transparent billing and scheduling policies designed to respect your time and ensure timely care for every patient.
+        </p>
+      </div>
+
+      <div class="policy-grid">
+        <!-- Insurance & Billing Card -->
+        <div class="policy-card">
+          <div class="policy-card-header">
+            <span class="p-icon">💳</span>
+            <h3>Insurance Participation &amp; Billing</h3>
+          </div>
+          <p>
+            Medical services are provided and billed directly by <strong>Ahmad S. Barakzoy, M.D., LLC</strong>. 
+            Dr. Barakzoy participates in most major health insurance plans, including Medicare and commercial carriers.
+          </p>
+          <ul class="policy-list">
+            <li>Please bring your current insurance card and photo ID to every visit.</li>
+            <li>Co-payments and deductibles are collected at the time of service.</li>
+            <li>Because every insurance plan has unique coverage rules, please contact your insurance provider directly regarding specific plan deductibles, referrals, or co-payment amounts.</li>
+          </ul>
+        </div>
+
+        <!-- Cancellation & No-Show Policy Card -->
+        <div class="policy-card policy-highlight">
+          <div class="policy-card-header">
+            <span class="p-icon">🗓️</span>
+            <h3>24-Hour Cancellation &amp; No-Show Policy</h3>
+          </div>
+          <p>
+            Missed appointments without adequate notice prevent us from offering that time to another patient in need of care. 
+            We kindly request at least <strong>24 hours advance notice</strong> to cancel or reschedule.
+          </p>
+
+          <div class="fee-boxes">
+            <div class="fee-item">
+              <span class="fee-label">Established Patients</span>
+              <span class="fee-amount">$25.00</span>
+              <small>Less than 24 hrs notice / No-show</small>
+            </div>
+            <div class="fee-item">
+              <span class="fee-label">New Patients</span>
+              <span class="fee-amount">$100.00</span>
+              <small>Extended appointment preparation</small>
+            </div>
+          </div>
+
+          <ul class="policy-list">
+            <li><strong>Late Arrivals:</strong> Patients arriving more than <strong>15 minutes late</strong> may be asked to reschedule and may be subject to the applicable cancellation fee.</li>
+            <li><strong>Emergency Exceptions:</strong> Unforeseen medical emergencies are considered at the discretion of the provider or office management.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATIENT FORMS SECTION -->
+  <section class="section section-alt" id="forms">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Save Time at Check-In</span>
+        <h2>New &amp; Returning Patient Forms</h2>
+        <p>
+          Patient forms are at your fingertips. Download and print the New Patient Packet prior to your first visit, 
+          or select an individual form below to update your address, insurance, or medical records.
+        </p>
+      </div>
+
+      <div class="forms-grid">
+        <a href="assets/forms/new-patient-packet.pdf" target="_blank" class="form-card">
+          <div class="form-icon">📄</div>
+          <div class="form-info">
+            <h4>Complete New Patient Packet</h4>
+            <p>All required registration, medical history, and consent forms for first-time patients.</p>
+            <span class="download-link">Download / Print PDF ↓</span>
+          </div>
+        </a>
+
+        <a href="assets/forms/medical-history-form.pdf" target="_blank" class="form-card">
+          <div class="form-icon">🩺</div>
+          <div class="form-info">
+            <h4>Health History &amp; Medication List</h4>
+            <p>Update your current prescriptions, allergies, surgeries, and family medical history.</p>
+            <span class="download-link">Download / Print PDF ↓</span>
+          </div>
+        </a>
+
+        <a href="assets/forms/hipaa-privacy-notice.pdf" target="_blank" class="form-card">
+          <div class="form-icon">🔒</div>
+          <div class="form-info">
+            <h4>HIPAA Privacy &amp; Financial Policy</h4>
+            <p>Notice of privacy practices, insurance authorization, and office cancellation acknowledgment.</p>
+            <span class="download-link">Download / Print PDF ↓</span>
+          </div>
+        </a>
+
+        <a href="assets/forms/records-release-form.pdf" target="_blank" class="form-card">
+          <div class="form-icon">📁</div>
+          <div class="form-info">
+            <h4>Medical Records Release</h4>
+            <p>Authorize transfer of lab results, imaging, or hospital records to or from our office.</p>
+            <span class="download-link">Download / Print PDF ↓</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="forms-notice">
+        <strong>Important Insurance Reminder:</strong> Updated patient information is required under your health insurance contract. 
+        Please notify our front desk promptly if your address, phone number, or insurance coverage changes.
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT & LOCATION SECTION -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Get In Touch</span>
+        <h2>Orange Park Office &amp; Contact</h2>
+        <p>Reach our office team by phone, fax, or secure general inquiry below.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Office Details & Live Map -->
+        <div class="location-card">
+          <div class="office-photo-wrap">
+            <img src="assets/images/orange-park-office.jpg" alt="Barakzoy Nephrology Orange Park Office" onerror="this.style.display='none';" />
+          </div>
+
+          <div class="location-details">
+            <span class="office-badge">Primary Clinic Location</span>
+            <h3>Orange Park Office</h3>
+            <p class="address">
+              <strong>2035 Professional Center Dr., Suite A</strong><br />
+              Orange Park, FL 32073
+            </p>
+
+            <div class="contact-meta-grid">
+              <div>
+                <span class="meta-label">Phone Number</span>
+                <a href="tel:9045793578" class="meta-value">(904) 579-3578</a>
+              </div>
+              <div>
+                <span class="meta-label">Fax Number</span>
+                <span class="meta-value">(904) 375-8568</span>
+              </div>
+              <div>
+                <span class="meta-label">Clinic Hours</span>
+                <span class="meta-value">Mon–Fri: 9:00 AM – 5:00 PM</span>
+              </div>
+              <div>
+                <span class="meta-label">Phone Line Hours</span>
+                <span class="meta-value">Mon–Fri: 8:00 AM – 5:00 PM</span>
+              </div>
+            </div>
+
+            <div class="map-actions">
+              <a href="https://www.google.com/maps/search/?api=1&query=2035+Professional+Center+Dr+Suite+A+Orange+Park+FL+32073" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+                Open in Google Maps ↗
+              </a>
+            </div>
+          </div>
+
+          <!-- Embedded Google Map -->
+          <div class="map-embed">
+            <iframe
+              title="Dr. Barakzoy Orange Park Office Map"
+              src="https://maps.google.com/maps?q=2035%20Professional%20Center%20Dr%20Suite%20A,%20Orange%20Park,%20FL%2032073&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="240"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-card">
+          <h3>Send Us a Message</h3>
+          <p class="form-sub">Have a general question about appointments, referrals, or accepted insurance? Send us a note and our staff will respond promptly.</p>
+
+          <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <!-- Optional: Replace YOUR_ACCESS_KEY_HERE with a free key from web3forms.com -->
+            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+
+            <div class="form-group">
+              <label for="cName">Full Name *</label>
+              <input type="text" id="cName" name="name" placeholder="Jane Doe" required />
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="cEmail">Email Address *</label>
+                <input type="email" id="cEmail" name="email" placeholder="jane@example.com" required />
+              </div>
+              <div class="form-group">
+                <label for="cPhone">Phone Number</label>
+                <input type="tel" id="cPhone" name="phone" placeholder="(904) 555-0199" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cSubject">Subject *</label>
+              <input type="text" id="cSubject" name="subject" placeholder="Appointment Inquiry / Insurance Question" required />
+            </div>
+
+            <div class="form-group">
+              <label for="cMessage">Message *</label>
+              <textarea id="cMessage" name="message" rows="4" placeholder="How can our office assist you?" required></textarea>
+            </div>
+
+            <div class="hipaa-warning">
+              ⚠️ <strong>Privacy Notice:</strong> Please do not transmit confidential medical records or sensitive personal health information (PHI) through this web form. For urgent medical needs, please call <strong>(904) 579-3578</strong>.
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="contactSubmitBtn">
+              Send Message
+            </button>
+
+            <div class="form-feedback" id="contactFeedback" style="display:none;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <div class="brand-footer">
+          <div class="brand-icon">+</div>
+          <div>
+            <h4>Dr. Ahmad S. Barakzoy, M.D., FASN</h4>
+            <span>Nephrologist &amp; Hypertension Specialist</span>
+          </div>
+        </div>
+        <p>
+          Board-certified Internal Medicine and Nephrology care serving patients across Orange Park, 
+          Fleming Island, Jacksonville, and Northeast Florida.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Quick Navigation</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#physician">Physician Profile</a></li>
+          <li><a href="#services">Nephrology Services</a></li>
+          <li><a href="#payment">Payment &amp; Cancellation Policy</a></li>
+          <li><a href="#forms">Patient Forms</a></li>
+          <li><a href="#contact">Contact &amp; Location</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Office Contact</h5>
+        <ul class="footer-contact-list">
+          <li><strong>Address:</strong> 2035 Professional Center Dr. Suite A, Orange Park, FL 32073</li>
+          <li><strong>Office Phone:</strong> <a href="tel:9045793578">(904) 579-3578</a></li>
+          <li><strong>Fax Number:</strong> (904) 375-8568</li>
+          <li><strong>Office Hours:</strong> Mon–Fri: 8:00 AM – 5:00 PM</li>
+          <li><strong>Weekends:</strong> Closed</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <span>© <span id="currentYear">2026</span> Ahmad S. Barakzoy M.D., LLC. All Rights Reserved.</span>
+        <span>If you are experiencing a medical emergency, please dial 911 immediately.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- APPOINTMENT REQUEST MODAL -->
+  <div class="modal-backdrop" id="bookingModal" onclick="closeBookingModal(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeBookingModal(event, true)" aria-label="Close">×</button>
+      <span class="eyebrow">Schedule a Visit</span>
+      <h3>Request an Appointment</h3>
+      <p class="modal-sub">Call us directly at <a href="tel:9045793578"><strong>(904) 579-3578</strong></a> or submit your preferred details below.</p>
+
+      <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="bName">Patient Full Name *</label>
+            <input type="text" id="bName" required placeholder="Full Name" />
+          </div>
+          <div class="form-group">
+            <label for="bPhone">Callback Phone *</label>
+            <input type="tel" id="bPhone" required placeholder="(904) 555-0100" />
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="bType">Patient Status *</label>
+            <select id="bType" required>
+              <option value="New Patient">New Patient</option>
+              <option value="Established Patient">Established Patient</option>
+              <option value="Second Opinion">Second Opinion</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="bReason">Reason for Visit</label>
+            <input type="text" id="bReason" placeholder="e.g., Kidney Consult, Hypertension" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="bNotes">Preferred Days / Insurance Provider (Optional)</label>
+          <textarea id="bNotes" rows="3" placeholder="e.g., Morning appointments preferred, Medicare / BCBS"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Submit Appointment Request</button>
+        <div class="form-feedback" id="bookingFeedback" style="display:none;"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
