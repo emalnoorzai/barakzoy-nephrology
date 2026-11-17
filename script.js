@@ -1,3 +1,6 @@
+// Web3Forms Access Key linked to BarakzoyNephrology@gmail.com
+const WEB3FORMS_ACCESS_KEY = "93906356-d140-4887-b55a-02d0bb27b6b1";
+
 // Auto copyright year
 document.getElementById('yearSpan').textContent = new Date().getFullYear();
 
@@ -205,21 +208,102 @@ function generateIntakeSummary(e) {
   `;
 }
 
-// Booking & Contact Submissions
-function handleBookingSubmit(e) {
+// Send Appointment Request Directly to BarakzoyNephrology@gmail.com
+async function handleBookingSubmit(e) {
   e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('button[type="submit"]');
   const fb = document.getElementById('bookingFeedback');
-  fb.style.display = 'block';
-  fb.innerHTML = `Thank you, <strong>${document.getElementById('bName').value}</strong>! Our Orange Park scheduling desk will call <strong>${document.getElementById('bPhone').value}</strong> shortly, or call us directly at <strong>(904) 579-3578</strong>.`;
-  e.target.reset();
+  const patientName = document.getElementById('bName').value;
+  const patientPhone = document.getElementById('bPhone').value;
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending Request...";
+
+  try {
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: `New Appointment Request: ${patientName}`,
+        from_name: "Barakzoy Nephrology Website",
+        Patient_Name: patientName,
+        Callback_Phone: patientPhone,
+        Visit_Type: document.getElementById('bType').value,
+        Reason_or_Condition: document.getElementById('bReason').value || "Not specified",
+        Insurance_and_Preferred_Days: document.getElementById('bNotes').value || "Not specified"
+      })
+    });
+
+    const result = await response.json();
+    fb.style.display = 'block';
+
+    if (result.success) {
+      fb.innerHTML = `Thank you, <strong>${patientName}</strong>! Your appointment request has been emailed directly to our scheduling desk. We will call <strong>${patientPhone}</strong> shortly to confirm your time.`;
+      form.reset();
+    } else {
+      fb.innerHTML = `Please call our scheduling desk directly at <strong>(904) 579-3578</strong> so we can book your visit right away.`;
+    }
+  } catch (err) {
+    fb.style.display = 'block';
+    fb.innerHTML = `Please call our scheduling desk directly at <strong>(904) 579-3578</strong> so we can book your visit right away.`;
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Submit Appointment Request";
 }
 
+// Send General Inquiry Directly to BarakzoyNephrology@gmail.com
 async function handleContactSubmit(e) {
   e.preventDefault();
+  const form = e.target;
+  const btn = document.getElementById('contactSubmitBtn');
   const fb = document.getElementById('contactFeedback');
-  fb.style.display = 'block';
-  fb.textContent = 'Thank you! Your inquiry has been received by Barakzoy Nephrology. For immediate assistance, call (904) 579-3578.';
-  e.target.reset();
+  const senderEmail = document.getElementById('cEmail').value;
+
+  btn.disabled = true;
+  btn.textContent = "Sending Message...";
+
+  try {
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: `Website Inquiry: ${document.getElementById('cSubject').value}`,
+        from_name: "Barakzoy Nephrology Contact Form",
+        replyto: senderEmail,
+        Name: document.getElementById('cName').value,
+        Email: senderEmail,
+        Phone: document.getElementById('cPhone').value,
+        Topic: document.getElementById('cSubject').value,
+        Message: document.getElementById('cMessage').value
+      })
+    });
+
+    const result = await response.json();
+    fb.style.display = 'block';
+
+    if (result.success) {
+      fb.textContent = "Thank you! Your message has been emailed directly to Barakzoy Nephrology. Our staff will respond promptly.";
+      form.reset();
+    } else {
+      fb.textContent = "Unable to send online right now—please call our office directly at (904) 579-3578.";
+    }
+  } catch (err) {
+    fb.style.display = 'block';
+    fb.textContent = "Unable to send online right now—please call our office directly at (904) 579-3578.";
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Send Message to Office";
 }
 
 // Legal, Privacy & Accessibility Modal Content
