@@ -19,6 +19,229 @@ document.querySelectorAll('.nav-link').forEach(link => {
   link.addEventListener('click', () => navLinks.classList.remove('open'));
 });
 
+// Subtle 3D Perspective Tilt on Cards
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-2px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateY(0)';
+  });
+});
+
+// ==========================================
+// INTERACTIVE 3D ANATOMICAL KIDNEY (THREE.JS)
+// ==========================================
+let kidneyGroup, outerMesh, medullaGroup, vascularGroup, particlesMesh;
+let isDragging = false, prevMouse = { x: 0, y: 0 };
+
+function init3DKidney() {
+  const container = document.getElementById('kidney3dCanvas');
+  if (!container || typeof THREE === 'undefined') return;
+
+  const width = container.clientWidth || 440;
+  const height = container.clientHeight || 290;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
+  camera.position.set(0, 0.15, 5.2);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xdbeafe, 0.9));
+  const keyLight = new THREE.DirectionalLight(0x5eead4, 1.8);
+  keyLight.position.set(4, 5, 5);
+  scene.add(keyLight);
+
+  const rimLight = new THREE.DirectionalLight(0x3b82f6, 1.4);
+  rimLight.position.set(-4, -3, -4);
+  scene.add(rimLight);
+
+  kidneyGroup = new THREE.Group();
+  scene.add(kidneyGroup);
+
+  // 1. Sculpted Anatomical Bean-Shaped Kidney Shell
+  const geo = new THREE.SphereGeometry(1.32, 64, 64);
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    let x = pos.getX(i);
+    let y = pos.getY(i);
+    let z = pos.getZ(i);
+
+    // Elongate vertically & flatten anterior-posteriorly
+    y *= 1.42;
+    z *= 0.62;
+
+    // C-curve bean silhouette
+    x -= 0.28 * Math.cos((y / 2.0) * Math.PI * 0.85);
+
+    // Medial hilum indentation on +X inner side
+    const hilum = Math.exp(-(y * y) * 3.2) * Math.max(0, x + 0.15);
+    x -= hilum * 0.68;
+
+    pos.setXYZ(i, x, y, z);
+  }
+  geo.computeVertexNormals();
+
+  const outerMat = new THREE.MeshPhysicalMaterial({
+    color: 0x1d4ed8,
+    emissive: 0x0a192f,
+    roughness: 0.25,
+    metalness: 0.1,
+    transparent: true,
+    opacity: 0.42,
+    clearcoat: 1.0,
+    side: THREE.DoubleSide
+  });
+  outerMesh = new THREE.Mesh(geo, outerMat);
+  kidneyGroup.add(outerMesh);
+
+  // Subtle anatomical wireframe overlay
+  const wireMat = new THREE.MeshBasicMaterial({
+    color: 0x5eead4,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.08
+  });
+  outerMesh.add(new THREE.Mesh(geo, wireMat));
+
+  // 2. Internal Renal Medullary Pyramids
+  medullaGroup = new THREE.Group();
+  const pyramidMat = new THREE.MeshStandardMaterial({
+    color: 0x0d9488,
+    emissive: 0x0f766e,
+    emissiveIntensity: 0.35,
+    roughness: 0.35
+  });
+  const angles = [-0.95, -0.45, 0, 0.45, 0.95];
+  angles.forEach(ang => {
+    const pyrGeo = new THREE.ConeGeometry(0.24, 0.62, 24);
+    const pyr = new THREE.Mesh(pyrGeo, pyramidMat);
+    pyr.position.set(-Math.cos(ang) * 0.58 - 0.1, Math.sin(ang) * 0.92, 0);
+    pyr.rotation.z = ang - Math.PI / 2;
+    medullaGroup.add(pyr);
+  });
+  kidneyGroup.add(medullaGroup);
+
+  // 3. Renal Artery, Vein & Ureter Tubes
+  vascularGroup = new THREE.Group();
+  const arteryCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(1.85, 0.28, 0.12),
+    new THREE.Vector3(0.65, 0.18, 0.08),
+    new THREE.Vector3(0.15, 0.45, 0.05),
+    new THREE.Vector3(-0.35, 0.85, 0)
+  ]);
+  const arteryMesh = new THREE.Mesh(
+    new THREE.TubeGeometry(arteryCurve, 32, 0.085, 16, false),
+    new THREE.MeshStandardMaterial({ color: 0xe11d48, emissive: 0x881337, roughness: 0.3 })
+  );
+  vascularGroup.add(arteryMesh);
+
+  const veinCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(1.85, 0.0, -0.1),
+    new THREE.Vector3(0.65, -0.02, -0.06),
+    new THREE.Vector3(0.1, -0.35, -0.04),
+    new THREE.Vector3(-0.35, -0.78, 0)
+  ]);
+  const veinMesh = new THREE.Mesh(
+    new THREE.TubeGeometry(veinCurve, 32, 0.09, 16, false),
+    new THREE.MeshStandardMaterial({ color: 0x3b82f6, emissive: 0x1e3a8a, roughness: 0.3 })
+  );
+  vascularGroup.add(veinMesh);
+
+  const ureterCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0.28, -0.12, 0),
+    new THREE.Vector3(0.75, -0.55, 0.05),
+    new THREE.Vector3(0.95, -1.35, 0.08),
+    new THREE.Vector3(1.02, -2.05, 0.08)
+  ]);
+  const ureterMesh = new THREE.Mesh(
+    new THREE.TubeGeometry(ureterCurve, 32, 0.075, 16, false),
+    new THREE.MeshStandardMaterial({ color: 0x5eead4, emissive: 0x0d9488, roughness: 0.3 })
+  );
+  vascularGroup.add(ureterMesh);
+  kidneyGroup.add(vascularGroup);
+
+  // 4. Floating Micro-Filtration Particles
+  const pCount = 70;
+  const pGeo = new THREE.BufferGeometry();
+  const pPositions = new Float32Array(pCount * 3);
+  for (let i = 0; i < pCount; i++) {
+    pPositions[i * 3] = (Math.random() - 0.5) * 2.2;
+    pPositions[i * 3 + 1] = (Math.random() - 0.5) * 3.0;
+    pPositions[i * 3 + 2] = (Math.random() - 0.5) * 1.4;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+  particlesMesh = new THREE.Points(
+    pGeo,
+    new THREE.PointsMaterial({ color: 0x5eead4, size: 0.045, transparent: true, opacity: 0.75 })
+  );
+  kidneyGroup.add(particlesMesh);
+
+  // Mouse & Touch Drag Controls
+  container.addEventListener('pointerdown', e => {
+    isDragging = true;
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('pointerup', () => { isDragging = false; });
+  window.addEventListener('pointermove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - prevMouse.x;
+    const dy = e.clientY - prevMouse.y;
+    kidneyGroup.rotation.y += dx * 0.01;
+    kidneyGroup.rotation.x += dy * 0.01;
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+
+  window.addEventListener('resize', () => {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    if (w && h) {
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    }
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!isDragging) {
+      kidneyGroup.rotation.y += 0.006;
+    }
+    particlesMesh.rotation.y -= 0.003;
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+function setKidneyView(mode, btn) {
+  document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const caption = document.getElementById('kidneyCaption');
+
+  if (!outerMesh) return;
+
+  if (mode === 'full') {
+    outerMesh.material.opacity = 0.42;
+    caption.innerHTML = '<strong>Renal Cortex &amp; Capsule:</strong> Filters ~150 quarts of blood daily through millions of microscopic nephrons to regulate blood pressure, fluid, and electrolytes.';
+  } else if (mode === 'medulla') {
+    outerMesh.material.opacity = 0.16;
+    caption.innerHTML = '<strong>Internal Renal Medulla:</strong> Cone-shaped pyramids house microscopic tubules that concentrate urine and maintain essential sodium and potassium balance.';
+  } else {
+    outerMesh.material.opacity = 0.22;
+    caption.innerHTML = '<strong>Renal Vascular System &amp; Ureter:</strong> Carries blood into the kidney for filtration and channels purified fluid smoothly toward the bladder.';
+  }
+}
+
+window.addEventListener('DOMContentLoaded', init3DKidney);
+
 // New Patient vs Insurance Tab Switcher
 function switchPatientTab(tabId, btnEl) {
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -118,7 +341,7 @@ function selectEduTopic(index, btnEl) {
 }
 selectEduTopic(0, document.querySelector('.edu-topic-btn'));
 
-// Interactive Patient Tools Modal (BP Tracker, Med List, Questions Checklist)
+// Interactive Patient Tools Modal
 function openToolModal(toolType) {
   const body = document.getElementById('toolModalBody');
   if (toolType === 'bp') {
@@ -204,7 +427,7 @@ function generateIntakeSummary(e) {
     <p><strong>Phone:</strong> ${document.getElementById('efPhone').value} | <strong>Email:</strong> ${document.getElementById('efEmail').value || 'N/A'}</p>
     <p><strong>Insurance:</strong> ${document.getElementById('efIns').value} | <strong>Referring MD:</strong> ${document.getElementById('efRef').value || 'Self-Referred'}</p>
     <p><strong>Reason for Visit:</strong> ${document.getElementById('efReason').value}</p>
-    <button class="btn btn-gold btn-sm" style="margin-top:10px;" onclick="window.print()">Print Summary for Check-In</button>
+    <button class="btn btn-teal btn-sm" style="margin-top:10px;" onclick="window.print()">Print Summary for Check-In</button>
   `;
 }
 
