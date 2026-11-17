@@ -41,7 +41,7 @@
 </head>
 <body>
 
-  <!-- Practice Announcement / Holiday Notice Bar -->
+  <!-- Practice Announcement Bar -->
   <div class="announcement-bar" id="announcementBar">
     <div class="container announcement-inner">
       <span>
@@ -60,7 +60,7 @@
         <span>2035 Professional Center Dr., Suite A, Orange Park, FL 32073</span>
       </div>
       <div class="top-bar-right">
-        <a href="tel:9045793578" class="top-link-gold">
+        <a href="tel:9045793578" class="top-link-accent">
           <strong>Call: (904) 579-3578</strong>
         </a>
         <span class="divider">|</span>
@@ -77,7 +77,7 @@
     <div class="container nav-inner">
       <a href="#home" class="brand">
         <div class="brand-logo" aria-hidden="true">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             <path d="M12 8v8M8 12h8"/>
           </svg>
@@ -101,7 +101,7 @@
       </nav>
 
       <div class="nav-actions">
-        <button class="btn btn-gold btn-sm" onclick="openBookingModal()">Book Appointment</button>
+        <button class="btn btn-royal btn-sm" onclick="openBookingModal()">Book Appointment</button>
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation Menu">
           <span></span><span></span><span></span>
         </button>
@@ -109,18 +109,19 @@
     </div>
   </header>
 
-  <!-- 1. HOME SECTION -->
+  <!-- 1. HERO SECTION WITH INTERACTIVE 3D KIDNEY MODEL -->
   <section class="hero" id="home">
+    <div class="hero-bg-grid"></div>
     <div class="container hero-grid">
       <div class="hero-content">
-        <div class="badge-royal">
-          <span class="gold-dot"></span>
+        <div class="badge-clinical">
+          <span class="teal-dot"></span>
           Nephrology &amp; Hypertension Specialist • Orange Park, FL
         </div>
-        <h1>Compassionate, Board-Certified Kidney &amp; Blood Pressure Care.</h1>
+        <h1>Precision, Board-Certified Kidney &amp; Blood Pressure Care.</h1>
         <p class="hero-lead">
           Welcome to <strong>Barakzoy Nephrology</strong>. Led by <strong>Dr. Ahmad S. Barakzoy, M.D., FASN</strong>, 
-          our practice provides comprehensive, patient-centered evaluation and long-term management for kidney disease, 
+          our practice provides compassionate, evidence-based evaluation and long-term management for kidney disease, 
           resistant hypertension, electrolyte disorders, dialysis, and transplant follow-up across Orange Park, Fleming Island, and Jacksonville.
         </p>
 
@@ -129,49 +130,53 @@
             Request Appointment
           </button>
           <a href="#new-patients" class="btn btn-outline-royal btn-lg">
-            New Patient Information
+            New Patient Guide
           </a>
-          <a href="tel:9045793578" class="btn btn-gold-outline btn-lg">
+          <a href="tel:9045793578" class="btn btn-teal-soft btn-lg">
             Call (904) 579-3578
           </a>
         </div>
 
-        <!-- Home Overview Cards (Insurance, Conditions, Office Hours) -->
+        <!-- Home Overview Cards -->
         <div class="home-overview-grid">
-          <div class="overview-mini-card">
+          <div class="overview-mini-card tilt-card">
             <span class="mini-label">Accepted Insurance</span>
             <p>Medicare, Medicare Advantage, Medicaid, BCBS, Aetna, Cigna, UnitedHealthcare, Tricare &amp; major commercial plans.</p>
           </div>
-          <div class="overview-mini-card">
+          <div class="overview-mini-card tilt-card">
             <span class="mini-label">Conditions Treated</span>
             <p>CKD (Stages 1–5), Hypertension, Diabetic Kidney Disease, AKI, ESRD, Proteinuria, Hematuria &amp; Transplant Care.</p>
           </div>
-          <div class="overview-mini-card">
+          <div class="overview-mini-card tilt-card">
             <span class="mini-label">Clinic &amp; Phone Hours</span>
             <p><strong>Phone:</strong> Mon–Fri 8:00 AM – 5:00 PM<br /><strong>Visits:</strong> Mon–Fri 9:00 AM – 5:00 PM</p>
           </div>
         </div>
       </div>
 
-      <!-- Physician & Practice Showcase Card -->
+      <!-- Interactive 3D Kidney Visualization Card -->
       <div class="hero-visual">
-        <div class="physician-spotlight-card">
-          <div class="spotlight-photo">
-            <img src="assets/images/dr-barakzoy.jpg" alt="Dr. Ahmad S. Barakzoy, M.D., FASN" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-            <div class="img-fallback doctor-fallback" style="display:none;">
-              <div class="monogram">AB</div>
-              <span>Dr. Ahmad S. Barakzoy, M.D., FASN</span>
-              <small>Board Certified in Nephrology &amp; Internal Medicine</small>
+        <div class="kidney-3d-stage">
+          <div class="stage-header">
+            <div>
+              <span class="stage-badge">Interactive 3D Renal Model</span>
+              <h4>Human Kidney &amp; Vascular Anatomy</h4>
             </div>
+            <span class="drag-hint">↻ Drag to Rotate</span>
           </div>
-          <div class="spotlight-body">
-            <div class="spotlight-badge">Double ABIM Board Certified</div>
-            <h3>Dr. Ahmad S. Barakzoy, M.D., FASN</h3>
-            <p>Fellow of the American Society of Nephrology • Serving Northeast Florida for 20+ Years</p>
-            <div class="spotlight-contact">
-              <span>📍 2035 Professional Center Dr., Suite A, Orange Park, FL 32073</span>
-              <span>✉️ <a href="mailto:BarakzoyNephrology@gmail.com">BarakzoyNephrology@gmail.com</a></span>
-            </div>
+
+          <!-- Three.js WebGL Canvas Container -->
+          <div id="kidney3dCanvas" class="kidney-canvas-box"></div>
+
+          <!-- Interactive View Controls -->
+          <div class="stage-controls">
+            <button class="stage-btn active" onclick="setKidneyView('full', this)">Full Kidney</button>
+            <button class="stage-btn" onclick="setKidneyView('medulla', this)">Internal Medulla</button>
+            <button class="stage-btn" onclick="setKidneyView('vascular', this)">Vascular Flow</button>
+          </div>
+
+          <div class="stage-caption" id="kidneyCaption">
+            <strong>Renal Cortex &amp; Capsule:</strong> Filters ~150 quarts of blood daily through millions of microscopic nephrons to regulate blood pressure, fluid, and electrolytes.
           </div>
         </div>
       </div>
@@ -179,98 +184,105 @@
   </section>
 
   <!-- 2. ABOUT THE PHYSICIAN -->
-  <section class="section section-light-blue" id="physician">
+  <section class="section section-ice" id="physician">
     <div class="container">
       <div class="section-header text-center">
         <span class="eyebrow">About the Physician</span>
         <h2>Ahmad S. Barakzoy, M.D., FASN</h2>
-        <p>Dedicated clinical leadership in Nephrology, Internal Medicine, and Complex Hypertension Management.</p>
+        <p>Double Board-Certified Leadership in Nephrology, Internal Medicine, and Complex Hypertension.</p>
       </div>
 
-      <div class="physician-detail-grid">
-        <!-- Left Column: Credentials & License -->
-        <div class="card-white">
-          <h3>Education, Training &amp; Credentials</h3>
-          <div class="timeline">
-            <div class="tl-item">
-              <span class="tl-dot"></span>
-              <div>
-                <h4>Board Certifications (ABIM)</h4>
-                <p>American Board of Internal Medicine — Certified in <strong>Nephrology</strong> and <strong>Internal Medicine</strong>.</p>
-              </div>
-            </div>
-            <div class="tl-item">
-              <span class="tl-dot"></span>
-              <div>
-                <h4>Nephrology Fellowship</h4>
-                <p>West Virginia University School of Medicine — Morgantown, WV</p>
-              </div>
-            </div>
-            <div class="tl-item">
-              <span class="tl-dot"></span>
-              <div>
-                <h4>Internal Medicine Residency</h4>
-                <p>West Virginia University School of Medicine — Morgantown, WV</p>
-              </div>
-            </div>
-            <div class="tl-item">
-              <span class="tl-dot"></span>
-              <div>
-                <h4>Doctor of Medicine (M.D.)</h4>
-                <p>West Virginia University School of Medicine — Morgantown, WV</p>
-              </div>
+      <div class="physician-showcase-layout">
+        <!-- Physician Profile Card -->
+        <div class="physician-card-left tilt-card">
+          <div class="portrait-wrap">
+            <img src="assets/images/dr-barakzoy.jpg" alt="Dr. Ahmad S. Barakzoy, M.D., FASN" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="doctor-fallback" style="display:none;">
+              <div class="monogram">AB</div>
+              <span>Dr. Ahmad S. Barakzoy, M.D., FASN</span>
+              <small>Board Certified in Nephrology &amp; Internal Medicine</small>
             </div>
           </div>
 
-          <div class="credential-badges">
-            <div class="cred-pill">
-              <strong>Experience:</strong> 20+ Years Clinical Practice
-            </div>
-            <div class="cred-pill">
-              <strong>Licensure:</strong> Active Florida Medical License (FL Dept. of Health)
-            </div>
-            <div class="cred-pill">
-              <strong>Memberships:</strong> Fellow of the American Society of Nephrology (FASN), AMA, FMA
-            </div>
-            <div class="cred-pill">
-              <strong>Languages Spoken:</strong> English, Dari/Persian, Pashto, Urdu (Medical interpreter support available)
-            </div>
+          <div class="portrait-meta">
+            <span class="cert-pill">Double ABIM Board Certified</span>
+            <h3>Dr. Ahmad S. Barakzoy</h3>
+            <p class="role-title">Nephrologist &amp; Hypertension Specialist</p>
+            <div class="meta-divider"></div>
+            <ul class="quick-specs">
+              <li><strong>Experience:</strong> 20+ Years Clinical Practice</li>
+              <li><strong>License:</strong> Active Florida Medical License</li>
+              <li><strong>Fellowship:</strong> Fellow, American Society of Nephrology (FASN)</li>
+              <li><strong>Languages:</strong> English, Dari/Persian, Pashto, Urdu</li>
+            </ul>
           </div>
         </div>
 
-        <!-- Right Column: Biography, Philosophy & Hospital Affiliations -->
-        <div class="card-white">
-          <h3>Biography &amp; Philosophy of Patient Care</h3>
-          <p class="body-p">
-            Dr. Ahmad S. Barakzoy is a board-certified nephrologist and internal medicine physician serving patients across 
-            Orange Park, Fleming Island, Green Cove Springs, and the greater Jacksonville region. With over two decades of 
-            clinical experience, Dr. Barakzoy specializes in early detection and preservation of kidney function, difficult-to-control 
-            hypertension, diabetic nephropathy, electrolyte imbalances, and comprehensive dialysis care.
-          </p>
-          <blockquote class="philosophy-quote">
-            “Every patient deserves unhurried time, clear explanations of their lab results, and a treatment plan tailored to their daily life. 
-            By working closely with patients, families, primary care doctors, and dialysis teams, we aim to protect kidney health and improve quality of life at every stage.”
-            <cite>— Dr. Ahmad S. Barakzoy, M.D., FASN</cite>
-          </blockquote>
+        <!-- Credentials, Bio & Affiliations -->
+        <div class="physician-card-right">
+          <div class="card-white mb-24">
+            <h3>Biography &amp; Philosophy of Patient Care</h3>
+            <p class="body-p">
+              Dr. Ahmad S. Barakzoy is a board-certified nephrologist and internal medicine physician serving patients across 
+              Orange Park, Fleming Island, Green Cove Springs, and the greater Jacksonville region. With over two decades of 
+              clinical experience, Dr. Barakzoy specializes in early detection and preservation of kidney function, difficult-to-control 
+              hypertension, diabetic nephropathy, electrolyte imbalances, and comprehensive dialysis care.
+            </p>
+            <blockquote class="philosophy-quote">
+              “Every patient deserves unhurried time, clear explanations of their lab results, and a treatment plan tailored to their daily life. 
+              By working closely with patients, families, primary care doctors, and dialysis teams, we aim to protect kidney health and improve quality of life at every stage.”
+              <cite>— Dr. Ahmad S. Barakzoy, M.D., FASN</cite>
+            </blockquote>
 
-          <h4>Areas of Clinical Expertise</h4>
-          <div class="tag-cloud mb-20">
-            <span>Chronic Kidney Disease (Stages 1–5)</span>
-            <span>Resistant Hypertension</span>
-            <span>Diabetic Kidney Disease</span>
-            <span>Electrolyte &amp; Acid-Base Disorders</span>
-            <span>Hemodialysis &amp; Peritoneal Dialysis</span>
-            <span>Post-Transplant Medical Management</span>
-          </div>
+            <h4>Medical Education, Residency &amp; Fellowship</h4>
+            <div class="timeline">
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Board Certifications — American Board of Internal Medicine (ABIM)</h4>
+                  <p>Certified in <strong>Nephrology</strong> and <strong>Internal Medicine</strong></p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Nephrology Fellowship</h4>
+                  <p>West Virginia University School of Medicine — Morgantown, WV</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Internal Medicine Residency &amp; Doctor of Medicine (M.D.)</h4>
+                  <p>West Virginia University School of Medicine — Morgantown, WV</p>
+                </div>
+              </div>
+            </div>
 
-          <h4>Hospital &amp; Dialysis Center Affiliations</h4>
-          <div class="tag-cloud">
-            <span>HCA Florida Orange Park Hospital</span>
-            <span>Ascension St. Vincent's (Clay, Riverside, Southside)</span>
-            <span>Baptist Medical Center (Clay, Jacksonville, South)</span>
-            <span>Kindred Hospital Green Cove Springs</span>
-            <span>Fresenius Kidney Care Centers</span>
-            <span>DaVita Dialysis Centers</span>
+            <div class="two-sub-grids">
+              <div>
+                <h4>Areas of Expertise</h4>
+                <div class="tag-cloud">
+                  <span>CKD Stages 1–5</span>
+                  <span>Resistant Hypertension</span>
+                  <span>Diabetic Kidney Disease</span>
+                  <span>Electrolyte Disorders</span>
+                  <span>Hemodialysis &amp; PD</span>
+                  <span>Transplant Follow-Up</span>
+                </div>
+              </div>
+              <div>
+                <h4>Hospital &amp; Dialysis Affiliations</h4>
+                <div class="tag-cloud">
+                  <span>HCA Florida Orange Park</span>
+                  <span>Ascension St. Vincent's</span>
+                  <span>Baptist Medical Centers</span>
+                  <span>Kindred Hospital</span>
+                  <span>Fresenius Kidney Care</span>
+                  <span>DaVita Dialysis Centers</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -283,7 +295,7 @@
       <div class="section-header text-center">
         <span class="eyebrow">Clinical Scope of Care</span>
         <h2>Conditions Treated &amp; Medical Services</h2>
-        <p>Comprehensive outpatient, inpatient hospital, and dialysis center nephrology services.</p>
+        <p>Comprehensive outpatient, inpatient hospital, and dialysis center nephrology care.</p>
       </div>
 
       <!-- 13 Conditions Treated -->
@@ -291,61 +303,61 @@
         <div class="box-header-flex">
           <div>
             <h3>Conditions We Diagnose &amp; Treat</h3>
-            <p>Click any condition to request a consultation or second opinion with Dr. Barakzoy.</p>
+            <p>Select any condition below to request a consultation or second opinion with Dr. Barakzoy.</p>
           </div>
           <button class="btn btn-royal btn-sm" onclick="openBookingModal('Nephrology Consultation')">Schedule Consultation</button>
         </div>
 
         <div class="conditions-grid-13">
-          <button class="cond-card" onclick="openBookingModal('Chronic Kidney Disease (CKD) Stages 1–5')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Chronic Kidney Disease (CKD) Stages 1–5')">
             <strong>Chronic Kidney Disease (CKD), Stages 1–5</strong>
             <span>Long-term staging, progression slowing &amp; renal protection</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('End-Stage Renal Disease (ESRD)')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('End-Stage Renal Disease (ESRD)')">
             <strong>End-Stage Renal Disease (ESRD)</strong>
             <span>Dialysis preparation, vascular access &amp; ongoing care</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Hypertension')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Hypertension')">
             <strong>Hypertension (High Blood Pressure)</strong>
             <span>Primary, secondary &amp; medication-resistant hypertension</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Acute Kidney Injury (AKI)')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Acute Kidney Injury (AKI)')">
             <strong>Acute Kidney Injury (AKI)</strong>
             <span>Rapid evaluation &amp; recovery of sudden kidney decline</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Proteinuria')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Proteinuria')">
             <strong>Proteinuria</strong>
             <span>Diagnostic workup &amp; reduction of excess urine protein</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Hematuria')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Hematuria')">
             <strong>Hematuria</strong>
             <span>Microscopic &amp; visible blood in the urine evaluation</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Electrolyte Disorders')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Electrolyte Disorders')">
             <strong>Electrolyte Disorders</strong>
             <span>Sodium, potassium, calcium, magnesium &amp; acid-base balance</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Diabetic Kidney Disease')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Diabetic Kidney Disease')">
             <strong>Diabetic Kidney Disease</strong>
             <span>Targeted renal protection for Type 1 &amp; Type 2 diabetes</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Kidney Transplant Management')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Kidney Transplant Management')">
             <strong>Kidney Transplant Management</strong>
             <span>Pre-transplant referrals &amp; post-transplant medical follow-up</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Lupus Nephritis')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Lupus Nephritis')">
             <strong>Lupus Nephritis</strong>
             <span>Autoimmune kidney inflammation monitoring &amp; therapy</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Glomerulonephritis')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Glomerulonephritis')">
             <strong>Glomerulonephritis</strong>
             <span>Evaluation &amp; treatment of glomerular filtering disorders</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Polycystic Kidney Disease (PKD)')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Polycystic Kidney Disease (PKD)')">
             <strong>Polycystic Kidney Disease</strong>
             <span>Genetic cystic kidney disease monitoring &amp; BP control</span>
           </button>
-          <button class="cond-card" onclick="openBookingModal('Nephrotic Syndrome')">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Nephrotic Syndrome')">
             <strong>Nephrotic Syndrome</strong>
             <span>Management of heavy protein loss, edema &amp; lipid changes</span>
           </button>
@@ -375,7 +387,7 @@
   </section>
 
   <!-- 5 & 6. NEW PATIENT INFORMATION & INSURANCE / BILLING -->
-  <section class="section section-light-blue" id="new-patients">
+  <section class="section section-ice" id="new-patients">
     <div class="container">
       <div class="section-header text-center">
         <span class="eyebrow">Preparing for Your Visit</span>
@@ -383,7 +395,6 @@
         <p>Everything you need to know before your first appointment, including coverage, referrals, and office policies.</p>
       </div>
 
-      <!-- Switchable Tabs: New Patients vs Insurance & Billing -->
       <div class="tab-controls">
         <button class="tab-btn active" onclick="switchPatientTab('tab-new', this)">New Patient Guide &amp; Visit Checklist</button>
         <button class="tab-btn" onclick="switchPatientTab('tab-insurance', this)">Insurance, Billing &amp; Good Faith Estimate</button>
@@ -468,13 +479,55 @@
     </div>
   </section>
 
-  <!-- 7. PATIENT RESOURCES & EDUCATION (ALL 15 ITEMS) -->
+  <!-- 7. PATIENT RESOURCES & EDUCATION + VECTOR KIDNEY DIAGRAM -->
   <section class="section" id="resources">
     <div class="container">
       <div class="section-header text-center">
         <span class="eyebrow">Patient Education Library</span>
         <h2>Kidney Health Resources &amp; Interactive Tools</h2>
-        <p>Explore physician-reviewed guides on kidney function, lab results, nutrition, and interactive tracking sheets.</p>
+        <p>Explore physician-reviewed guides on kidney anatomy, lab results, nutrition, and printable tracking sheets.</p>
+      </div>
+
+      <!-- Anatomical Kidney Illustration Banner -->
+      <div class="anatomy-diagram-card">
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 360 240" width="100%" height="220" role="img" aria-label="Anatomical Kidney Cross-Section Diagram">
+            <defs>
+              <linearGradient id="kidneyCortex" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1D4ED8"/>
+                <stop offset="100%" stop-color="#0D9488"/>
+              </linearGradient>
+              <linearGradient id="kidneyInner" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#DBEAFE"/>
+                <stop offset="100%" stop-color="#CCFBF1"/>
+              </linearGradient>
+            </defs>
+            <!-- Outer Kidney Silhouette -->
+            <path d="M155,22 C90,22 52,68 52,120 C52,172 90,218 155,218 C192,218 212,195 212,168 C212,150 192,142 192,120 C192,98 212,90 212,72 C212,45 192,22 155,22 Z" fill="url(#kidneyCortex)" opacity="0.92"/>
+            <!-- Inner Medulla Cavity -->
+            <path d="M152,38 C102,38 72,74 72,120 C72,166 102,202 152,202 C178,202 192,184 192,164 C192,150 175,140 175,120 C175,100 192,90 192,76 C192,56 178,38 152,38 Z" fill="url(#kidneyInner)"/>
+            <!-- Renal Pyramids -->
+            <path d="M110,64 L142,92 L126,104 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M90,104 L132,114 L132,126 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M108,174 L142,146 L126,134 Z" fill="#1E40AF" opacity="0.75"/>
+            <!-- Renal Artery & Vein + Ureter -->
+            <path d="M188,108 L295,92" stroke="#DC2626" stroke-width="10" stroke-linecap="round"/>
+            <path d="M188,122 L295,122" stroke="#1D4ED8" stroke-width="10" stroke-linecap="round"/>
+            <path d="M185,134 Q225,145 232,225" fill="none" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
+            <!-- Labels -->
+            <text x="235" y="82" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Artery (Inflow)</text>
+            <text x="235" y="142" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Vein (Outflow)</text>
+            <text x="242" y="212" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Ureter</text>
+            <text x="16" y="34" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Cortex</text>
+          </svg>
+        </div>
+        <div class="anatomy-info">
+          <span class="eyebrow">How Your Kidneys Work</span>
+          <h3>Understanding Renal Filtration &amp; Blood Pressure</h3>
+          <p>
+            Each kidney contains roughly <strong>one million microscopic filtering units (nephrons)</strong>. Healthy kidneys filter waste products like creatinine and urea while regulating fluid volume, sodium, potassium, and blood pressure hormones. When hypertension or diabetes strains these delicate filters, early nephrology care helps protect long-term kidney function.
+          </p>
+        </div>
       </div>
 
       <!-- Interactive Educational Topic Selector -->
@@ -499,23 +552,23 @@
         </div>
       </div>
 
-      <!-- 3 Interactive / Printable Patient Tools (Items 13, 14, 15) -->
+      <!-- 3 Interactive / Printable Patient Tools -->
       <div class="tools-grid-3">
-        <div class="tool-card">
+        <div class="tool-card tilt-card">
           <span class="tool-badge">Interactive &amp; Printable Tool</span>
           <h4>Blood Pressure Tracking Sheet</h4>
           <p>Record your morning and evening blood pressure readings at home and print a clean sheet for Dr. Barakzoy.</p>
           <button class="btn btn-royal btn-sm" onclick="openToolModal('bp')">Open BP Tracker →</button>
         </div>
 
-        <div class="tool-card">
+        <div class="tool-card tilt-card">
           <span class="tool-badge">Interactive &amp; Printable Tool</span>
           <h4>Personal Medication List Template</h4>
           <p>Build and print an organized list of your prescriptions, dosages, and supplements to bring to every visit.</p>
           <button class="btn btn-royal btn-sm" onclick="openToolModal('meds')">Open Medication Template →</button>
         </div>
 
-        <div class="tool-card">
+        <div class="tool-card tilt-card">
           <span class="tool-badge">Visit Preparation Guide</span>
           <h4>Questions to Ask Your Nephrologist</h4>
           <p>Use our guided question checklist during your consultation so you leave with complete clarity about your kidney health.</p>
@@ -529,9 +582,8 @@
   <section class="section section-navy" id="referring">
     <div class="container">
       <div class="dual-portal-grid">
-        <!-- Referring Providers Dedicated Section -->
         <div class="navy-panel">
-          <span class="eyebrow-gold">For Physicians &amp; Care Teams</span>
+          <span class="eyebrow-teal">For Physicians &amp; Care Teams</span>
           <h2>Referring Providers</h2>
           <p>
             We value collaborative partnerships with primary care physicians, endocrinologists, cardiologists, and hospitalists. 
@@ -562,9 +614,8 @@
           </div>
         </div>
 
-        <!-- eClinicalWorks (eCW) Patient Portal Section -->
         <div class="navy-panel portal-panel" id="portal">
-          <span class="eyebrow-gold">24/7 Online Access</span>
+          <span class="eyebrow-teal">24/7 Online Access</span>
           <h2>eCW Patient Portal</h2>
           <p>
             Established patients can securely access their health information online anytime through our 
@@ -583,7 +634,7 @@
           </div>
 
           <div class="portal-actions">
-            <a href="https://mycw142.ecwcloud.com/" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-block">
+            <a href="https://mycw142.ecwcloud.com/" target="_blank" rel="noopener noreferrer" class="btn btn-teal btn-block">
               Log In to eCW Patient Portal ↗
             </a>
           </div>
@@ -597,7 +648,7 @@
   </section>
 
   <!-- 11. FREQUENTLY ASKED QUESTIONS (ALL 14 QUESTIONS) -->
-  <section class="section section-light-blue" id="faq">
+  <section class="section section-ice" id="faq">
     <div class="container">
       <div class="section-header text-center">
         <span class="eyebrow">Patient Questions Answered</span>
@@ -679,17 +730,15 @@
         <p>Print and complete your forms before arriving, or use our electronic pre-registration form below.</p>
       </div>
 
-      <!-- Electronic Form Completion Banner -->
       <div class="electronic-form-banner">
         <div>
-          <span class="badge-gold">Fastest Option</span>
+          <span class="badge-teal">Fastest Option</span>
           <h3>Electronic New Patient Pre-Registration</h3>
           <p>Prefer not to print? Complete your demographics, insurance, and visit details online to generate an instant printable summary.</p>
         </div>
-        <button class="btn btn-gold" onclick="openElectronicFormModal()">Start Electronic Form →</button>
+        <button class="btn btn-teal" onclick="openElectronicFormModal()">Start Electronic Form →</button>
       </div>
 
-      <!-- 9 Downloadable PDF Form Cards -->
       <div class="forms-grid-3">
         <a href="assets/forms/new-patient-packet.pdf" target="_blank" class="pdf-card">
           <span class="pdf-tag">PDF</span>
@@ -750,7 +799,7 @@
   </section>
 
   <!-- 10. CONTACT & OFFICE INFORMATION -->
-  <section class="section section-light-blue" id="contact">
+  <section class="section section-ice" id="contact">
     <div class="container">
       <div class="section-header text-center">
         <span class="eyebrow">Location &amp; Contact</span>
@@ -759,12 +808,11 @@
       </div>
 
       <div class="contact-layout">
-        <!-- Office Card & Map -->
         <div class="card-white p-0 overflow-hidden">
           <img src="assets/images/orange-park-office.jpg" alt="Barakzoy Nephrology Orange Park Office Exterior" class="office-banner-img" onerror="this.style.display='none';" />
           <div class="p-28">
             <div class="office-status-row">
-              <span class="badge-royal">Orange Park Primary Clinic</span>
+              <span class="badge-clinical">Orange Park Primary Clinic</span>
               <a href="https://www.google.com/search?q=Dr.+Ahmad+S.+Barakzoy+Orange+Park+FL" target="_blank" rel="noopener noreferrer" class="review-link">★ Leave a Google Review</a>
             </div>
 
@@ -796,13 +844,11 @@
           </iframe>
         </div>
 
-        <!-- General Contact Form -->
         <div class="card-white">
           <h3>Send a General Inquiry</h3>
-          <p class="body-p">Questions about accepted insurance, directions, or scheduling? Send a note to our front desk.</p>
+          <p class="body-p">Questions about accepted insurance, directions, or scheduling? Send a note directly to our front desk.</p>
 
           <form id="contactForm" onsubmit="handleContactSubmit(event)">
-            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
             <div class="form-group">
               <label for="cName">Full Name *</label>
               <input type="text" id="cName" name="name" required placeholder="Your Full Name" />
@@ -919,7 +965,7 @@
     </div>
   </div>
 
-  <!-- MODAL 2: INTERACTIVE PATIENT TOOLS (BP TRACKER, MED LIST, QUESTIONS) -->
+  <!-- MODAL 2: INTERACTIVE PATIENT TOOLS -->
   <div class="modal-backdrop" id="toolModal" onclick="closeModal('toolModal', event)">
     <div class="modal-card modal-lg">
       <button class="modal-close" onclick="closeModal('toolModal', event, true)">×</button>
@@ -933,7 +979,7 @@
       <button class="modal-close" onclick="closeModal('electronicFormModal', event, true)">×</button>
       <span class="eyebrow">Digital Intake</span>
       <h3>Electronic New Patient Pre-Registration</h3>
-      <p class="modal-desc">Fill out your registration summary below and click <strong>Print / Save Summary</strong> to bring with you or email to our intake desk.</p>
+      <p class="modal-desc">Fill out your registration summary below and click <strong>Print Summary</strong> to bring with you at check-in.</p>
       <form id="eIntakeForm" onsubmit="generateIntakeSummary(event)">
         <div class="form-row-2">
           <div class="form-group"><label>Patient Full Name *</label><input type="text" id="efName" required /></div>
@@ -962,6 +1008,8 @@
     </div>
   </div>
 
+  <!-- Three.js for Interactive 3D Anatomical Kidney Model -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
