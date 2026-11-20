@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Barakzoy Nephrology | Dr. Ahmad S. Barakzoy, M.D., FASN — Orange Park &amp; Jacksonville, FL</title>
   <meta name="description" content="Board-certified Nephrology & Hypertension care in Orange Park, Fleming Island, and Jacksonville, FL. Dr. Ahmad S. Barakzoy, M.D., FASN. Call (904) 579-3578." />
-  <meta name="keywords" content="Nephrologist Orange Park FL, Kidney Doctor Jacksonville FL, Dr. Ahmad S. Barakzoy, Hypertension Specialist, Chronic Kidney Disease, Dialysis Care" />
+  <meta name="keywords" content="Nephrologist Orange Park FL, Kidney Doctor Jacksonville FL, Dr. Ahmad S. Barakzoy, Hypertension Specialist, Chronic Kidney Disease, Dialysis Care, eGFR Calculator" />
   <meta name="robots" content="index, follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -51,7 +51,7 @@
     </div>
   </div>
 
-  <!-- Top Utility & Accessibility Bar -->
+  <!-- Top Utility, Accessibility & Multi-Language Bar -->
   <div class="top-bar">
     <div class="container top-bar-inner">
       <div class="top-bar-left">
@@ -64,11 +64,22 @@
           <strong>Call: (904) 579-3578</strong>
         </a>
         <span class="divider">|</span>
-        <span>Fax: (904) 375-8568</span>
-        <span class="divider">|</span>
+        <div class="lang-switcher" role="group" aria-label="Language Quick Guide">
+          <button class="lang-btn active" onclick="setLanguageGuide('en', this)">EN</button>
+          <button class="lang-btn" onclick="setLanguageGuide('es', this)">ES</button>
+          <button class="lang-btn" onclick="setLanguageGuide('fa', this)">دری / فارسی</button>
+        </div>
         <button class="a11y-btn" id="fontToggleBtn" onclick="toggleFontSize()" title="Increase Text Size">A+</button>
         <a href="#portal" class="portal-pill">eCW Patient Portal</a>
       </div>
+    </div>
+  </div>
+
+  <!-- Multilingual Quick-Guide Strip (Appears when ES or Dari/Persian is selected) -->
+  <div class="lang-guide-banner" id="langBanner" style="display:none;">
+    <div class="container lang-banner-inner">
+      <p id="langBannerText"></p>
+      <button class="lang-close-btn" onclick="setLanguageGuide('en', document.querySelector('.lang-btn'))">English</button>
     </div>
   </div>
 
@@ -93,7 +104,8 @@
         <a href="#physician" class="nav-link">Physician</a>
         <a href="#services" class="nav-link">Services &amp; Conditions</a>
         <a href="#new-patients" class="nav-link">New Patients &amp; Insurance</a>
-        <a href="#resources" class="nav-link">Resources</a>
+        <a href="#interactive-tools" class="nav-link">eGFR &amp; Food Tools</a>
+        <a href="#resources" class="nav-link">Education</a>
         <a href="#referring" class="nav-link">Referring Providers</a>
         <a href="#faq" class="nav-link">FAQ</a>
         <a href="#forms" class="nav-link">Forms</a>
@@ -129,12 +141,12 @@
           <button class="btn btn-royal btn-lg" onclick="openBookingModal()">
             Request Appointment
           </button>
-          <a href="#new-patients" class="btn btn-outline-royal btn-lg">
-            New Patient Guide
+          <a href="#interactive-tools" class="btn btn-outline-royal btn-lg">
+            Check eGFR &amp; Kidney Risk
           </a>
-          <a href="tel:9045793578" class="btn btn-teal-soft btn-lg">
-            Call (904) 579-3578
-          </a>
+          <button class="btn btn-teal-soft btn-lg" onclick="downloadClinicVCard()">
+            📲 Save Clinic Contact
+          </button>
         </div>
 
         <!-- Home Overview Cards -->
@@ -165,10 +177,8 @@
             <span class="drag-hint">↻ Drag to Rotate</span>
           </div>
 
-          <!-- Three.js WebGL Canvas Container -->
           <div id="kidney3dCanvas" class="kidney-canvas-box"></div>
 
-          <!-- Interactive View Controls -->
           <div class="stage-controls">
             <button class="stage-btn active" onclick="setKidneyView('full', this)">Full Kidney</button>
             <button class="stage-btn" onclick="setKidneyView('medulla', this)">Internal Medulla</button>
@@ -183,7 +193,7 @@
     </div>
   </section>
 
-  <!-- 2. ABOUT THE PHYSICIAN -->
+  <!-- 2. ABOUT THE PHYSICIAN + HOSPITAL & DIALYSIS DIRECTORY -->
   <section class="section section-ice" id="physician">
     <div class="container">
       <div class="section-header text-center">
@@ -259,28 +269,23 @@
               </div>
             </div>
 
-            <div class="two-sub-grids">
-              <div>
-                <h4>Areas of Expertise</h4>
-                <div class="tag-cloud">
-                  <span>CKD Stages 1–5</span>
-                  <span>Resistant Hypertension</span>
-                  <span>Diabetic Kidney Disease</span>
-                  <span>Electrolyte Disorders</span>
-                  <span>Hemodialysis &amp; PD</span>
-                  <span>Transplant Follow-Up</span>
+            <!-- Interactive Hospital & Dialysis Rounding Directory -->
+            <div class="rounding-box">
+              <div class="rounding-header">
+                <h4>Hospital &amp; Dialysis Center Rounding Directory</h4>
+                <div class="rounding-filters">
+                  <button class="filter-chip active" onclick="filterRounding('all', this)">All</button>
+                  <button class="filter-chip" onclick="filterRounding('hospital', this)">Hospitals</button>
+                  <button class="filter-chip" onclick="filterRounding('dialysis', this)">Dialysis Centers</button>
                 </div>
               </div>
-              <div>
-                <h4>Hospital &amp; Dialysis Affiliations</h4>
-                <div class="tag-cloud">
-                  <span>HCA Florida Orange Park</span>
-                  <span>Ascension St. Vincent's</span>
-                  <span>Baptist Medical Centers</span>
-                  <span>Kindred Hospital</span>
-                  <span>Fresenius Kidney Care</span>
-                  <span>DaVita Dialysis Centers</span>
-                </div>
+              <div class="rounding-grid" id="roundingGrid">
+                <div class="round-item" data-type="hospital"><strong>HCA Florida Orange Park Hospital</strong><span>Inpatient Nephrology Consults • Orange Park, FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Ascension St. Vincent's (Clay, Riverside &amp; Southside)</strong><span>Inpatient Hospital Care • Northeast FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Baptist Medical Centers (Clay, Jax &amp; South)</strong><span>Inpatient Nephrology Care • Northeast FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Kindred Hospital North Florida</strong><span>Specialty Acute Care • Green Cove Springs, FL</span></div>
+                <div class="round-item" data-type="dialysis"><strong>Fresenius Kidney Care Centers</strong><span>Outpatient Hemodialysis &amp; Home Dialysis Rounding</span></div>
+                <div class="round-item" data-type="dialysis"><strong>DaVita Dialysis Centers</strong><span>Outpatient Hemodialysis &amp; Peritoneal Dialysis Care</span></div>
               </div>
             </div>
           </div>
@@ -298,7 +303,6 @@
         <p>Comprehensive outpatient, inpatient hospital, and dialysis center nephrology care.</p>
       </div>
 
-      <!-- 13 Conditions Treated -->
       <div class="conditions-showcase">
         <div class="box-header-flex">
           <div>
@@ -364,7 +368,6 @@
         </div>
       </div>
 
-      <!-- 13 Medical Services -->
       <div class="services-wrapper">
         <h3 class="sub-section-title">Comprehensive Medical &amp; Clinical Services</h3>
         <div class="services-13-grid">
@@ -400,7 +403,6 @@
         <button class="tab-btn" onclick="switchPatientTab('tab-insurance', this)">Insurance, Billing &amp; Good Faith Estimate</button>
       </div>
 
-      <!-- TAB 1: NEW PATIENT INFORMATION -->
       <div class="tab-panel active" id="tab-new">
         <div class="two-col-cards">
           <div class="card-white">
@@ -437,7 +439,6 @@
         </div>
       </div>
 
-      <!-- TAB 2: INSURANCE & BILLING -->
       <div class="tab-panel" id="tab-insurance">
         <div class="two-col-cards">
           <div class="card-white">
@@ -479,12 +480,98 @@
     </div>
   </section>
 
-  <!-- 7. PATIENT RESOURCES & EDUCATION + VECTOR KIDNEY DIAGRAM -->
-  <section class="section" id="resources">
+  <!-- INTERACTIVE CLINICAL TOOLS SUITE: eGFR CALCULATOR, 60-SEC QUIZ & FOOD CHECKER -->
+  <section class="section" id="interactive-tools">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Interactive Patient Utilities</span>
+        <h2>eGFR Calculator, Risk Quiz &amp; Kidney Food Checker</h2>
+        <p>Understand your lab numbers, check kidney risk factors, and look up kidney-friendly foods in seconds.</p>
+      </div>
+
+      <div class="interactive-duo-grid">
+        <!-- 1. Interactive 2021 CKD-EPI eGFR & CKD Stage Calculator -->
+        <div class="card-white">
+          <span class="tool-badge">2021 Race-Free CKD-EPI Equation</span>
+          <h3>Interactive eGFR &amp; CKD Stage Calculator</h3>
+          <p class="body-p">Enter your serum creatinine from a recent blood test (BMP/CMP) to estimate your kidney filtering rate and CKD stage.</p>
+
+          <form onsubmit="calculateEGFR(event)" class="calc-form">
+            <div class="form-row-3">
+              <div class="form-group">
+                <label for="egfrCreatinine">Creatinine (mg/dL) *</label>
+                <input type="number" id="egfrCreatinine" step="0.01" min="0.2" max="20" required placeholder="e.g., 1.35" />
+              </div>
+              <div class="form-group">
+                <label for="egfrAge">Age (Years) *</label>
+                <input type="number" id="egfrAge" min="18" max="110" required placeholder="e.g., 64" />
+              </div>
+              <div class="form-group">
+                <label for="egfrSex">Sex at Birth *</label>
+                <select id="egfrSex">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-royal btn-block">Calculate My eGFR &amp; Stage</button>
+          </form>
+
+          <div id="egfrOutput" class="calc-result-box" style="display:none;"></div>
+          <p class="calc-disclaimer">Educational estimate only. Always review your full lab trend and urine protein with Dr. Barakzoy.</p>
+        </div>
+
+        <!-- 2. 60-Second "Should I See a Nephrologist?" Self-Assessment Quiz -->
+        <div class="card-white">
+          <span class="tool-badge">60-Second Visit Readiness Check</span>
+          <h3>Should I See a Nephrologist? Quiz</h3>
+          <p class="body-p">Check any items that apply to you to generate a personalized consultation readiness guide:</p>
+
+          <form id="quizForm" onsubmit="evaluateKidneyQuiz(event)">
+            <div class="quiz-checks">
+              <label class="quiz-row"><input type="checkbox" value="eGFR below 60 or rising creatinine" /> My lab results show an <strong>eGFR below 60</strong> or rising creatinine</label>
+              <label class="quiz-row"><input type="checkbox" value="High blood pressure (especially on 2+ medications)" /> I have <strong>high blood pressure</strong> (or take 2+ BP medications)</label>
+              <label class="quiz-row"><input type="checkbox" value="Type 1 or Type 2 Diabetes" /> I have <strong>Type 1 or Type 2 Diabetes</strong></label>
+              <label class="quiz-row"><input type="checkbox" value="Protein or blood in urine" /> A doctor mentioned <strong>protein or blood in my urine</strong></label>
+              <label class="quiz-row"><input type="checkbox" value="Swelling in ankles/feet or family history of kidney disease" /> I have <strong>ankle/leg swelling</strong> or a <strong>family history of kidney failure</strong></label>
+            </div>
+            <button type="submit" class="btn btn-teal btn-block">See My Personalized Recommendation</button>
+          </form>
+
+          <div id="quizOutput" class="calc-result-box" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- 3. Kidney-Safe Food & Sodium Checker -->
+      <div class="food-checker-panel">
+        <div class="food-header-row">
+          <div>
+            <span class="eyebrow">Renal Nutrition Lookup</span>
+            <h3>Kidney-Safe Food &amp; Sodium Checker</h3>
+            <p>Search common foods to check sodium, potassium, and phosphorus friendliness—plus smart kidney-healthy swaps.</p>
+          </div>
+          <div class="food-controls">
+            <input type="text" id="foodSearchInput" placeholder="Search food (e.g., banana, chicken, rice, soda, canned soup)..." onkeyup="renderFoodList()" />
+            <div class="food-cat-pills">
+              <button class="filter-chip active" onclick="setFoodCategory('all', this)">All Foods</button>
+              <button class="filter-chip" onclick="setFoodCategory('Produce', this)">Fruits &amp; Veggies</button>
+              <button class="filter-chip" onclick="setFoodCategory('Proteins', this)">Proteins</button>
+              <button class="filter-chip" onclick="setFoodCategory('Pantry & Drinks', this)">Pantry &amp; Drinks</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-grid" id="foodGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PATIENT RESOURCES & EDUCATION + AUDIO READ-ALOUD -->
+  <section class="section section-ice" id="resources">
     <div class="container">
       <div class="section-header text-center">
         <span class="eyebrow">Patient Education Library</span>
-        <h2>Kidney Health Resources &amp; Interactive Tools</h2>
+        <h2>Kidney Health Guides &amp; Printable Trackers</h2>
         <p>Explore physician-reviewed guides on kidney anatomy, lab results, nutrition, and printable tracking sheets.</p>
       </div>
 
@@ -502,19 +589,14 @@
                 <stop offset="100%" stop-color="#CCFBF1"/>
               </linearGradient>
             </defs>
-            <!-- Outer Kidney Silhouette -->
             <path d="M155,22 C90,22 52,68 52,120 C52,172 90,218 155,218 C192,218 212,195 212,168 C212,150 192,142 192,120 C192,98 212,90 212,72 C212,45 192,22 155,22 Z" fill="url(#kidneyCortex)" opacity="0.92"/>
-            <!-- Inner Medulla Cavity -->
             <path d="M152,38 C102,38 72,74 72,120 C72,166 102,202 152,202 C178,202 192,184 192,164 C192,150 175,140 175,120 C175,100 192,90 192,76 C192,56 178,38 152,38 Z" fill="url(#kidneyInner)"/>
-            <!-- Renal Pyramids -->
             <path d="M110,64 L142,92 L126,104 Z" fill="#1E40AF" opacity="0.75"/>
             <path d="M90,104 L132,114 L132,126 Z" fill="#1E40AF" opacity="0.75"/>
             <path d="M108,174 L142,146 L126,134 Z" fill="#1E40AF" opacity="0.75"/>
-            <!-- Renal Artery & Vein + Ureter -->
             <path d="M188,108 L295,92" stroke="#DC2626" stroke-width="10" stroke-linecap="round"/>
             <path d="M188,122 L295,122" stroke="#1D4ED8" stroke-width="10" stroke-linecap="round"/>
             <path d="M185,134 Q225,145 232,225" fill="none" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
-            <!-- Labels -->
             <text x="235" y="82" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Artery (Inflow)</text>
             <text x="235" y="142" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Vein (Outflow)</text>
             <text x="242" y="212" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Ureter</text>
@@ -530,7 +612,7 @@
         </div>
       </div>
 
-      <!-- Interactive Educational Topic Selector -->
+      <!-- Interactive Educational Topic Selector + Audio Read-Aloud -->
       <div class="edu-layout">
         <div class="edu-sidebar" id="eduTopicList">
           <button class="edu-topic-btn active" onclick="selectEduTopic(0, this)">1. What Do Kidneys Do?</button>
@@ -547,8 +629,14 @@
           <button class="edu-topic-btn" onclick="selectEduTopic(11, this)">12. Kidney Disease Prevention</button>
         </div>
 
-        <div class="edu-reader card-white" id="eduReaderContent">
-          <!-- Populated dynamically by script.js -->
+        <div class="edu-reader card-white">
+          <div class="edu-reader-toolbar">
+            <span class="eyebrow">Physician-Reviewed Guide</span>
+            <button class="btn btn-teal-soft btn-sm" id="listenGuideBtn" onclick="toggleReadAloud()">🔊 Listen to Guide</button>
+          </div>
+          <div id="eduReaderContent">
+            <!-- Populated dynamically by script.js -->
+          </div>
         </div>
       </div>
 
@@ -578,7 +666,7 @@
     </div>
   </section>
 
-  <!-- 8 & 9. REFERRING PROVIDERS & ECW PATIENT PORTAL -->
+  <!-- 8 & 9. REFERRING PROVIDERS (WITH FAX COVER SHEET GENERATOR) & ECW PATIENT PORTAL -->
   <section class="section section-navy" id="referring">
     <div class="container">
       <div class="dual-portal-grid">
@@ -611,6 +699,9 @@
             <p class="urgent-ref-box">
               <strong>Urgent Referrals:</strong> For rapidly rising creatinine, severe hyperkalemia, or urgent hypertension consults, please call <strong>(904) 579-3578</strong> directly to speak with our clinical coordinator or Dr. Barakzoy.
             </p>
+            <button class="btn btn-teal btn-block" style="margin-top:14px;" onclick="openReferralCoverModal()">
+              🖨️ Generate Printable Referral Fax Cover Sheet
+            </button>
           </div>
         </div>
 
@@ -813,7 +904,11 @@
           <div class="p-28">
             <div class="office-status-row">
               <span class="badge-clinical">Orange Park Primary Clinic</span>
-              <a href="https://www.google.com/search?q=Dr.+Ahmad+S.+Barakzoy+Orange+Park+FL" target="_blank" rel="noopener noreferrer" class="review-link">★ Leave a Google Review</a>
+              <div class="contact-quick-actions">
+                <button class="link-btn-teal" onclick="downloadClinicVCard()">📲 Save to Phone</button>
+                <span>•</span>
+                <a href="https://www.google.com/search?q=Dr.+Ahmad+S.+Barakzoy+Orange+Park+FL" target="_blank" rel="noopener noreferrer" class="review-link">★ Google Review</a>
+              </div>
             </div>
 
             <h3>2035 Professional Center Drive, Suite A</h3>
@@ -907,7 +1002,7 @@
         <ul class="footer-links">
           <li><a href="#physician">About Dr. Barakzoy</a></li>
           <li><a href="#services">Conditions &amp; Services</a></li>
-          <li><a href="#new-patients">New Patients &amp; Insurance</a></li>
+          <li><a href="#interactive-tools">eGFR Calculator &amp; Food Checker</a></li>
           <li><a href="#resources">Kidney Education &amp; Trackers</a></li>
           <li><a href="#referring">Referring Providers</a></li>
           <li><a href="#portal">eCW Patient Portal</a></li>
@@ -1000,7 +1095,2333 @@
     </div>
   </div>
 
-  <!-- MODAL 4: LEGAL, PRIVACY & ACCESSIBILITY -->
+  <!-- MODAL 4: REFERRING PROVIDER FAX COVER SHEET GENERATOR -->
+  <div class="modal-backdrop" id="referralCoverModal" onclick="closeModal('referralCoverModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('referralCoverModal', event, true)">×</button>
+      <span class="eyebrow">Referring Clinic Utility</span>
+      <h3>Generate Referral Fax Cover Sheet</h3>
+      <p class="modal-desc">Pre-addressed to <strong>Barakzoy Nephrology — Fax: (904) 375-8568</strong>. Complete below and click <strong>Print Fax Cover Sheet</strong>.</p>
+      <form onsubmit="generateReferralCover(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="refPatientName" required /></div>
+          <div class="form-group"><label>Patient Date of Birth *</label><input type="date" id="refPatientDob" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Phone *</label><input type="tel" id="refPatientPhone" required /></div>
+          <div class="form-group"><label>Insurance Plan / Auth #</label><input type="text" id="refInsurance" placeholder="e.g., Medicare / BCBS" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Referring Provider / Clinic *</label><input type="text" id="refProviderName" required /></div>
+          <div class="form-group"><label>Referring Office Phone / Fax *</label><input type="text" id="refProviderPhone" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Urgency Level</label>
+            <select id="refUrgency">
+              <option>Routine Consultation</option>
+              <option>Urgent (Within 48–72 Hours — Please Also Call 904-579-3578)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Reason for Referral</label><input type="text" id="refNotes" placeholder="e.g., CKD Stage 3b, Resistant HTN" /></div>
+        </div>
+        <button type="submit" class="btn btn-royal">Generate Printable Fax Cover Sheet</button>
+      </form>
+      <div id="refCoverPreview" class="intake-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: LEGAL, PRIVACY & ACCESSIBILITY -->
+  <div class="modal-backdrop" id="legalModal" onclick="closeModal('legalModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('legalModal', event, true)">×</button>
+      <div id="legalModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Three.js for Interactive 3D Anatomical Kidney Model -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barakzoy Nephrology | Dr. Ahmad S. Barakzoy, M.D., FASN — Orange Park &amp; Jacksonville, FL</title>
+  <meta name="description" content="Board-certified Nephrology & Hypertension care in Orange Park, Fleming Island, and Jacksonville, FL. Dr. Ahmad S. Barakzoy, M.D., FASN. Call (904) 579-3578." />
+  <meta name="keywords" content="Nephrologist Orange Park FL, Kidney Doctor Jacksonville FL, Dr. Ahmad S. Barakzoy, Hypertension Specialist, Chronic Kidney Disease, Dialysis Care, eGFR Calculator" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Local Medical Clinic & Physician Structured Data (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalClinic",
+    "name": "Barakzoy Nephrology",
+    "medicalSpecialty": "Nephrology",
+    "telephone": "+1-904-579-3578",
+    "faxNumber": "+1-904-375-8568",
+    "email": "BarakzoyNephrology@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2035 Professional Center Drive, Suite A",
+      "addressLocality": "Orange Park",
+      "addressRegion": "FL",
+      "postalCode": "32073",
+      "addressCountry": "US"
+    },
+    "openingHours": "Mo-Fr 08:00-17:00",
+    "physician": {
+      "@type": "Physician",
+      "name": "Dr. Ahmad S. Barakzoy, M.D., FASN",
+      "medicalSpecialty": ["Nephrology", "InternalMedicine"]
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Practice Announcement Bar -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="container announcement-inner">
+      <span>
+        <strong>Practice Notice:</strong> Accepting new nephrology &amp; hypertension consultations in Orange Park and Northeast Florida. Same-week urgent provider referrals available.
+      </span>
+      <button class="announcement-close" onclick="document.getElementById('announcementBar').style.display='none'" aria-label="Dismiss announcement">×</button>
+    </div>
+  </div>
+
+  <!-- Top Utility, Accessibility & Multi-Language Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-bar-left">
+        <span><strong>Office Hours:</strong> Mon–Fri 8:00 AM – 5:00 PM</span>
+        <span class="divider">|</span>
+        <span>2035 Professional Center Dr., Suite A, Orange Park, FL 32073</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="tel:9045793578" class="top-link-accent">
+          <strong>Call: (904) 579-3578</strong>
+        </a>
+        <span class="divider">|</span>
+        <div class="lang-switcher" role="group" aria-label="Language Quick Guide">
+          <button class="lang-btn active" onclick="setLanguageGuide('en', this)">EN</button>
+          <button class="lang-btn" onclick="setLanguageGuide('es', this)">ES</button>
+          <button class="lang-btn" onclick="setLanguageGuide('fa', this)">دری / فارسی</button>
+        </div>
+        <button class="a11y-btn" id="fontToggleBtn" onclick="toggleFontSize()" title="Increase Text Size">A+</button>
+        <a href="#portal" class="portal-pill">eCW Patient Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multilingual Quick-Guide Strip (Appears when ES or Dari/Persian is selected) -->
+  <div class="lang-guide-banner" id="langBanner" style="display:none;">
+    <div class="container lang-banner-inner">
+      <p id="langBannerText"></p>
+      <button class="lang-close-btn" onclick="setLanguageGuide('en', document.querySelector('.lang-btn'))">English</button>
+    </div>
+  </div>
+
+  <!-- Primary Sticky Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8M8 12h8"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Barakzoy Nephrology</span>
+          <span class="brand-sub">Dr. Ahmad S. Barakzoy, M.D., FASN</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#physician" class="nav-link">Physician</a>
+        <a href="#services" class="nav-link">Services &amp; Conditions</a>
+        <a href="#new-patients" class="nav-link">New Patients &amp; Insurance</a>
+        <a href="#interactive-tools" class="nav-link">eGFR &amp; Food Tools</a>
+        <a href="#resources" class="nav-link">Education</a>
+        <a href="#referring" class="nav-link">Referring Providers</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#forms" class="nav-link">Forms</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-royal btn-sm" onclick="openBookingModal()">Book Appointment</button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. HERO SECTION WITH INTERACTIVE 3D KIDNEY MODEL -->
+  <section class="hero" id="home">
+    <div class="hero-bg-grid"></div>
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="badge-clinical">
+          <span class="teal-dot"></span>
+          Nephrology &amp; Hypertension Specialist • Orange Park, FL
+        </div>
+        <h1>Precision, Board-Certified Kidney &amp; Blood Pressure Care.</h1>
+        <p class="hero-lead">
+          Welcome to <strong>Barakzoy Nephrology</strong>. Led by <strong>Dr. Ahmad S. Barakzoy, M.D., FASN</strong>, 
+          our practice provides compassionate, evidence-based evaluation and long-term management for kidney disease, 
+          resistant hypertension, electrolyte disorders, dialysis, and transplant follow-up across Orange Park, Fleming Island, and Jacksonville.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-royal btn-lg" onclick="openBookingModal()">
+            Request Appointment
+          </button>
+          <a href="#interactive-tools" class="btn btn-outline-royal btn-lg">
+            Check eGFR &amp; Kidney Risk
+          </a>
+          <button class="btn btn-teal-soft btn-lg" onclick="downloadClinicVCard()">
+            📲 Save Clinic Contact
+          </button>
+        </div>
+
+        <!-- Home Overview Cards -->
+        <div class="home-overview-grid">
+          <div class="overview-mini-card tilt-card">
+            <span class="mini-label">Accepted Insurance</span>
+            <p>Medicare, Medicare Advantage, Medicaid, BCBS, Aetna, Cigna, UnitedHealthcare, Tricare &amp; major commercial plans.</p>
+          </div>
+          <div class="overview-mini-card tilt-card">
+            <span class="mini-label">Conditions Treated</span>
+            <p>CKD (Stages 1–5), Hypertension, Diabetic Kidney Disease, AKI, ESRD, Proteinuria, Hematuria &amp; Transplant Care.</p>
+          </div>
+          <div class="overview-mini-card tilt-card">
+            <span class="mini-label">Clinic &amp; Phone Hours</span>
+            <p><strong>Phone:</strong> Mon–Fri 8:00 AM – 5:00 PM<br /><strong>Visits:</strong> Mon–Fri 9:00 AM – 5:00 PM</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 3D Kidney Visualization Card -->
+      <div class="hero-visual">
+        <div class="kidney-3d-stage">
+          <div class="stage-header">
+            <div>
+              <span class="stage-badge">Interactive 3D Renal Model</span>
+              <h4>Human Kidney &amp; Vascular Anatomy</h4>
+            </div>
+            <span class="drag-hint">↻ Drag to Rotate</span>
+          </div>
+
+          <div id="kidney3dCanvas" class="kidney-canvas-box"></div>
+
+          <div class="stage-controls">
+            <button class="stage-btn active" onclick="setKidneyView('full', this)">Full Kidney</button>
+            <button class="stage-btn" onclick="setKidneyView('medulla', this)">Internal Medulla</button>
+            <button class="stage-btn" onclick="setKidneyView('vascular', this)">Vascular Flow</button>
+          </div>
+
+          <div class="stage-caption" id="kidneyCaption">
+            <strong>Renal Cortex &amp; Capsule:</strong> Filters ~150 quarts of blood daily through millions of microscopic nephrons to regulate blood pressure, fluid, and electrolytes.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ABOUT THE PHYSICIAN + HOSPITAL & DIALYSIS DIRECTORY -->
+  <section class="section section-ice" id="physician">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">About the Physician</span>
+        <h2>Ahmad S. Barakzoy, M.D., FASN</h2>
+        <p>Double Board-Certified Leadership in Nephrology, Internal Medicine, and Complex Hypertension.</p>
+      </div>
+
+      <div class="physician-showcase-layout">
+        <!-- Physician Profile Card -->
+        <div class="physician-card-left tilt-card">
+          <div class="portrait-wrap">
+            <img src="assets/images/dr-barakzoy.jpeg" alt="Dr. Ahmad S. Barakzoy, M.D., FASN" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="doctor-fallback" style="display:none;">
+              <div class="monogram">AB</div>
+              <span>Dr. Ahmad S. Barakzoy, M.D., FASN</span>
+              <small>Board Certified in Nephrology &amp; Internal Medicine</small>
+            </div>
+          </div>
+
+          <div class="portrait-meta">
+            <span class="cert-pill">Double ABIM Board Certified</span>
+            <h3>Dr. Ahmad S. Barakzoy</h3>
+            <p class="role-title">Nephrologist &amp; Hypertension Specialist</p>
+            <div class="meta-divider"></div>
+            <ul class="quick-specs">
+              <li><strong>Experience:</strong> 20+ Years Clinical Practice</li>
+              <li><strong>License:</strong> Active Florida Medical License</li>
+              <li><strong>Fellowship:</strong> Fellow, American Society of Nephrology (FASN)</li>
+              <li><strong>Languages:</strong> English, Dari/Persian, Pashto, Urdu</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Credentials, Bio & Affiliations -->
+        <div class="physician-card-right">
+          <div class="card-white mb-24">
+            <h3>Biography &amp; Philosophy of Patient Care</h3>
+            <p class="body-p">
+              Dr. Ahmad S. Barakzoy is a board-certified nephrologist and internal medicine physician serving patients across 
+              Orange Park, Fleming Island, Green Cove Springs, and the greater Jacksonville region. With over two decades of 
+              clinical experience, Dr. Barakzoy specializes in early detection and preservation of kidney function, difficult-to-control 
+              hypertension, diabetic nephropathy, electrolyte imbalances, and comprehensive dialysis care.
+            </p>
+            <blockquote class="philosophy-quote">
+              “Every patient deserves unhurried time, clear explanations of their lab results, and a treatment plan tailored to their daily life. 
+              By working closely with patients, families, primary care doctors, and dialysis teams, we aim to protect kidney health and improve quality of life at every stage.”
+              <cite>— Dr. Ahmad S. Barakzoy, M.D., FASN</cite>
+            </blockquote>
+
+            <h4>Medical Education, Residency &amp; Fellowship</h4>
+            <div class="timeline">
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Board Certifications — American Board of Internal Medicine (ABIM)</h4>
+                  <p>Certified in <strong>Nephrology</strong> and <strong>Internal Medicine</strong></p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Nephrology Fellowship</h4>
+                  <p>West Virginia University School of Medicine — Morgantown, WV</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Internal Medicine Residency &amp; Doctor of Medicine (M.D.)</h4>
+                  <p>West Virginia University School of Medicine — Morgantown, WV</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Hospital & Dialysis Rounding Directory -->
+            <div class="rounding-box">
+              <div class="rounding-header">
+                <h4>Hospital &amp; Dialysis Center Rounding Directory</h4>
+                <div class="rounding-filters">
+                  <button class="filter-chip active" onclick="filterRounding('all', this)">All</button>
+                  <button class="filter-chip" onclick="filterRounding('hospital', this)">Hospitals</button>
+                  <button class="filter-chip" onclick="filterRounding('dialysis', this)">Dialysis Centers</button>
+                </div>
+              </div>
+              <div class="rounding-grid" id="roundingGrid">
+                <div class="round-item" data-type="hospital"><strong>HCA Florida Orange Park Hospital</strong><span>Inpatient Nephrology Consults • Orange Park, FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Ascension St. Vincent's (Clay, Riverside &amp; Southside)</strong><span>Inpatient Hospital Care • Northeast FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Baptist Medical Centers (Clay, Jax &amp; South)</strong><span>Inpatient Nephrology Care • Northeast FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Kindred Hospital North Florida</strong><span>Specialty Acute Care • Green Cove Springs, FL</span></div>
+                <div class="round-item" data-type="dialysis"><strong>Fresenius Kidney Care Centers</strong><span>Outpatient Hemodialysis &amp; Home Dialysis Rounding</span></div>
+                <div class="round-item" data-type="dialysis"><strong>DaVita Dialysis Centers</strong><span>Outpatient Hemodialysis &amp; Peritoneal Dialysis Care</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 & 4. CONDITIONS TREATED & MEDICAL SERVICES -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Clinical Scope of Care</span>
+        <h2>Conditions Treated &amp; Medical Services</h2>
+        <p>Comprehensive outpatient, inpatient hospital, and dialysis center nephrology care.</p>
+      </div>
+
+      <div class="conditions-showcase">
+        <div class="box-header-flex">
+          <div>
+            <h3>Conditions We Diagnose &amp; Treat</h3>
+            <p>Select any condition below to request a consultation or second opinion with Dr. Barakzoy.</p>
+          </div>
+          <button class="btn btn-royal btn-sm" onclick="openBookingModal('Nephrology Consultation')">Schedule Consultation</button>
+        </div>
+
+        <div class="conditions-grid-13">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Chronic Kidney Disease (CKD) Stages 1–5')">
+            <strong>Chronic Kidney Disease (CKD), Stages 1–5</strong>
+            <span>Long-term staging, progression slowing &amp; renal protection</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('End-Stage Renal Disease (ESRD)')">
+            <strong>End-Stage Renal Disease (ESRD)</strong>
+            <span>Dialysis preparation, vascular access &amp; ongoing care</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Hypertension')">
+            <strong>Hypertension (High Blood Pressure)</strong>
+            <span>Primary, secondary &amp; medication-resistant hypertension</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Acute Kidney Injury (AKI)')">
+            <strong>Acute Kidney Injury (AKI)</strong>
+            <span>Rapid evaluation &amp; recovery of sudden kidney decline</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Proteinuria')">
+            <strong>Proteinuria</strong>
+            <span>Diagnostic workup &amp; reduction of excess urine protein</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Hematuria')">
+            <strong>Hematuria</strong>
+            <span>Microscopic &amp; visible blood in the urine evaluation</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Electrolyte Disorders')">
+            <strong>Electrolyte Disorders</strong>
+            <span>Sodium, potassium, calcium, magnesium &amp; acid-base balance</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Diabetic Kidney Disease')">
+            <strong>Diabetic Kidney Disease</strong>
+            <span>Targeted renal protection for Type 1 &amp; Type 2 diabetes</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Kidney Transplant Management')">
+            <strong>Kidney Transplant Management</strong>
+            <span>Pre-transplant referrals &amp; post-transplant medical follow-up</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Lupus Nephritis')">
+            <strong>Lupus Nephritis</strong>
+            <span>Autoimmune kidney inflammation monitoring &amp; therapy</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Glomerulonephritis')">
+            <strong>Glomerulonephritis</strong>
+            <span>Evaluation &amp; treatment of glomerular filtering disorders</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Polycystic Kidney Disease (PKD)')">
+            <strong>Polycystic Kidney Disease</strong>
+            <span>Genetic cystic kidney disease monitoring &amp; BP control</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Nephrotic Syndrome')">
+            <strong>Nephrotic Syndrome</strong>
+            <span>Management of heavy protein loss, edema &amp; lipid changes</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="services-wrapper">
+        <h3 class="sub-section-title">Comprehensive Medical &amp; Clinical Services</h3>
+        <div class="services-13-grid">
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Nephrology Consultations</strong><p>Detailed initial evaluations and second opinions for kidney and blood pressure concerns.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>CKD Management</strong><p>Stage-specific protocols to slow kidney decline and prevent complications.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Hypertension Management</strong><p>Precision blood pressure optimization to protect kidneys, heart, and brain.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Kidney Function Monitoring</strong><p>Routine tracking of eGFR, serum creatinine, cystatin C, and urine albumin ratios.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Laboratory Result Review</strong><p>Clear, patient-friendly explanation of blood panels, urinalysis, and metabolic labs.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Medication Management</strong><p>Renal dose adjustments, formulary review, and avoidance of kidney-toxic drugs.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Electrolyte &amp; Fluid Management</strong><p>Correction of fluid retention (edema), hyponatremia, hyperkalemia, and acidosis.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Dialysis Management &amp; Rounding</strong><p>Regular physician rounding at Fresenius and DaVita centers across Northeast Florida.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>ESRD Management</strong><p>Comprehensive anemia, bone-mineral metabolism, and dialysis adequacy oversight.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Kidney Transplant Follow-Up</strong><p>Coordinated post-transplant medical monitoring alongside regional transplant centers.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Primary Care Coordination</strong><p>Timely consultation notes sent directly to your primary care and referring physicians.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Dialysis Center Coordination</strong><p>Direct admissions and placement assistance at convenient neighborhood dialysis units.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Preventive Care &amp; Education</strong><p>Nutrition, sodium reduction, blood pressure tracking, and lifestyle counseling.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 & 6. NEW PATIENT INFORMATION & INSURANCE / BILLING -->
+  <section class="section section-ice" id="new-patients">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Preparing for Your Visit</span>
+        <h2>New Patient Information, Insurance &amp; Billing</h2>
+        <p>Everything you need to know before your first appointment, including coverage, referrals, and office policies.</p>
+      </div>
+
+      <div class="tab-controls">
+        <button class="tab-btn active" onclick="switchPatientTab('tab-new', this)">New Patient Guide &amp; Visit Checklist</button>
+        <button class="tab-btn" onclick="switchPatientTab('tab-insurance', this)">Insurance, Billing &amp; Good Faith Estimate</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-new">
+        <div class="two-col-cards">
+          <div class="card-white">
+            <h3>Registration &amp; Appointment Instructions</h3>
+            <ul class="styled-list">
+              <li><strong>How to Register &amp; Request a Visit:</strong> Call our scheduling desk at <a href="tel:9045793578"><strong>(904) 579-3578</strong></a> or click <em>Request Appointment</em> online. New patients may download and complete our registration forms ahead of time or fill out our electronic pre-registration form.</li>
+              <li><strong>Referral Requirements:</strong> If your insurance plan (such as an HMO or Tricare Prime) requires a specialist referral, please ask your Primary Care Provider (PCP) to fax the referral and clinical notes to <strong>(904) 375-8568</strong> prior to your appointment.</li>
+              <li><strong>Laboratory &amp; Medical Records Requirements:</strong> Recent blood work (BMP/CMP, CBC), urinalysis, and any renal ultrasound reports help Dr. Barakzoy evaluate your kidneys immediately. Please request your prior records be faxed to us or bring copies with you.</li>
+              <li><strong>Arrival &amp; Check-In Instructions:</strong> Please arrive <strong>15–20 minutes early</strong> for your first visit to complete insurance verification and check-in.</li>
+              <li><strong>What to Expect at Your Visit:</strong> Your initial consultation typically lasts 30–45 minutes and includes a thorough vital signs/blood pressure check, medication review, lab interpretation, and a personalized care plan.</li>
+            </ul>
+          </div>
+
+          <div class="card-white">
+            <h3>What to Bring to Your First Appointment</h3>
+            <div class="checklist-box">
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Valid government-issued photo ID (Driver's License or Passport)</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Current primary &amp; secondary health insurance cards</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Complete list of all current prescription &amp; over-the-counter medications (or pill bottles)</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Recent laboratory results (creatinine, eGFR, urinalysis) &amp; kidney imaging</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Home blood pressure log (if you monitor your BP at home)</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Co-payment or deductible payment method</label>
+            </div>
+
+            <div class="policy-alert-box">
+              <h4>24-Hour Cancellation &amp; Rescheduling Policy</h4>
+              <p>
+                Please notify our office at least <strong>24 hours in advance</strong> if you need to cancel or reschedule. 
+                Missed appointments or late cancellations without 24 hours notice incur a <strong>$25 fee for established patients</strong> 
+                and a <strong>$100 fee for new patients</strong>. Arrivals more than 15 minutes late may need to be rescheduled.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-insurance">
+        <div class="two-col-cards">
+          <div class="card-white">
+            <h3>Accepted Health Insurance Plans</h3>
+            <p class="body-p">
+              Services are billed under <strong>Ahmad S. Barakzoy, M.D., LLC</strong>. We participate with most major federal, state, and commercial insurers:
+            </p>
+            <div class="insurance-grid">
+              <div class="ins-tier">
+                <strong>Medicare &amp; Medicare Advantage</strong>
+                <span>Traditional Medicare Part B, Humana, UnitedHealthcare, Aetna, BlueCross BlueShield, WellCare &amp; Devoted Health MA plans.</span>
+              </div>
+              <div class="ins-tier">
+                <strong>Medicaid Plans</strong>
+                <span>Florida Medicaid and participating Medicaid Managed Medical Assistance (MMA) plans (please verify network status when scheduling).</span>
+              </div>
+              <div class="ins-tier">
+                <strong>Commercial &amp; Military Insurance</strong>
+                <span>Florida Blue (BCBS), Aetna, Cigna, UnitedHealthcare, UMR, Ambetter, AvMed, and Tricare.</span>
+              </div>
+            </div>
+            <p class="small-note">
+              <strong>Insurance Verification &amp; Prior Authorization:</strong> Please verify in-network coverage and referral rules with your insurer prior to your visit. Our team assists with prior authorizations for specialty nephrology medications and diagnostic imaging.
+            </p>
+          </div>
+
+          <div class="card-white">
+            <h3>Billing, Self-Pay &amp; Good Faith Estimate</h3>
+            <ul class="styled-list">
+              <li><strong>Copayments &amp; Deductibles:</strong> All applicable copayments, coinsurance, and unmet deductibles are due at the time of service.</li>
+              <li><strong>Accepted Payment Methods:</strong> We accept Visa, Mastercard, American Express, Discover, HSA/FSA cards, personal checks, and cash.</li>
+              <li><strong>Self-Pay Policy:</strong> Uninsured or self-pay patients are welcome. Discounted time-of-service self-pay rates are available—please contact our billing desk prior to your visit for details.</li>
+              <li><strong>Good Faith Estimate (No Surprises Act):</strong> Uninsured or self-pay patients have the right to receive a written <em>Good Faith Estimate</em> explaining the expected total cost of scheduled non-emergency medical services before care is provided.</li>
+              <li><strong>Billing Contact Information:</strong> For statement or insurance questions, call <strong>(904) 579-3578</strong> (Mon–Fri, 8:00 AM – 5:00 PM) or email <a href="mailto:BarakzoyNephrology@gmail.com"><strong>BarakzoyNephrology@gmail.com</strong></a>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE CLINICAL TOOLS SUITE: eGFR CALCULATOR, 60-SEC QUIZ & FOOD CHECKER -->
+  <section class="section" id="interactive-tools">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Interactive Patient Utilities</span>
+        <h2>eGFR Calculator, Risk Quiz &amp; Kidney Food Checker</h2>
+        <p>Understand your lab numbers, check kidney risk factors, and look up kidney-friendly foods in seconds.</p>
+      </div>
+
+      <div class="interactive-duo-grid">
+        <!-- 1. Interactive 2021 CKD-EPI eGFR & CKD Stage Calculator -->
+        <div class="card-white">
+          <span class="tool-badge">2021 Race-Free CKD-EPI Equation</span>
+          <h3>Interactive eGFR &amp; CKD Stage Calculator</h3>
+          <p class="body-p">Enter your serum creatinine from a recent blood test (BMP/CMP) to estimate your kidney filtering rate and CKD stage.</p>
+
+          <form onsubmit="calculateEGFR(event)" class="calc-form">
+            <div class="form-row-3">
+              <div class="form-group">
+                <label for="egfrCreatinine">Creatinine (mg/dL) *</label>
+                <input type="number" id="egfrCreatinine" step="0.01" min="0.2" max="20" required placeholder="e.g., 1.35" />
+              </div>
+              <div class="form-group">
+                <label for="egfrAge">Age (Years) *</label>
+                <input type="number" id="egfrAge" min="18" max="110" required placeholder="e.g., 64" />
+              </div>
+              <div class="form-group">
+                <label for="egfrSex">Sex at Birth *</label>
+                <select id="egfrSex">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-royal btn-block">Calculate My eGFR &amp; Stage</button>
+          </form>
+
+          <div id="egfrOutput" class="calc-result-box" style="display:none;"></div>
+          <p class="calc-disclaimer">Educational estimate only. Always review your full lab trend and urine protein with Dr. Barakzoy.</p>
+        </div>
+
+        <!-- 2. 60-Second "Should I See a Nephrologist?" Self-Assessment Quiz -->
+        <div class="card-white">
+          <span class="tool-badge">60-Second Visit Readiness Check</span>
+          <h3>Should I See a Nephrologist? Quiz</h3>
+          <p class="body-p">Check any items that apply to you to generate a personalized consultation readiness guide:</p>
+
+          <form id="quizForm" onsubmit="evaluateKidneyQuiz(event)">
+            <div class="quiz-checks">
+              <label class="quiz-row"><input type="checkbox" value="eGFR below 60 or rising creatinine" /> My lab results show an <strong>eGFR below 60</strong> or rising creatinine</label>
+              <label class="quiz-row"><input type="checkbox" value="High blood pressure (especially on 2+ medications)" /> I have <strong>high blood pressure</strong> (or take 2+ BP medications)</label>
+              <label class="quiz-row"><input type="checkbox" value="Type 1 or Type 2 Diabetes" /> I have <strong>Type 1 or Type 2 Diabetes</strong></label>
+              <label class="quiz-row"><input type="checkbox" value="Protein or blood in urine" /> A doctor mentioned <strong>protein or blood in my urine</strong></label>
+              <label class="quiz-row"><input type="checkbox" value="Swelling in ankles/feet or family history of kidney disease" /> I have <strong>ankle/leg swelling</strong> or a <strong>family history of kidney failure</strong></label>
+            </div>
+            <button type="submit" class="btn btn-teal btn-block">See My Personalized Recommendation</button>
+          </form>
+
+          <div id="quizOutput" class="calc-result-box" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- 3. Kidney-Safe Food & Sodium Checker -->
+      <div class="food-checker-panel">
+        <div class="food-header-row">
+          <div>
+            <span class="eyebrow">Renal Nutrition Lookup</span>
+            <h3>Kidney-Safe Food &amp; Sodium Checker</h3>
+            <p>Search common foods to check sodium, potassium, and phosphorus friendliness—plus smart kidney-healthy swaps.</p>
+          </div>
+          <div class="food-controls">
+            <input type="text" id="foodSearchInput" placeholder="Search food (e.g., banana, chicken, rice, soda, canned soup)..." onkeyup="renderFoodList()" />
+            <div class="food-cat-pills">
+              <button class="filter-chip active" onclick="setFoodCategory('all', this)">All Foods</button>
+              <button class="filter-chip" onclick="setFoodCategory('Produce', this)">Fruits &amp; Veggies</button>
+              <button class="filter-chip" onclick="setFoodCategory('Proteins', this)">Proteins</button>
+              <button class="filter-chip" onclick="setFoodCategory('Pantry & Drinks', this)">Pantry &amp; Drinks</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-grid" id="foodGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PATIENT RESOURCES & EDUCATION + AUDIO READ-ALOUD -->
+  <section class="section section-ice" id="resources">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Patient Education Library</span>
+        <h2>Kidney Health Guides &amp; Printable Trackers</h2>
+        <p>Explore physician-reviewed guides on kidney anatomy, lab results, nutrition, and printable tracking sheets.</p>
+      </div>
+
+      <!-- Anatomical Kidney Illustration Banner -->
+      <div class="anatomy-diagram-card">
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 360 240" width="100%" height="220" role="img" aria-label="Anatomical Kidney Cross-Section Diagram">
+            <defs>
+              <linearGradient id="kidneyCortex" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1D4ED8"/>
+                <stop offset="100%" stop-color="#0D9488"/>
+              </linearGradient>
+              <linearGradient id="kidneyInner" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#DBEAFE"/>
+                <stop offset="100%" stop-color="#CCFBF1"/>
+              </linearGradient>
+            </defs>
+            <path d="M155,22 C90,22 52,68 52,120 C52,172 90,218 155,218 C192,218 212,195 212,168 C212,150 192,142 192,120 C192,98 212,90 212,72 C212,45 192,22 155,22 Z" fill="url(#kidneyCortex)" opacity="0.92"/>
+            <path d="M152,38 C102,38 72,74 72,120 C72,166 102,202 152,202 C178,202 192,184 192,164 C192,150 175,140 175,120 C175,100 192,90 192,76 C192,56 178,38 152,38 Z" fill="url(#kidneyInner)"/>
+            <path d="M110,64 L142,92 L126,104 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M90,104 L132,114 L132,126 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M108,174 L142,146 L126,134 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M188,108 L295,92" stroke="#DC2626" stroke-width="10" stroke-linecap="round"/>
+            <path d="M188,122 L295,122" stroke="#1D4ED8" stroke-width="10" stroke-linecap="round"/>
+            <path d="M185,134 Q225,145 232,225" fill="none" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
+            <text x="235" y="82" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Artery (Inflow)</text>
+            <text x="235" y="142" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Vein (Outflow)</text>
+            <text x="242" y="212" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Ureter</text>
+            <text x="16" y="34" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Cortex</text>
+          </svg>
+        </div>
+        <div class="anatomy-info">
+          <span class="eyebrow">How Your Kidneys Work</span>
+          <h3>Understanding Renal Filtration &amp; Blood Pressure</h3>
+          <p>
+            Each kidney contains roughly <strong>one million microscopic filtering units (nephrons)</strong>. Healthy kidneys filter waste products like creatinine and urea while regulating fluid volume, sodium, potassium, and blood pressure hormones. When hypertension or diabetes strains these delicate filters, early nephrology care helps protect long-term kidney function.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Educational Topic Selector + Audio Read-Aloud -->
+      <div class="edu-layout">
+        <div class="edu-sidebar" id="eduTopicList">
+          <button class="edu-topic-btn active" onclick="selectEduTopic(0, this)">1. What Do Kidneys Do?</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(1, this)">2. Understanding Chronic Kidney Disease</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(2, this)">3. CKD Stages 1–5 Educational Guide</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(3, this)">4. Understanding Creatinine &amp; eGFR</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(4, this)">5. Understanding BUN &amp; Urine Protein</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(5, this)">6. Hypertension &amp; Kidney Health</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(6, this)">7. Diabetes &amp; Kidney Disease</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(7, this)">8. Kidney-Friendly Nutrition Guide</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(8, this)">9. Medication Safety &amp; Kidney Function</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(9, this)">10. Understanding Dialysis</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(10, this)">11. Kidney Transplant Education</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(11, this)">12. Kidney Disease Prevention</button>
+        </div>
+
+        <div class="edu-reader card-white">
+          <div class="edu-reader-toolbar">
+            <span class="eyebrow">Physician-Reviewed Guide</span>
+            <button class="btn btn-teal-soft btn-sm" id="listenGuideBtn" onclick="toggleReadAloud()">🔊 Listen to Guide</button>
+          </div>
+          <div id="eduReaderContent">
+            <!-- Populated dynamically by script.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Interactive / Printable Patient Tools -->
+      <div class="tools-grid-3">
+        <div class="tool-card tilt-card">
+          <span class="tool-badge">Interactive &amp; Printable Tool</span>
+          <h4>Blood Pressure Tracking Sheet</h4>
+          <p>Record your morning and evening blood pressure readings at home and print a clean sheet for Dr. Barakzoy.</p>
+          <button class="btn btn-royal btn-sm" onclick="openToolModal('bp')">Open BP Tracker →</button>
+        </div>
+
+        <div class="tool-card tilt-card">
+          <span class="tool-badge">Interactive &amp; Printable Tool</span>
+          <h4>Personal Medication List Template</h4>
+          <p>Build and print an organized list of your prescriptions, dosages, and supplements to bring to every visit.</p>
+          <button class="btn btn-royal btn-sm" onclick="openToolModal('meds')">Open Medication Template →</button>
+        </div>
+
+        <div class="tool-card tilt-card">
+          <span class="tool-badge">Visit Preparation Guide</span>
+          <h4>Questions to Ask Your Nephrologist</h4>
+          <p>Use our guided question checklist during your consultation so you leave with complete clarity about your kidney health.</p>
+          <button class="btn btn-royal btn-sm" onclick="openToolModal('questions')">View Question Checklist →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 & 9. REFERRING PROVIDERS (WITH FAX COVER SHEET GENERATOR) & ECW PATIENT PORTAL -->
+  <section class="section section-navy" id="referring">
+    <div class="container">
+      <div class="dual-portal-grid">
+        <div class="navy-panel">
+          <span class="eyebrow-teal">For Physicians &amp; Care Teams</span>
+          <h2>Referring Providers</h2>
+          <p>
+            We value collaborative partnerships with primary care physicians, endocrinologists, cardiologists, and hospitalists. 
+            Our office ensures prompt consultation scheduling and timely clinical communication back to your practice.
+          </p>
+
+          <div class="referral-numbers">
+            <div>
+              <span>Dedicated Referral Fax</span>
+              <strong>(904) 375-8568</strong>
+            </div>
+            <div>
+              <span>Direct Referral Phone</span>
+              <strong><a href="tel:9045793578">(904) 579-3578</a></strong>
+            </div>
+          </div>
+
+          <div class="ref-details">
+            <h4>Required Referral Documentation</h4>
+            <ul>
+              <li><strong>Patient Demographics &amp; Insurance:</strong> Full name, DOB, contact number, copy of insurance cards, and HMO referral/prior authorization number (if required).</li>
+              <li><strong>Recent Laboratory Work:</strong> Basic/Comprehensive Metabolic Panel (CMP/BMP with creatinine &amp; eGFR), CBC, Urinalysis, and Urine Albumin-to-Creatinine Ratio (UACR).</li>
+              <li><strong>Imaging &amp; Clinical Notes:</strong> Recent renal/bladder ultrasound reports, current medication list, and relevant progress notes.</li>
+            </ul>
+            <p class="urgent-ref-box">
+              <strong>Urgent Referrals:</strong> For rapidly rising creatinine, severe hyperkalemia, or urgent hypertension consults, please call <strong>(904) 579-3578</strong> directly to speak with our clinical coordinator or Dr. Barakzoy.
+            </p>
+            <button class="btn btn-teal btn-block" style="margin-top:14px;" onclick="openReferralCoverModal()">
+              🖨️ Generate Printable Referral Fax Cover Sheet
+            </button>
+          </div>
+        </div>
+
+        <div class="navy-panel portal-panel" id="portal">
+          <span class="eyebrow-teal">24/7 Online Access</span>
+          <h2>eCW Patient Portal</h2>
+          <p>
+            Established patients can securely access their health information online anytime through our 
+            <strong>eClinicalWorks (eCW) / healow Patient Portal</strong>.
+          </p>
+
+          <div class="portal-features-grid">
+            <span>✓ View Lab &amp; Test Results</span>
+            <span>✓ Review Current Medications</span>
+            <span>✓ Request Prescription Refills</span>
+            <span>✓ Check Upcoming Appointments</span>
+            <span>✓ Send Non-Urgent Messages</span>
+            <span>✓ Access Clinical Summaries</span>
+            <span>✓ Update Address &amp; Phone</span>
+            <span>✓ View Billing Statements</span>
+          </div>
+
+          <div class="portal-actions">
+            <a href="https://mycw142.ecwcloud.com/" target="_blank" rel="noopener noreferrer" class="btn btn-teal btn-block">
+              Log In to eCW Patient Portal ↗
+            </a>
+          </div>
+
+          <div class="portal-reg-note">
+            <strong>Need Portal Registration?</strong> To activate your eCW Patient Portal account, provide your email address at check-in or call our front desk at <strong>(904) 579-3578</strong> to receive your secure activation link and temporary PIN.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FREQUENTLY ASKED QUESTIONS (ALL 14 QUESTIONS) -->
+  <section class="section section-ice" id="faq">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Patient Questions Answered</span>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <p>Find quick answers about appointments, insurance, lab work, dialysis, and kidney care.</p>
+      </div>
+
+      <div class="faq-search-wrap">
+        <input type="text" id="faqSearch" placeholder="Search questions (e.g., Medicare, referral, eGFR, refills, labs)..." onkeyup="filterFAQs()" />
+      </div>
+
+      <div class="faq-list" id="faqList">
+        <details class="faq-item" open>
+          <summary>1. Does the practice accept new patients?</summary>
+          <p>Yes, Dr. Barakzoy is actively accepting new patients for nephrology consultations, chronic kidney disease management, hypertension, and second opinions at our Orange Park office.</p>
+        </details>
+        <details class="faq-item">
+          <summary>2. Do I need a referral?</summary>
+          <p>If you have Traditional Medicare or a PPO insurance plan, you typically do not need a referral to schedule an appointment. If you have an HMO plan or Tricare Prime, your primary care provider must submit a referral before your visit.</p>
+        </details>
+        <details class="faq-item">
+          <summary>3. What should I bring to my appointment?</summary>
+          <p>Please bring a valid photo ID, your current insurance cards, a complete list of your medications (or your medication bottles), any recent lab results or kidney ultrasounds not sent by your doctor, and your copayment.</p>
+        </details>
+        <details class="faq-item">
+          <summary>4. How long are appointments?</summary>
+          <p>New patient consultations generally take 30 to 45 minutes so Dr. Barakzoy can thoroughly review your medical history, labs, and imaging. Established follow-up visits typically take 15 to 20 minutes.</p>
+        </details>
+        <details class="faq-item">
+          <summary>5. Which insurance plans are accepted?</summary>
+          <p>We accept Medicare, Medicare Advantage plans, Florida Medicaid plans, Florida Blue (BCBS), Aetna, Cigna, UnitedHealthcare, Humana, WellCare, Ambetter, AvMed, and Tricare. Please call our office to confirm your specific plan network.</p>
+        </details>
+        <details class="faq-item">
+          <summary>6. Does the practice accept Medicare and Medicaid?</summary>
+          <p>Yes, we accept Traditional Medicare Part B, most Medicare Advantage plans, and Florida Medicaid / Medicaid Managed Care plans.</p>
+        </details>
+        <details class="faq-item">
+          <summary>7. What does a nephrologist treat?</summary>
+          <p>A nephrologist is a medical specialist trained in diagnosing and treating kidney diseases, high blood pressure (hypertension), fluid and electrolyte imbalances, protein or blood in the urine, diabetic kidney disease, dialysis care, and kidney transplant follow-up.</p>
+        </details>
+        <details class="faq-item">
+          <summary>8. What does a low eGFR mean?</summary>
+          <p>Estimated Glomerular Filtration Rate (eGFR) measures how well your kidneys filter waste from your blood. A lower eGFR indicates reduced kidney filtering capacity, which Dr. Barakzoy evaluates alongside urine protein, blood pressure, and trends over time to protect your remaining kidney function.</p>
+        </details>
+        <details class="faq-item">
+          <summary>9. Does the practice treat dialysis patients?</summary>
+          <p>Yes. Dr. Barakzoy manages patients on both hemodialysis and peritoneal dialysis and rounds regularly at Fresenius Kidney Care and DaVita Dialysis Centers throughout Orange Park, Clay County, and Jacksonville.</p>
+        </details>
+        <details class="faq-item">
+          <summary>10. Does the practice manage transplant patients?</summary>
+          <p>Yes, we evaluate patients for pre-transplant nephrology referrals and provide long-term post-transplant medical and blood pressure follow-up in coordination with regional transplant centers.</p>
+        </details>
+        <details class="faq-item">
+          <summary>11. Do I need laboratory work before my appointment?</summary>
+          <p>If you have had blood or urine tests within the past 3 months, we will review those results. If updated labs are needed prior to your consultation, our staff will notify you when confirming your appointment.</p>
+        </details>
+        <details class="faq-item">
+          <summary>12. How do I request medical records?</summary>
+          <p>You can download and complete our <em>Medical Records Release Authorization</em> form in the Forms section below and fax it to <strong>(904) 375-8568</strong>, or request records directly through your eCW Patient Portal.</p>
+        </details>
+        <details class="faq-item">
+          <summary>13. How do I request prescription refills?</summary>
+          <p>For the fastest turnaround, please contact your pharmacy directly and ask them to send an electronic refill request to our office, or submit a refill request through the eCW Patient Portal at least 3–5 business days before running out.</p>
+        </details>
+        <details class="faq-item">
+          <summary>14. How do I contact the office about medical questions?</summary>
+          <p>During business hours (Monday–Friday, 8:00 AM – 5:00 PM), please call <strong>(904) 579-3578</strong> to speak with our clinical staff, or send a non-urgent message via the eCW Patient Portal. For medical emergencies, always dial 911.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. DOWNLOADABLE PATIENT FORMS (ALL 9 DOCX FILES + ELECTRONIC FORM) -->
+  <section class="section" id="forms">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Paperwork &amp; Digital Intake</span>
+        <h2>Downloadable Patient Forms</h2>
+        <p>Download and fill out your Microsoft Word forms before arriving, or use our electronic pre-registration form below.</p>
+      </div>
+
+      <div class="electronic-form-banner">
+        <div>
+          <span class="badge-teal">Fastest Option</span>
+          <h3>Electronic New Patient Pre-Registration</h3>
+          <p>Prefer not to download? Complete your demographics, insurance, and visit details online to generate an instant printable summary.</p>
+        </div>
+        <button class="btn btn-teal" onclick="openElectronicFormModal()">Start Electronic Form →</button>
+      </div>
+
+      <div class="forms-grid-3">
+        <a href="assets/forms/01_New_Patient_Registration_Form.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>1. New Patient Registration Form</h4>
+          <p>Patient demographics, emergency contact, and primary insurance details.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/02_Patient_Medical_History_Form.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>2. Medical History Form</h4>
+          <p>Past medical conditions, surgeries, allergies, and family health history.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/03_Medication_List_Form.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>3. Medication List Form</h4>
+          <p>Fillable sheet for all current prescriptions, dosages, and supplements.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/04_HIPAA_Acknowledgment_and_PHI_Consent.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>4. HIPAA Acknowledgment &amp; PHI Consent</h4>
+          <p>Signed acknowledgment of receipt of our HIPAA privacy practices.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/05_Notice_of_Privacy_Practices.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>5. Notice of Privacy Practices</h4>
+          <p>Detailed explanation of how your medical information is protected and used.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/06_Financial_Policy.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>6. Financial Policy</h4>
+          <p>Insurance billing, copayment, deductible, and payment terms.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/07_Medical_Records_Release_Authorization.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>7. Medical Records Release Authorization</h4>
+          <p>Authorize release or transfer of medical records to or from our office.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/08_Appointment_Cancellation_Policy.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>8. Appointment Cancellation Policy</h4>
+          <p>24-hour notice requirements and missed appointment fee agreement.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/09_Good_Faith_Estimate_Notice.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>9. Good Faith Estimate Information</h4>
+          <p>No Surprises Act notice of rights for uninsured and self-pay patients.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. CONTACT & OFFICE INFORMATION -->
+  <section class="section section-ice" id="contact">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Location &amp; Contact</span>
+        <h2>Contact Barakzoy Nephrology</h2>
+        <p>Conveniently located in Orange Park with ground-level patient parking.</p>
+      </div>
+
+      <div class="contact-layout">
+        <div class="card-white p-0 overflow-hidden">
+          <img src="assets/images/orange-park-office.png" alt="Barakzoy Nephrology Orange Park Office Exterior" class="office-banner-img" onerror="this.style.display='none';" />
+          <div class="p-28">
+            <div class="office-status-row">
+              <span class="badge-clinical">Orange Park Primary Clinic</span>
+              <div class="contact-quick-actions">
+                <button class="link-btn-teal" onclick="downloadClinicVCard()">📲 Save to Phone</button>
+                <span>•</span>
+                <a href="https://www.google.com/search?q=Dr.+Ahmad+S.+Barakzoy+Orange+Park+FL" target="_blank" rel="noopener noreferrer" class="review-link">★ Google Review</a>
+              </div>
+            </div>
+
+            <h3>2035 Professional Center Drive, Suite A</h3>
+            <p class="city-line">Orange Park, FL 32073</p>
+
+            <div class="info-rows">
+              <div><strong>Main Telephone:</strong> <a href="tel:9045793578">(904) 579-3578</a></div>
+              <div><strong>Office &amp; Referral Fax:</strong> (904) 375-8568</div>
+              <div><strong>Practice Email:</strong> <a href="mailto:BarakzoyNephrology@gmail.com">BarakzoyNephrology@gmail.com</a></div>
+              <div><strong>Office Phone Hours:</strong> Monday – Friday, 8:00 AM – 5:00 PM</div>
+              <div><strong>Patient Appointment Hours:</strong> Monday – Friday, 9:00 AM – 5:00 PM (Sat–Sun Closed)</div>
+              <div><strong>Parking &amp; Accessibility:</strong> Free dedicated surface parking directly outside Suite A with ground-level wheelchair-accessible entry.</div>
+            </div>
+
+            <div class="emergency-strip">
+              <strong>Medical Emergencies:</strong> Do not use email or web forms for urgent medical symptoms. Dial <strong>911</strong> or go to the nearest emergency room immediately.
+            </div>
+          </div>
+
+          <iframe
+            title="Barakzoy Nephrology Google Map"
+            src="https://maps.google.com/maps?q=2035%20Professional%20Center%20Drive%20Suite%20A,%20Orange%20Park,%20FL%2032073&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            width="100%"
+            height="250"
+            style="border:0; display:block;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <div class="card-white">
+          <h3>Send a General Inquiry</h3>
+          <p class="body-p">Questions about accepted insurance, directions, or scheduling? Send a note directly to our front desk.</p>
+
+          <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+              <label for="cName">Full Name *</label>
+              <input type="text" id="cName" name="name" required placeholder="Your Full Name" />
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="cEmail">Email Address *</label>
+                <input type="email" id="cEmail" name="email" required placeholder="you@example.com" />
+              </div>
+              <div class="form-group">
+                <label for="cPhone">Telephone Number *</label>
+                <input type="tel" id="cPhone" name="phone" required placeholder="(904) 555-0199" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cSubject">Topic *</label>
+              <select id="cSubject" name="subject">
+                <option value="Appointment Request">Appointment Request</option>
+                <option value="Insurance / Billing Question">Insurance / Billing Question</option>
+                <option value="Referring Provider Inquiry">Referring Provider Inquiry</option>
+                <option value="General Office Question">General Office Question</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cMessage">Message *</label>
+              <textarea id="cMessage" name="message" rows="4" required placeholder="How may we help you?"></textarea>
+            </div>
+
+            <div class="hipaa-notice">
+              🔒 <strong>HIPAA Privacy Notice:</strong> Please do not submit sensitive personal health information (PHI), SSNs, or medical records through this general web form. Established patients should use the secure <strong>eCW Patient Portal</strong> or call <strong>(904) 579-3578</strong>.
+            </div>
+
+            <button type="submit" class="btn btn-royal btn-block" id="contactSubmitBtn">Send Message to Office</button>
+            <div class="feedback-box" id="contactFeedback" style="display:none;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. LEGAL, PRIVACY & ACCESSIBILITY FOOTER -->
+  <footer class="footer">
+    <div class="container footer-top">
+      <div>
+        <h4>Barakzoy Nephrology</h4>
+        <p class="footer-sub">Dr. Ahmad S. Barakzoy, M.D., FASN • Nephrology &amp; Hypertension</p>
+        <p class="footer-desc">
+          2035 Professional Center Drive, Suite A, Orange Park, FL 32073<br />
+          Phone: <a href="tel:9045793578">(904) 579-3578</a> • Fax: (904) 375-8568<br />
+          Email: <a href="mailto:BarakzoyNephrology@gmail.com">BarakzoyNephrology@gmail.com</a>
+        </p>
+      </div>
+
+      <div>
+        <h5>Patient Quick Links</h5>
+        <ul class="footer-links">
+          <li><a href="#physician">About Dr. Barakzoy</a></li>
+          <li><a href="#services">Conditions &amp; Services</a></li>
+          <li><a href="#interactive-tools">eGFR Calculator &amp; Food Checker</a></li>
+          <li><a href="#resources">Kidney Education &amp; Trackers</a></li>
+          <li><a href="#referring">Referring Providers</a></li>
+          <li><a href="#portal">eCW Patient Portal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Legal, Privacy &amp; Compliance</h5>
+        <ul class="footer-links">
+          <li><button class="link-btn" onclick="openLegalModal('privacy')">Website Privacy Policy</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('hipaa')">HIPAA Notice of Privacy Practices</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('terms')">Website Terms of Use</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('disclaimer')">Medical Disclaimer</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('accessibility')">Accessibility Statement</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('gfe')">Good Faith Estimate &amp; Non-Discrimination Notice</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-flex">
+        <span>© <span id="yearSpan">2026</span> Ahmad S. Barakzoy, M.D., LLC (Barakzoy Nephrology). All Rights Reserved.</span>
+        <span>Protected by HTTPS/SSL Encryption • Privacy Contact: BarakzoyNephrology@gmail.com</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: APPOINTMENT REQUEST -->
+  <div class="modal-backdrop" id="bookingModal" onclick="closeModal('bookingModal', event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('bookingModal', event, true)">×</button>
+      <span class="eyebrow">Schedule a Consultation</span>
+      <h3>Request an Appointment</h3>
+      <p class="modal-desc">Call <a href="tel:9045793578"><strong>(904) 579-3578</strong></a> for immediate scheduling or submit your request below.</p>
+      <form onsubmit="handleBookingSubmit(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="bName" required /></div>
+          <div class="form-group"><label>Callback Phone *</label><input type="tel" id="bPhone" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Visit Type *</label>
+            <select id="bType">
+              <option>New Patient Consultation</option>
+              <option>Established Patient Follow-Up</option>
+              <option>Second Opinion</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Reason / Condition</label><input type="text" id="bReason" placeholder="e.g., CKD, High Blood Pressure" /></div>
+        </div>
+        <div class="form-group"><label>Insurance Provider &amp; Preferred Days</label><input type="text" id="bNotes" placeholder="e.g., Medicare / Florida Blue, Morning visits" /></div>
+        <button type="submit" class="btn btn-royal btn-block">Submit Appointment Request</button>
+        <div class="feedback-box" id="bookingFeedback" style="display:none;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: INTERACTIVE PATIENT TOOLS -->
+  <div class="modal-backdrop" id="toolModal" onclick="closeModal('toolModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('toolModal', event, true)">×</button>
+      <div id="toolModalBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ELECTRONIC NEW PATIENT FORM -->
+  <div class="modal-backdrop" id="electronicFormModal" onclick="closeModal('electronicFormModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('electronicFormModal', event, true)">×</button>
+      <span class="eyebrow">Digital Intake</span>
+      <h3>Electronic New Patient Pre-Registration</h3>
+      <p class="modal-desc">Fill out your registration summary below and click <strong>Print Summary</strong> to bring with you at check-in.</p>
+      <form id="eIntakeForm" onsubmit="generateIntakeSummary(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="efName" required /></div>
+          <div class="form-group"><label>Date of Birth *</label><input type="date" id="efDob" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Phone Number *</label><input type="tel" id="efPhone" required /></div>
+          <div class="form-group"><label>Email Address</label><input type="email" id="efEmail" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Primary Insurance Carrier *</label><input type="text" id="efIns" required placeholder="e.g., Medicare, BCBS, Aetna" /></div>
+          <div class="form-group"><label>Referring Physician Name</label><input type="text" id="efRef" placeholder="Primary Care Doctor" /></div>
+        </div>
+        <div class="form-group"><label>Primary Reason for Nephrology Visit *</label><textarea id="efReason" rows="2" required></textarea></div>
+        <button type="submit" class="btn btn-royal">Generate Printable Pre-Registration Summary</button>
+      </form>
+      <div id="intakeSummaryOutput" class="intake-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: REFERRING PROVIDER FAX COVER SHEET GENERATOR -->
+  <div class="modal-backdrop" id="referralCoverModal" onclick="closeModal('referralCoverModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('referralCoverModal', event, true)">×</button>
+      <span class="eyebrow">Referring Clinic Utility</span>
+      <h3>Generate Referral Fax Cover Sheet</h3>
+      <p class="modal-desc">Pre-addressed to <strong>Barakzoy Nephrology — Fax: (904) 375-8568</strong>. Complete below and click <strong>Print Fax Cover Sheet</strong>.</p>
+      <form onsubmit="generateReferralCover(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="refPatientName" required /></div>
+          <div class="form-group"><label>Patient Date of Birth *</label><input type="date" id="refPatientDob" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Phone *</label><input type="tel" id="refPatientPhone" required /></div>
+          <div class="form-group"><label>Insurance Plan / Auth #</label><input type="text" id="refInsurance" placeholder="e.g., Medicare / BCBS" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Referring Provider / Clinic *</label><input type="text" id="refProviderName" required /></div>
+          <div class="form-group"><label>Referring Office Phone / Fax *</label><input type="text" id="refProviderPhone" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Urgency Level</label>
+            <select id="refUrgency">
+              <option>Routine Consultation</option>
+              <option>Urgent (Within 48–72 Hours — Please Also Call 904-579-3578)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Reason for Referral</label><input type="text" id="refNotes" placeholder="e.g., CKD Stage 3b, Resistant HTN" /></div>
+        </div>
+        <button type="submit" class="btn btn-royal">Generate Printable Fax Cover Sheet</button>
+      </form>
+      <div id="refCoverPreview" class="intake-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: LEGAL, PRIVACY & ACCESSIBILITY -->
+  <div class="modal-backdrop" id="legalModal" onclick="closeModal('legalModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('legalModal', event, true)">×</button>
+      <div id="legalModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Three.js for Interactive 3D Anatomical Kidney Model -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barakzoy Nephrology | Dr. Ahmad S. Barakzoy, M.D., FASN — Orange Park &amp; Jacksonville, FL</title>
+  <meta name="description" content="Board-certified Nephrology & Hypertension care in Orange Park, Fleming Island, and Jacksonville, FL. Dr. Ahmad S. Barakzoy, M.D., FASN. Call (904) 579-3578." />
+  <meta name="keywords" content="Nephrologist Orange Park FL, Kidney Doctor Jacksonville FL, Dr. Ahmad S. Barakzoy, Hypertension Specialist, Chronic Kidney Disease, Dialysis Care, eGFR Calculator" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Local Medical Clinic & Physician Structured Data (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalClinic",
+    "name": "Barakzoy Nephrology",
+    "medicalSpecialty": "Nephrology",
+    "telephone": "+1-904-579-3578",
+    "faxNumber": "+1-904-375-8568",
+    "email": "BarakzoyNephrology@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2035 Professional Center Drive, Suite A",
+      "addressLocality": "Orange Park",
+      "addressRegion": "FL",
+      "postalCode": "32073",
+      "addressCountry": "US"
+    },
+    "openingHours": "Mo-Fr 08:00-17:00",
+    "physician": {
+      "@type": "Physician",
+      "name": "Dr. Ahmad S. Barakzoy, M.D., FASN",
+      "medicalSpecialty": ["Nephrology", "InternalMedicine"]
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Practice Announcement Bar -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="container announcement-inner">
+      <span>
+        <strong>Practice Notice:</strong> Accepting new nephrology &amp; hypertension consultations in Orange Park and Northeast Florida. Same-week urgent provider referrals available.
+      </span>
+      <button class="announcement-close" onclick="document.getElementById('announcementBar').style.display='none'" aria-label="Dismiss announcement">×</button>
+    </div>
+  </div>
+
+  <!-- Top Utility, Accessibility & Multi-Language Bar -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-bar-left">
+        <span><strong>Office Hours:</strong> Mon–Fri 8:00 AM – 5:00 PM</span>
+        <span class="divider">|</span>
+        <span>2035 Professional Center Dr., Suite A, Orange Park, FL 32073</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="tel:9045793578" class="top-link-accent">
+          <strong>Call: (904) 579-3578</strong>
+        </a>
+        <span class="divider">|</span>
+        <div class="lang-switcher" role="group" aria-label="Language Quick Guide">
+          <button class="lang-btn active" onclick="setLanguageGuide('en', this)">EN</button>
+          <button class="lang-btn" onclick="setLanguageGuide('es', this)">ES</button>
+          <button class="lang-btn" onclick="setLanguageGuide('fa', this)">دری / فارسی</button>
+        </div>
+        <button class="a11y-btn" id="fontToggleBtn" onclick="toggleFontSize()" title="Increase Text Size">A+</button>
+        <a href="#portal" class="portal-pill">eCW Patient Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multilingual Quick-Guide Strip (Appears when ES or Dari/Persian is selected) -->
+  <div class="lang-guide-banner" id="langBanner" style="display:none;">
+    <div class="container lang-banner-inner">
+      <p id="langBannerText"></p>
+      <button class="lang-close-btn" onclick="setLanguageGuide('en', document.querySelector('.lang-btn'))">English</button>
+    </div>
+  </div>
+
+  <!-- Primary Sticky Navigation -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8M8 12h8"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Barakzoy Nephrology</span>
+          <span class="brand-sub">Dr. Ahmad S. Barakzoy, M.D., FASN</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#physician" class="nav-link">Physician</a>
+        <a href="#services" class="nav-link">Services &amp; Conditions</a>
+        <a href="#new-patients" class="nav-link">New Patients &amp; Insurance</a>
+        <a href="#interactive-tools" class="nav-link">eGFR &amp; Food Tools</a>
+        <a href="#resources" class="nav-link">Education</a>
+        <a href="#referring" class="nav-link">Referring Providers</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+        <a href="#forms" class="nav-link">Forms</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-royal btn-sm" onclick="openBookingModal()">Book Appointment</button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. HERO SECTION WITH INTERACTIVE 3D KIDNEY MODEL -->
+  <section class="hero" id="home">
+    <div class="hero-bg-grid"></div>
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="badge-clinical">
+          <span class="teal-dot"></span>
+          Nephrology &amp; Hypertension Specialist • Orange Park, FL
+        </div>
+        <h1>Precision, Board-Certified Kidney &amp; Blood Pressure Care.</h1>
+        <p class="hero-lead">
+          Welcome to <strong>Barakzoy Nephrology</strong>. Led by <strong>Dr. Ahmad S. Barakzoy, M.D., FASN</strong>, 
+          our practice provides compassionate, evidence-based evaluation and long-term management for kidney disease, 
+          resistant hypertension, electrolyte disorders, dialysis, and transplant follow-up across Orange Park, Fleming Island, and Jacksonville.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-royal btn-lg" onclick="openBookingModal()">
+            Request Appointment
+          </button>
+          <a href="#interactive-tools" class="btn btn-outline-royal btn-lg">
+            Check eGFR &amp; Kidney Risk
+          </a>
+          <button class="btn btn-teal-soft btn-lg" onclick="downloadClinicVCard()">
+            📲 Save Clinic Contact
+          </button>
+        </div>
+
+        <!-- Home Overview Cards -->
+        <div class="home-overview-grid">
+          <div class="overview-mini-card tilt-card">
+            <span class="mini-label">Accepted Insurance</span>
+            <p>Medicare, Medicare Advantage, Medicaid, BCBS, Aetna, Cigna, UnitedHealthcare, Tricare &amp; major commercial plans.</p>
+          </div>
+          <div class="overview-mini-card tilt-card">
+            <span class="mini-label">Conditions Treated</span>
+            <p>CKD (Stages 1–5), Hypertension, Diabetic Kidney Disease, AKI, ESRD, Proteinuria, Hematuria &amp; Transplant Care.</p>
+          </div>
+          <div class="overview-mini-card tilt-card">
+            <span class="mini-label">Clinic &amp; Phone Hours</span>
+            <p><strong>Phone:</strong> Mon–Fri 8:00 AM – 5:00 PM<br /><strong>Visits:</strong> Mon–Fri 9:00 AM – 5:00 PM</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive 3D Kidney Visualization Card -->
+      <div class="hero-visual">
+        <div class="kidney-3d-stage">
+          <div class="stage-header">
+            <div>
+              <span class="stage-badge">Interactive 3D Renal Model</span>
+              <h4>Human Kidney &amp; Vascular Anatomy</h4>
+            </div>
+            <span class="drag-hint">↻ Drag to Rotate</span>
+          </div>
+
+          <div id="kidney3dCanvas" class="kidney-canvas-box"></div>
+
+          <div class="stage-controls">
+            <button class="stage-btn active" onclick="setKidneyView('full', this)">Full Kidney</button>
+            <button class="stage-btn" onclick="setKidneyView('medulla', this)">Internal Medulla</button>
+            <button class="stage-btn" onclick="setKidneyView('vascular', this)">Vascular Flow</button>
+          </div>
+
+          <div class="stage-caption" id="kidneyCaption">
+            <strong>Renal Cortex &amp; Capsule:</strong> Filters ~150 quarts of blood daily through millions of microscopic nephrons to regulate blood pressure, fluid, and electrolytes.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. ABOUT THE PHYSICIAN + HOSPITAL & DIALYSIS DIRECTORY -->
+  <section class="section section-ice" id="physician">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">About the Physician</span>
+        <h2>Ahmad S. Barakzoy, M.D., FASN</h2>
+        <p>Double Board-Certified Leadership in Nephrology, Internal Medicine, and Complex Hypertension.</p>
+      </div>
+
+      <div class="physician-showcase-layout">
+        <!-- Physician Profile Card -->
+        <div class="physician-card-left tilt-card">
+          <div class="portrait-wrap">
+            <img src="assets/images/dr-barakzoy.jpeg" alt="Dr. Ahmad S. Barakzoy, M.D., FASN" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+            <div class="doctor-fallback" style="display:none;">
+              <div class="monogram">AB</div>
+              <span>Dr. Ahmad S. Barakzoy, M.D., FASN</span>
+              <small>Board Certified in Nephrology &amp; Internal Medicine</small>
+            </div>
+          </div>
+
+          <div class="portrait-meta">
+            <span class="cert-pill">Double ABIM Board Certified</span>
+            <h3>Dr. Ahmad S. Barakzoy</h3>
+            <p class="role-title">Nephrologist &amp; Hypertension Specialist</p>
+            <div class="meta-divider"></div>
+            <ul class="quick-specs">
+              <li><strong>Experience:</strong> 20+ Years Clinical Practice</li>
+              <li><strong>License:</strong> Active Florida Medical License</li>
+              <li><strong>Fellowship:</strong> Fellow, American Society of Nephrology (FASN)</li>
+              <li><strong>Languages:</strong> English, Dari/Persian, Pashto, Urdu</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Credentials, Bio & Affiliations -->
+        <div class="physician-card-right">
+          <div class="card-white mb-24">
+            <h3>Biography &amp; Philosophy of Patient Care</h3>
+            <p class="body-p">
+              Dr. Ahmad S. Barakzoy is a board-certified nephrologist and internal medicine physician serving patients across 
+              Orange Park, Fleming Island, Green Cove Springs, and the greater Jacksonville region. With over two decades of 
+              clinical experience, Dr. Barakzoy specializes in early detection and preservation of kidney function, difficult-to-control 
+              hypertension, diabetic nephropathy, electrolyte imbalances, and comprehensive dialysis care.
+            </p>
+            <blockquote class="philosophy-quote">
+              “Every patient deserves unhurried time, clear explanations of their lab results, and a treatment plan tailored to their daily life. 
+              By working closely with patients, families, primary care doctors, and dialysis teams, we aim to protect kidney health and improve quality of life at every stage.”
+              <cite>— Dr. Ahmad S. Barakzoy, M.D., FASN</cite>
+            </blockquote>
+
+            <h4>Medical Education, Residency &amp; Fellowship</h4>
+            <div class="timeline">
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Board Certifications — American Board of Internal Medicine (ABIM)</h4>
+                  <p>Certified in <strong>Nephrology</strong> and <strong>Internal Medicine</strong></p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Nephrology Fellowship</h4>
+                  <p>West Virginia University School of Medicine — Morgantown, WV</p>
+                </div>
+              </div>
+              <div class="tl-item">
+                <span class="tl-dot"></span>
+                <div>
+                  <h4>Internal Medicine Residency &amp; Doctor of Medicine (M.D.)</h4>
+                  <p>West Virginia University School of Medicine — Morgantown, WV</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Hospital & Dialysis Rounding Directory -->
+            <div class="rounding-box">
+              <div class="rounding-header">
+                <h4>Hospital &amp; Dialysis Center Rounding Directory</h4>
+                <div class="rounding-filters">
+                  <button class="filter-chip active" onclick="filterRounding('all', this)">All</button>
+                  <button class="filter-chip" onclick="filterRounding('hospital', this)">Hospitals</button>
+                  <button class="filter-chip" onclick="filterRounding('dialysis', this)">Dialysis Centers</button>
+                </div>
+              </div>
+              <div class="rounding-grid" id="roundingGrid">
+                <div class="round-item" data-type="hospital"><strong>HCA Florida Orange Park Hospital</strong><span>Inpatient Nephrology Consults • Orange Park, FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Ascension St. Vincent's (Clay, Riverside &amp; Southside)</strong><span>Inpatient Hospital Care • Northeast FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Baptist Medical Centers (Clay, Jax &amp; South)</strong><span>Inpatient Nephrology Care • Northeast FL</span></div>
+                <div class="round-item" data-type="hospital"><strong>Kindred Hospital North Florida</strong><span>Specialty Acute Care • Green Cove Springs, FL</span></div>
+                <div class="round-item" data-type="dialysis"><strong>Fresenius Kidney Care Centers</strong><span>Outpatient Hemodialysis &amp; Home Dialysis Rounding</span></div>
+                <div class="round-item" data-type="dialysis"><strong>DaVita Dialysis Centers</strong><span>Outpatient Hemodialysis &amp; Peritoneal Dialysis Care</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 & 4. CONDITIONS TREATED & MEDICAL SERVICES -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Clinical Scope of Care</span>
+        <h2>Conditions Treated &amp; Medical Services</h2>
+        <p>Comprehensive outpatient, inpatient hospital, and dialysis center nephrology care.</p>
+      </div>
+
+      <div class="conditions-showcase">
+        <div class="box-header-flex">
+          <div>
+            <h3>Conditions We Diagnose &amp; Treat</h3>
+            <p>Select any condition below to request a consultation or second opinion with Dr. Barakzoy.</p>
+          </div>
+          <button class="btn btn-royal btn-sm" onclick="openBookingModal('Nephrology Consultation')">Schedule Consultation</button>
+        </div>
+
+        <div class="conditions-grid-13">
+          <button class="cond-card tilt-card" onclick="openBookingModal('Chronic Kidney Disease (CKD) Stages 1–5')">
+            <strong>Chronic Kidney Disease (CKD), Stages 1–5</strong>
+            <span>Long-term staging, progression slowing &amp; renal protection</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('End-Stage Renal Disease (ESRD)')">
+            <strong>End-Stage Renal Disease (ESRD)</strong>
+            <span>Dialysis preparation, vascular access &amp; ongoing care</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Hypertension')">
+            <strong>Hypertension (High Blood Pressure)</strong>
+            <span>Primary, secondary &amp; medication-resistant hypertension</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Acute Kidney Injury (AKI)')">
+            <strong>Acute Kidney Injury (AKI)</strong>
+            <span>Rapid evaluation &amp; recovery of sudden kidney decline</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Proteinuria')">
+            <strong>Proteinuria</strong>
+            <span>Diagnostic workup &amp; reduction of excess urine protein</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Hematuria')">
+            <strong>Hematuria</strong>
+            <span>Microscopic &amp; visible blood in the urine evaluation</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Electrolyte Disorders')">
+            <strong>Electrolyte Disorders</strong>
+            <span>Sodium, potassium, calcium, magnesium &amp; acid-base balance</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Diabetic Kidney Disease')">
+            <strong>Diabetic Kidney Disease</strong>
+            <span>Targeted renal protection for Type 1 &amp; Type 2 diabetes</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Kidney Transplant Management')">
+            <strong>Kidney Transplant Management</strong>
+            <span>Pre-transplant referrals &amp; post-transplant medical follow-up</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Lupus Nephritis')">
+            <strong>Lupus Nephritis</strong>
+            <span>Autoimmune kidney inflammation monitoring &amp; therapy</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Glomerulonephritis')">
+            <strong>Glomerulonephritis</strong>
+            <span>Evaluation &amp; treatment of glomerular filtering disorders</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Polycystic Kidney Disease (PKD)')">
+            <strong>Polycystic Kidney Disease</strong>
+            <span>Genetic cystic kidney disease monitoring &amp; BP control</span>
+          </button>
+          <button class="cond-card tilt-card" onclick="openBookingModal('Nephrotic Syndrome')">
+            <strong>Nephrotic Syndrome</strong>
+            <span>Management of heavy protein loss, edema &amp; lipid changes</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="services-wrapper">
+        <h3 class="sub-section-title">Comprehensive Medical &amp; Clinical Services</h3>
+        <div class="services-13-grid">
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Nephrology Consultations</strong><p>Detailed initial evaluations and second opinions for kidney and blood pressure concerns.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>CKD Management</strong><p>Stage-specific protocols to slow kidney decline and prevent complications.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Hypertension Management</strong><p>Precision blood pressure optimization to protect kidneys, heart, and brain.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Kidney Function Monitoring</strong><p>Routine tracking of eGFR, serum creatinine, cystatin C, and urine albumin ratios.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Laboratory Result Review</strong><p>Clear, patient-friendly explanation of blood panels, urinalysis, and metabolic labs.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Medication Management</strong><p>Renal dose adjustments, formulary review, and avoidance of kidney-toxic drugs.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Electrolyte &amp; Fluid Management</strong><p>Correction of fluid retention (edema), hyponatremia, hyperkalemia, and acidosis.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Dialysis Management &amp; Rounding</strong><p>Regular physician rounding at Fresenius and DaVita centers across Northeast Florida.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>ESRD Management</strong><p>Comprehensive anemia, bone-mineral metabolism, and dialysis adequacy oversight.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Kidney Transplant Follow-Up</strong><p>Coordinated post-transplant medical monitoring alongside regional transplant centers.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Primary Care Coordination</strong><p>Timely consultation notes sent directly to your primary care and referring physicians.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Dialysis Center Coordination</strong><p>Direct admissions and placement assistance at convenient neighborhood dialysis units.</p></div></div>
+          <div class="srv-item"><span class="srv-check">✓</span><div><strong>Preventive Care &amp; Education</strong><p>Nutrition, sodium reduction, blood pressure tracking, and lifestyle counseling.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 & 6. NEW PATIENT INFORMATION & INSURANCE / BILLING -->
+  <section class="section section-ice" id="new-patients">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Preparing for Your Visit</span>
+        <h2>New Patient Information, Insurance &amp; Billing</h2>
+        <p>Everything you need to know before your first appointment, including coverage, referrals, and office policies.</p>
+      </div>
+
+      <div class="tab-controls">
+        <button class="tab-btn active" onclick="switchPatientTab('tab-new', this)">New Patient Guide &amp; Visit Checklist</button>
+        <button class="tab-btn" onclick="switchPatientTab('tab-insurance', this)">Insurance, Billing &amp; Good Faith Estimate</button>
+      </div>
+
+      <div class="tab-panel active" id="tab-new">
+        <div class="two-col-cards">
+          <div class="card-white">
+            <h3>Registration &amp; Appointment Instructions</h3>
+            <ul class="styled-list">
+              <li><strong>How to Register &amp; Request a Visit:</strong> Call our scheduling desk at <a href="tel:9045793578"><strong>(904) 579-3578</strong></a> or click <em>Request Appointment</em> online. New patients may download and complete our registration forms ahead of time or fill out our electronic pre-registration form.</li>
+              <li><strong>Referral Requirements:</strong> If your insurance plan (such as an HMO or Tricare Prime) requires a specialist referral, please ask your Primary Care Provider (PCP) to fax the referral and clinical notes to <strong>(904) 375-8568</strong> prior to your appointment.</li>
+              <li><strong>Laboratory &amp; Medical Records Requirements:</strong> Recent blood work (BMP/CMP, CBC), urinalysis, and any renal ultrasound reports help Dr. Barakzoy evaluate your kidneys immediately. Please request your prior records be faxed to us or bring copies with you.</li>
+              <li><strong>Arrival &amp; Check-In Instructions:</strong> Please arrive <strong>15–20 minutes early</strong> for your first visit to complete insurance verification and check-in.</li>
+              <li><strong>What to Expect at Your Visit:</strong> Your initial consultation typically lasts 30–45 minutes and includes a thorough vital signs/blood pressure check, medication review, lab interpretation, and a personalized care plan.</li>
+            </ul>
+          </div>
+
+          <div class="card-white">
+            <h3>What to Bring to Your First Appointment</h3>
+            <div class="checklist-box">
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Valid government-issued photo ID (Driver's License or Passport)</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Current primary &amp; secondary health insurance cards</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Complete list of all current prescription &amp; over-the-counter medications (or pill bottles)</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Recent laboratory results (creatinine, eGFR, urinalysis) &amp; kidney imaging</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Home blood pressure log (if you monitor your BP at home)</label>
+              <label class="check-row"><input type="checkbox" checked onclick="return false;" /> Co-payment or deductible payment method</label>
+            </div>
+
+            <div class="policy-alert-box">
+              <h4>24-Hour Cancellation &amp; Rescheduling Policy</h4>
+              <p>
+                Please notify our office at least <strong>24 hours in advance</strong> if you need to cancel or reschedule. 
+                Missed appointments or late cancellations without 24 hours notice incur a <strong>$25 fee for established patients</strong> 
+                and a <strong>$100 fee for new patients</strong>. Arrivals more than 15 minutes late may need to be rescheduled.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="tab-insurance">
+        <div class="two-col-cards">
+          <div class="card-white">
+            <h3>Accepted Health Insurance Plans</h3>
+            <p class="body-p">
+              Services are billed under <strong>Ahmad S. Barakzoy, M.D., LLC</strong>. We participate with most major federal, state, and commercial insurers:
+            </p>
+            <div class="insurance-grid">
+              <div class="ins-tier">
+                <strong>Medicare &amp; Medicare Advantage</strong>
+                <span>Traditional Medicare Part B, Humana, UnitedHealthcare, Aetna, BlueCross BlueShield, WellCare &amp; Devoted Health MA plans.</span>
+              </div>
+              <div class="ins-tier">
+                <strong>Medicaid Plans</strong>
+                <span>Florida Medicaid and participating Medicaid Managed Medical Assistance (MMA) plans (please verify network status when scheduling).</span>
+              </div>
+              <div class="ins-tier">
+                <strong>Commercial &amp; Military Insurance</strong>
+                <span>Florida Blue (BCBS), Aetna, Cigna, UnitedHealthcare, UMR, Ambetter, AvMed, and Tricare.</span>
+              </div>
+            </div>
+            <p class="small-note">
+              <strong>Insurance Verification &amp; Prior Authorization:</strong> Please verify in-network coverage and referral rules with your insurer prior to your visit. Our team assists with prior authorizations for specialty nephrology medications and diagnostic imaging.
+            </p>
+          </div>
+
+          <div class="card-white">
+            <h3>Billing, Self-Pay &amp; Good Faith Estimate</h3>
+            <ul class="styled-list">
+              <li><strong>Copayments &amp; Deductibles:</strong> All applicable copayments, coinsurance, and unmet deductibles are due at the time of service.</li>
+              <li><strong>Accepted Payment Methods:</strong> We accept Visa, Mastercard, American Express, Discover, HSA/FSA cards, personal checks, and cash.</li>
+              <li><strong>Self-Pay Policy:</strong> Uninsured or self-pay patients are welcome. Discounted time-of-service self-pay rates are available—please contact our billing desk prior to your visit for details.</li>
+              <li><strong>Good Faith Estimate (No Surprises Act):</strong> Uninsured or self-pay patients have the right to receive a written <em>Good Faith Estimate</em> explaining the expected total cost of scheduled non-emergency medical services before care is provided.</li>
+              <li><strong>Billing Contact Information:</strong> For statement or insurance questions, call <strong>(904) 579-3578</strong> (Mon–Fri, 8:00 AM – 5:00 PM) or email <a href="mailto:BarakzoyNephrology@gmail.com"><strong>BarakzoyNephrology@gmail.com</strong></a>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE CLINICAL TOOLS SUITE: eGFR CALCULATOR, 60-SEC QUIZ & FOOD CHECKER -->
+  <section class="section" id="interactive-tools">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Interactive Patient Utilities</span>
+        <h2>eGFR Calculator, Risk Quiz &amp; Kidney Food Checker</h2>
+        <p>Understand your lab numbers, check kidney risk factors, and look up kidney-friendly foods in seconds.</p>
+      </div>
+
+      <div class="interactive-duo-grid">
+        <!-- 1. Interactive 2021 CKD-EPI eGFR & CKD Stage Calculator -->
+        <div class="card-white">
+          <span class="tool-badge">2021 Race-Free CKD-EPI Equation</span>
+          <h3>Interactive eGFR &amp; CKD Stage Calculator</h3>
+          <p class="body-p">Enter your serum creatinine from a recent blood test (BMP/CMP) to estimate your kidney filtering rate and CKD stage.</p>
+
+          <form onsubmit="calculateEGFR(event)" class="calc-form">
+            <div class="form-row-3">
+              <div class="form-group">
+                <label for="egfrCreatinine">Creatinine (mg/dL) *</label>
+                <input type="number" id="egfrCreatinine" step="0.01" min="0.2" max="20" required placeholder="e.g., 1.35" />
+              </div>
+              <div class="form-group">
+                <label for="egfrAge">Age (Years) *</label>
+                <input type="number" id="egfrAge" min="18" max="110" required placeholder="e.g., 64" />
+              </div>
+              <div class="form-group">
+                <label for="egfrSex">Sex at Birth *</label>
+                <select id="egfrSex">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-royal btn-block">Calculate My eGFR &amp; Stage</button>
+          </form>
+
+          <div id="egfrOutput" class="calc-result-box" style="display:none;"></div>
+          <p class="calc-disclaimer">Educational estimate only. Always review your full lab trend and urine protein with Dr. Barakzoy.</p>
+        </div>
+
+        <!-- 2. 60-Second "Should I See a Nephrologist?" Self-Assessment Quiz -->
+        <div class="card-white">
+          <span class="tool-badge">60-Second Visit Readiness Check</span>
+          <h3>Should I See a Nephrologist? Quiz</h3>
+          <p class="body-p">Check any items that apply to you to generate a personalized consultation readiness guide:</p>
+
+          <form id="quizForm" onsubmit="evaluateKidneyQuiz(event)">
+            <div class="quiz-checks">
+              <label class="quiz-row"><input type="checkbox" value="eGFR below 60 or rising creatinine" /> My lab results show an <strong>eGFR below 60</strong> or rising creatinine</label>
+              <label class="quiz-row"><input type="checkbox" value="High blood pressure (especially on 2+ medications)" /> I have <strong>high blood pressure</strong> (or take 2+ BP medications)</label>
+              <label class="quiz-row"><input type="checkbox" value="Type 1 or Type 2 Diabetes" /> I have <strong>Type 1 or Type 2 Diabetes</strong></label>
+              <label class="quiz-row"><input type="checkbox" value="Protein or blood in urine" /> A doctor mentioned <strong>protein or blood in my urine</strong></label>
+              <label class="quiz-row"><input type="checkbox" value="Swelling in ankles/feet or family history of kidney disease" /> I have <strong>ankle/leg swelling</strong> or a <strong>family history of kidney failure</strong></label>
+            </div>
+            <button type="submit" class="btn btn-teal btn-block">See My Personalized Recommendation</button>
+          </form>
+
+          <div id="quizOutput" class="calc-result-box" style="display:none;"></div>
+        </div>
+      </div>
+
+      <!-- 3. Kidney-Safe Food & Sodium Checker -->
+      <div class="food-checker-panel">
+        <div class="food-header-row">
+          <div>
+            <span class="eyebrow">Renal Nutrition Lookup</span>
+            <h3>Kidney-Safe Food &amp; Sodium Checker</h3>
+            <p>Search common foods to check sodium, potassium, and phosphorus friendliness—plus smart kidney-healthy swaps.</p>
+          </div>
+          <div class="food-controls">
+            <input type="text" id="foodSearchInput" placeholder="Search food (e.g., banana, chicken, rice, soda, canned soup)..." onkeyup="renderFoodList()" />
+            <div class="food-cat-pills">
+              <button class="filter-chip active" onclick="setFoodCategory('all', this)">All Foods</button>
+              <button class="filter-chip" onclick="setFoodCategory('Produce', this)">Fruits &amp; Veggies</button>
+              <button class="filter-chip" onclick="setFoodCategory('Proteins', this)">Proteins</button>
+              <button class="filter-chip" onclick="setFoodCategory('Pantry & Drinks', this)">Pantry &amp; Drinks</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="food-grid" id="foodGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. PATIENT RESOURCES & EDUCATION + AUDIO READ-ALOUD -->
+  <section class="section section-ice" id="resources">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Patient Education Library</span>
+        <h2>Kidney Health Guides &amp; Printable Trackers</h2>
+        <p>Explore physician-reviewed guides on kidney anatomy, lab results, nutrition, and printable tracking sheets.</p>
+      </div>
+
+      <!-- Anatomical Kidney Illustration Banner -->
+      <div class="anatomy-diagram-card">
+        <div class="anatomy-svg-box">
+          <svg viewBox="0 0 360 240" width="100%" height="220" role="img" aria-label="Anatomical Kidney Cross-Section Diagram">
+            <defs>
+              <linearGradient id="kidneyCortex" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1D4ED8"/>
+                <stop offset="100%" stop-color="#0D9488"/>
+              </linearGradient>
+              <linearGradient id="kidneyInner" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#DBEAFE"/>
+                <stop offset="100%" stop-color="#CCFBF1"/>
+              </linearGradient>
+            </defs>
+            <path d="M155,22 C90,22 52,68 52,120 C52,172 90,218 155,218 C192,218 212,195 212,168 C212,150 192,142 192,120 C192,98 212,90 212,72 C212,45 192,22 155,22 Z" fill="url(#kidneyCortex)" opacity="0.92"/>
+            <path d="M152,38 C102,38 72,74 72,120 C72,166 102,202 152,202 C178,202 192,184 192,164 C192,150 175,140 175,120 C175,100 192,90 192,76 C192,56 178,38 152,38 Z" fill="url(#kidneyInner)"/>
+            <path d="M110,64 L142,92 L126,104 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M90,104 L132,114 L132,126 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M108,174 L142,146 L126,134 Z" fill="#1E40AF" opacity="0.75"/>
+            <path d="M188,108 L295,92" stroke="#DC2626" stroke-width="10" stroke-linecap="round"/>
+            <path d="M188,122 L295,122" stroke="#1D4ED8" stroke-width="10" stroke-linecap="round"/>
+            <path d="M185,134 Q225,145 232,225" fill="none" stroke="#0D9488" stroke-width="9" stroke-linecap="round"/>
+            <text x="235" y="82" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Artery (Inflow)</text>
+            <text x="235" y="142" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Vein (Outflow)</text>
+            <text x="242" y="212" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Ureter</text>
+            <text x="16" y="34" fill="#0F172A" font-size="11" font-weight="700" font-family="Inter, sans-serif">Renal Cortex</text>
+          </svg>
+        </div>
+        <div class="anatomy-info">
+          <span class="eyebrow">How Your Kidneys Work</span>
+          <h3>Understanding Renal Filtration &amp; Blood Pressure</h3>
+          <p>
+            Each kidney contains roughly <strong>one million microscopic filtering units (nephrons)</strong>. Healthy kidneys filter waste products like creatinine and urea while regulating fluid volume, sodium, potassium, and blood pressure hormones. When hypertension or diabetes strains these delicate filters, early nephrology care helps protect long-term kidney function.
+          </p>
+        </div>
+      </div>
+
+      <!-- Interactive Educational Topic Selector + Audio Read-Aloud -->
+      <div class="edu-layout">
+        <div class="edu-sidebar" id="eduTopicList">
+          <button class="edu-topic-btn active" onclick="selectEduTopic(0, this)">1. What Do Kidneys Do?</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(1, this)">2. Understanding Chronic Kidney Disease</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(2, this)">3. CKD Stages 1–5 Educational Guide</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(3, this)">4. Understanding Creatinine &amp; eGFR</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(4, this)">5. Understanding BUN &amp; Urine Protein</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(5, this)">6. Hypertension &amp; Kidney Health</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(6, this)">7. Diabetes &amp; Kidney Disease</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(7, this)">8. Kidney-Friendly Nutrition Guide</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(8, this)">9. Medication Safety &amp; Kidney Function</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(9, this)">10. Understanding Dialysis</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(10, this)">11. Kidney Transplant Education</button>
+          <button class="edu-topic-btn" onclick="selectEduTopic(11, this)">12. Kidney Disease Prevention</button>
+        </div>
+
+        <div class="edu-reader card-white">
+          <div class="edu-reader-toolbar">
+            <span class="eyebrow">Physician-Reviewed Guide</span>
+            <button class="btn btn-teal-soft btn-sm" id="listenGuideBtn" onclick="toggleReadAloud()">🔊 Listen to Guide</button>
+          </div>
+          <div id="eduReaderContent">
+            <!-- Populated dynamically by script.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 Interactive / Printable Patient Tools -->
+      <div class="tools-grid-3">
+        <div class="tool-card tilt-card">
+          <span class="tool-badge">Interactive &amp; Printable Tool</span>
+          <h4>Blood Pressure Tracking Sheet</h4>
+          <p>Record your morning and evening blood pressure readings at home and print a clean sheet for Dr. Barakzoy.</p>
+          <button class="btn btn-royal btn-sm" onclick="openToolModal('bp')">Open BP Tracker →</button>
+        </div>
+
+        <div class="tool-card tilt-card">
+          <span class="tool-badge">Interactive &amp; Printable Tool</span>
+          <h4>Personal Medication List Template</h4>
+          <p>Build and print an organized list of your prescriptions, dosages, and supplements to bring to every visit.</p>
+          <button class="btn btn-royal btn-sm" onclick="openToolModal('meds')">Open Medication Template →</button>
+        </div>
+
+        <div class="tool-card tilt-card">
+          <span class="tool-badge">Visit Preparation Guide</span>
+          <h4>Questions to Ask Your Nephrologist</h4>
+          <p>Use our guided question checklist during your consultation so you leave with complete clarity about your kidney health.</p>
+          <button class="btn btn-royal btn-sm" onclick="openToolModal('questions')">View Question Checklist →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 & 9. REFERRING PROVIDERS (WITH FAX COVER SHEET GENERATOR) & ECW PATIENT PORTAL -->
+  <section class="section section-navy" id="referring">
+    <div class="container">
+      <div class="dual-portal-grid">
+        <div class="navy-panel">
+          <span class="eyebrow-teal">For Physicians &amp; Care Teams</span>
+          <h2>Referring Providers</h2>
+          <p>
+            We value collaborative partnerships with primary care physicians, endocrinologists, cardiologists, and hospitalists. 
+            Our office ensures prompt consultation scheduling and timely clinical communication back to your practice.
+          </p>
+
+          <div class="referral-numbers">
+            <div>
+              <span>Dedicated Referral Fax</span>
+              <strong>(904) 375-8568</strong>
+            </div>
+            <div>
+              <span>Direct Referral Phone</span>
+              <strong><a href="tel:9045793578">(904) 579-3578</a></strong>
+            </div>
+          </div>
+
+          <div class="ref-details">
+            <h4>Required Referral Documentation</h4>
+            <ul>
+              <li><strong>Patient Demographics &amp; Insurance:</strong> Full name, DOB, contact number, copy of insurance cards, and HMO referral/prior authorization number (if required).</li>
+              <li><strong>Recent Laboratory Work:</strong> Basic/Comprehensive Metabolic Panel (CMP/BMP with creatinine &amp; eGFR), CBC, Urinalysis, and Urine Albumin-to-Creatinine Ratio (UACR).</li>
+              <li><strong>Imaging &amp; Clinical Notes:</strong> Recent renal/bladder ultrasound reports, current medication list, and relevant progress notes.</li>
+            </ul>
+            <p class="urgent-ref-box">
+              <strong>Urgent Referrals:</strong> For rapidly rising creatinine, severe hyperkalemia, or urgent hypertension consults, please call <strong>(904) 579-3578</strong> directly to speak with our clinical coordinator or Dr. Barakzoy.
+            </p>
+            <button class="btn btn-teal btn-block" style="margin-top:14px;" onclick="openReferralCoverModal()">
+              🖨️ Generate Printable Referral Fax Cover Sheet
+            </button>
+          </div>
+        </div>
+
+        <div class="navy-panel portal-panel" id="portal">
+          <span class="eyebrow-teal">24/7 Online Access</span>
+          <h2>eCW Patient Portal</h2>
+          <p>
+            Established patients can securely access their health information online anytime through our 
+            <strong>eClinicalWorks (eCW) / healow Patient Portal</strong>.
+          </p>
+
+          <div class="portal-features-grid">
+            <span>✓ View Lab &amp; Test Results</span>
+            <span>✓ Review Current Medications</span>
+            <span>✓ Request Prescription Refills</span>
+            <span>✓ Check Upcoming Appointments</span>
+            <span>✓ Send Non-Urgent Messages</span>
+            <span>✓ Access Clinical Summaries</span>
+            <span>✓ Update Address &amp; Phone</span>
+            <span>✓ View Billing Statements</span>
+          </div>
+
+          <div class="portal-actions">
+            <a href="https://mycw142.ecwcloud.com/" target="_blank" rel="noopener noreferrer" class="btn btn-teal btn-block">
+              Log In to eCW Patient Portal ↗
+            </a>
+          </div>
+
+          <div class="portal-reg-note">
+            <strong>Need Portal Registration?</strong> To activate your eCW Patient Portal account, provide your email address at check-in or call our front desk at <strong>(904) 579-3578</strong> to receive your secure activation link and temporary PIN.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. FREQUENTLY ASKED QUESTIONS (ALL 14 QUESTIONS) -->
+  <section class="section section-ice" id="faq">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Patient Questions Answered</span>
+        <h2>Frequently Asked Questions (FAQ)</h2>
+        <p>Find quick answers about appointments, insurance, lab work, dialysis, and kidney care.</p>
+      </div>
+
+      <div class="faq-search-wrap">
+        <input type="text" id="faqSearch" placeholder="Search questions (e.g., Medicare, referral, eGFR, refills, labs)..." onkeyup="filterFAQs()" />
+      </div>
+
+      <div class="faq-list" id="faqList">
+        <details class="faq-item" open>
+          <summary>1. Does the practice accept new patients?</summary>
+          <p>Yes, Dr. Barakzoy is actively accepting new patients for nephrology consultations, chronic kidney disease management, hypertension, and second opinions at our Orange Park office.</p>
+        </details>
+        <details class="faq-item">
+          <summary>2. Do I need a referral?</summary>
+          <p>If you have Traditional Medicare or a PPO insurance plan, you typically do not need a referral to schedule an appointment. If you have an HMO plan or Tricare Prime, your primary care provider must submit a referral before your visit.</p>
+        </details>
+        <details class="faq-item">
+          <summary>3. What should I bring to my appointment?</summary>
+          <p>Please bring a valid photo ID, your current insurance cards, a complete list of your medications (or your medication bottles), any recent lab results or kidney ultrasounds not sent by your doctor, and your copayment.</p>
+        </details>
+        <details class="faq-item">
+          <summary>4. How long are appointments?</summary>
+          <p>New patient consultations generally take 30 to 45 minutes so Dr. Barakzoy can thoroughly review your medical history, labs, and imaging. Established follow-up visits typically take 15 to 20 minutes.</p>
+        </details>
+        <details class="faq-item">
+          <summary>5. Which insurance plans are accepted?</summary>
+          <p>We accept Medicare, Medicare Advantage plans, Florida Medicaid plans, Florida Blue (BCBS), Aetna, Cigna, UnitedHealthcare, Humana, WellCare, Ambetter, AvMed, and Tricare. Please call our office to confirm your specific plan network.</p>
+        </details>
+        <details class="faq-item">
+          <summary>6. Does the practice accept Medicare and Medicaid?</summary>
+          <p>Yes, we accept Traditional Medicare Part B, most Medicare Advantage plans, and Florida Medicaid / Medicaid Managed Care plans.</p>
+        </details>
+        <details class="faq-item">
+          <summary>7. What does a nephrologist treat?</summary>
+          <p>A nephrologist is a medical specialist trained in diagnosing and treating kidney diseases, high blood pressure (hypertension), fluid and electrolyte imbalances, protein or blood in the urine, diabetic kidney disease, dialysis care, and kidney transplant follow-up.</p>
+        </details>
+        <details class="faq-item">
+          <summary>8. What does a low eGFR mean?</summary>
+          <p>Estimated Glomerular Filtration Rate (eGFR) measures how well your kidneys filter waste from your blood. A lower eGFR indicates reduced kidney filtering capacity, which Dr. Barakzoy evaluates alongside urine protein, blood pressure, and trends over time to protect your remaining kidney function.</p>
+        </details>
+        <details class="faq-item">
+          <summary>9. Does the practice treat dialysis patients?</summary>
+          <p>Yes. Dr. Barakzoy manages patients on both hemodialysis and peritoneal dialysis and rounds regularly at Fresenius Kidney Care and DaVita Dialysis Centers throughout Orange Park, Clay County, and Jacksonville.</p>
+        </details>
+        <details class="faq-item">
+          <summary>10. Does the practice manage transplant patients?</summary>
+          <p>Yes, we evaluate patients for pre-transplant nephrology referrals and provide long-term post-transplant medical and blood pressure follow-up in coordination with regional transplant centers.</p>
+        </details>
+        <details class="faq-item">
+          <summary>11. Do I need laboratory work before my appointment?</summary>
+          <p>If you have had blood or urine tests within the past 3 months, we will review those results. If updated labs are needed prior to your consultation, our staff will notify you when confirming your appointment.</p>
+        </details>
+        <details class="faq-item">
+          <summary>12. How do I request medical records?</summary>
+          <p>You can download and complete our <em>Medical Records Release Authorization</em> form in the Forms section below and fax it to <strong>(904) 375-8568</strong>, or request records directly through your eCW Patient Portal.</p>
+        </details>
+        <details class="faq-item">
+          <summary>13. How do I request prescription refills?</summary>
+          <p>For the fastest turnaround, please contact your pharmacy directly and ask them to send an electronic refill request to our office, or submit a refill request through the eCW Patient Portal at least 3–5 business days before running out.</p>
+        </details>
+        <details class="faq-item">
+          <summary>14. How do I contact the office about medical questions?</summary>
+          <p>During business hours (Monday–Friday, 8:00 AM – 5:00 PM), please call <strong>(904) 579-3578</strong> to speak with our clinical staff, or send a non-urgent message via the eCW Patient Portal. For medical emergencies, always dial 911.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. DOWNLOADABLE PATIENT FORMS (ALL 9 DOCX FILES + ELECTRONIC FORM) -->
+  <section class="section" id="forms">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Paperwork &amp; Digital Intake</span>
+        <h2>Downloadable Patient Forms</h2>
+        <p>Download and fill out your Microsoft Word forms before arriving, or use our electronic pre-registration form below.</p>
+      </div>
+
+      <div class="electronic-form-banner">
+        <div>
+          <span class="badge-teal">Fastest Option</span>
+          <h3>Electronic New Patient Pre-Registration</h3>
+          <p>Prefer not to download? Complete your demographics, insurance, and visit details online to generate an instant printable summary.</p>
+        </div>
+        <button class="btn btn-teal" onclick="openElectronicFormModal()">Start Electronic Form →</button>
+      </div>
+
+      <div class="forms-grid-3">
+        <a href="assets/forms/01_New_Patient_Registration_Form.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>1. New Patient Registration Form</h4>
+          <p>Patient demographics, emergency contact, and primary insurance details.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/02_Patient_Medical_History_Form.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>2. Medical History Form</h4>
+          <p>Past medical conditions, surgeries, allergies, and family health history.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/03_Medication_List_Form.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>3. Medication List Form</h4>
+          <p>Fillable sheet for all current prescriptions, dosages, and supplements.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/04_HIPAA_Acknowledgment_and_PHI_Consent.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>4. HIPAA Acknowledgment &amp; PHI Consent</h4>
+          <p>Signed acknowledgment of receipt of our HIPAA privacy practices.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/05_Notice_of_Privacy_Practices.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>5. Notice of Privacy Practices</h4>
+          <p>Detailed explanation of how your medical information is protected and used.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/06_Financial_Policy.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>6. Financial Policy</h4>
+          <p>Insurance billing, copayment, deductible, and payment terms.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/07_Medical_Records_Release_Authorization.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>7. Medical Records Release Authorization</h4>
+          <p>Authorize release or transfer of medical records to or from our office.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/08_Appointment_Cancellation_Policy.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>8. Appointment Cancellation Policy</h4>
+          <p>24-hour notice requirements and missed appointment fee agreement.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+        <a href="assets/forms/09_Good_Faith_Estimate_Notice.docx" download class="pdf-card">
+          <span class="pdf-tag">DOCX</span>
+          <h4>9. Good Faith Estimate Information</h4>
+          <p>No Surprises Act notice of rights for uninsured and self-pay patients.</p>
+          <span class="pdf-action">Download Word Form ↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. CONTACT & OFFICE INFORMATION -->
+  <section class="section section-ice" id="contact">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="eyebrow">Location &amp; Contact</span>
+        <h2>Contact Barakzoy Nephrology</h2>
+        <p>Conveniently located in Orange Park with ground-level patient parking.</p>
+      </div>
+
+      <div class="contact-layout">
+        <div class="card-white p-0 overflow-hidden">
+          <img src="assets/images/orange-park-office.png" alt="Barakzoy Nephrology Orange Park Office Exterior" class="office-banner-img" onerror="this.style.display='none';" />
+          <div class="p-28">
+            <div class="office-status-row">
+              <span class="badge-clinical">Orange Park Primary Clinic</span>
+              <div class="contact-quick-actions">
+                <button class="link-btn-teal" onclick="downloadClinicVCard()">📲 Save to Phone</button>
+                <span>•</span>
+                <a href="https://www.google.com/search?q=Dr.+Ahmad+S.+Barakzoy+Orange+Park+FL" target="_blank" rel="noopener noreferrer" class="review-link">★ Google Review</a>
+              </div>
+            </div>
+
+            <h3>2035 Professional Center Drive, Suite A</h3>
+            <p class="city-line">Orange Park, FL 32073</p>
+
+            <div class="info-rows">
+              <div><strong>Main Telephone:</strong> <a href="tel:9045793578">(904) 579-3578</a></div>
+              <div><strong>Office &amp; Referral Fax:</strong> (904) 375-8568</div>
+              <div><strong>Practice Email:</strong> <a href="mailto:BarakzoyNephrology@gmail.com">BarakzoyNephrology@gmail.com</a></div>
+              <div><strong>Office Phone Hours:</strong> Monday – Friday, 8:00 AM – 5:00 PM</div>
+              <div><strong>Patient Appointment Hours:</strong> Monday – Friday, 9:00 AM – 5:00 PM (Sat–Sun Closed)</div>
+              <div><strong>Parking &amp; Accessibility:</strong> Free dedicated surface parking directly outside Suite A with ground-level wheelchair-accessible entry.</div>
+            </div>
+
+            <div class="emergency-strip">
+              <strong>Medical Emergencies:</strong> Do not use email or web forms for urgent medical symptoms. Dial <strong>911</strong> or go to the nearest emergency room immediately.
+            </div>
+          </div>
+
+          <iframe
+            title="Barakzoy Nephrology Google Map"
+            src="https://maps.google.com/maps?q=2035%20Professional%20Center%20Drive%20Suite%20A,%20Orange%20Park,%20FL%2032073&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            width="100%"
+            height="250"
+            style="border:0; display:block;"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <div class="card-white">
+          <h3>Send a General Inquiry</h3>
+          <p class="body-p">Questions about accepted insurance, directions, or scheduling? Send a note directly to our front desk.</p>
+
+          <form id="contactForm" onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+              <label for="cName">Full Name *</label>
+              <input type="text" id="cName" name="name" required placeholder="Your Full Name" />
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="cEmail">Email Address *</label>
+                <input type="email" id="cEmail" name="email" required placeholder="you@example.com" />
+              </div>
+              <div class="form-group">
+                <label for="cPhone">Telephone Number *</label>
+                <input type="tel" id="cPhone" name="phone" required placeholder="(904) 555-0199" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cSubject">Topic *</label>
+              <select id="cSubject" name="subject">
+                <option value="Appointment Request">Appointment Request</option>
+                <option value="Insurance / Billing Question">Insurance / Billing Question</option>
+                <option value="Referring Provider Inquiry">Referring Provider Inquiry</option>
+                <option value="General Office Question">General Office Question</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cMessage">Message *</label>
+              <textarea id="cMessage" name="message" rows="4" required placeholder="How may we help you?"></textarea>
+            </div>
+
+            <div class="hipaa-notice">
+              🔒 <strong>HIPAA Privacy Notice:</strong> Please do not submit sensitive personal health information (PHI), SSNs, or medical records through this general web form. Established patients should use the secure <strong>eCW Patient Portal</strong> or call <strong>(904) 579-3578</strong>.
+            </div>
+
+            <button type="submit" class="btn btn-royal btn-block" id="contactSubmitBtn">Send Message to Office</button>
+            <div class="feedback-box" id="contactFeedback" style="display:none;"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. LEGAL, PRIVACY & ACCESSIBILITY FOOTER -->
+  <footer class="footer">
+    <div class="container footer-top">
+      <div>
+        <h4>Barakzoy Nephrology</h4>
+        <p class="footer-sub">Dr. Ahmad S. Barakzoy, M.D., FASN • Nephrology &amp; Hypertension</p>
+        <p class="footer-desc">
+          2035 Professional Center Drive, Suite A, Orange Park, FL 32073<br />
+          Phone: <a href="tel:9045793578">(904) 579-3578</a> • Fax: (904) 375-8568<br />
+          Email: <a href="mailto:BarakzoyNephrology@gmail.com">BarakzoyNephrology@gmail.com</a>
+        </p>
+      </div>
+
+      <div>
+        <h5>Patient Quick Links</h5>
+        <ul class="footer-links">
+          <li><a href="#physician">About Dr. Barakzoy</a></li>
+          <li><a href="#services">Conditions &amp; Services</a></li>
+          <li><a href="#interactive-tools">eGFR Calculator &amp; Food Checker</a></li>
+          <li><a href="#resources">Kidney Education &amp; Trackers</a></li>
+          <li><a href="#referring">Referring Providers</a></li>
+          <li><a href="#portal">eCW Patient Portal</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Legal, Privacy &amp; Compliance</h5>
+        <ul class="footer-links">
+          <li><button class="link-btn" onclick="openLegalModal('privacy')">Website Privacy Policy</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('hipaa')">HIPAA Notice of Privacy Practices</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('terms')">Website Terms of Use</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('disclaimer')">Medical Disclaimer</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('accessibility')">Accessibility Statement</button></li>
+          <li><button class="link-btn" onclick="openLegalModal('gfe')">Good Faith Estimate &amp; Non-Discrimination Notice</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-flex">
+        <span>© <span id="yearSpan">2026</span> Ahmad S. Barakzoy, M.D., LLC (Barakzoy Nephrology). All Rights Reserved.</span>
+        <span>Protected by HTTPS/SSL Encryption • Privacy Contact: BarakzoyNephrology@gmail.com</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL 1: APPOINTMENT REQUEST -->
+  <div class="modal-backdrop" id="bookingModal" onclick="closeModal('bookingModal', event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('bookingModal', event, true)">×</button>
+      <span class="eyebrow">Schedule a Consultation</span>
+      <h3>Request an Appointment</h3>
+      <p class="modal-desc">Call <a href="tel:9045793578"><strong>(904) 579-3578</strong></a> for immediate scheduling or submit your request below.</p>
+      <form onsubmit="handleBookingSubmit(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="bName" required /></div>
+          <div class="form-group"><label>Callback Phone *</label><input type="tel" id="bPhone" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Visit Type *</label>
+            <select id="bType">
+              <option>New Patient Consultation</option>
+              <option>Established Patient Follow-Up</option>
+              <option>Second Opinion</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Reason / Condition</label><input type="text" id="bReason" placeholder="e.g., CKD, High Blood Pressure" /></div>
+        </div>
+        <div class="form-group"><label>Insurance Provider &amp; Preferred Days</label><input type="text" id="bNotes" placeholder="e.g., Medicare / Florida Blue, Morning visits" /></div>
+        <button type="submit" class="btn btn-royal btn-block">Submit Appointment Request</button>
+        <div class="feedback-box" id="bookingFeedback" style="display:none;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: INTERACTIVE PATIENT TOOLS -->
+  <div class="modal-backdrop" id="toolModal" onclick="closeModal('toolModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('toolModal', event, true)">×</button>
+      <div id="toolModalBody"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ELECTRONIC NEW PATIENT FORM -->
+  <div class="modal-backdrop" id="electronicFormModal" onclick="closeModal('electronicFormModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('electronicFormModal', event, true)">×</button>
+      <span class="eyebrow">Digital Intake</span>
+      <h3>Electronic New Patient Pre-Registration</h3>
+      <p class="modal-desc">Fill out your registration summary below and click <strong>Print Summary</strong> to bring with you at check-in.</p>
+      <form id="eIntakeForm" onsubmit="generateIntakeSummary(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="efName" required /></div>
+          <div class="form-group"><label>Date of Birth *</label><input type="date" id="efDob" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Phone Number *</label><input type="tel" id="efPhone" required /></div>
+          <div class="form-group"><label>Email Address</label><input type="email" id="efEmail" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Primary Insurance Carrier *</label><input type="text" id="efIns" required placeholder="e.g., Medicare, BCBS, Aetna" /></div>
+          <div class="form-group"><label>Referring Physician Name</label><input type="text" id="efRef" placeholder="Primary Care Doctor" /></div>
+        </div>
+        <div class="form-group"><label>Primary Reason for Nephrology Visit *</label><textarea id="efReason" rows="2" required></textarea></div>
+        <button type="submit" class="btn btn-royal">Generate Printable Pre-Registration Summary</button>
+      </form>
+      <div id="intakeSummaryOutput" class="intake-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: REFERRING PROVIDER FAX COVER SHEET GENERATOR -->
+  <div class="modal-backdrop" id="referralCoverModal" onclick="closeModal('referralCoverModal', event)">
+    <div class="modal-card modal-lg">
+      <button class="modal-close" onclick="closeModal('referralCoverModal', event, true)">×</button>
+      <span class="eyebrow">Referring Clinic Utility</span>
+      <h3>Generate Referral Fax Cover Sheet</h3>
+      <p class="modal-desc">Pre-addressed to <strong>Barakzoy Nephrology — Fax: (904) 375-8568</strong>. Complete below and click <strong>Print Fax Cover Sheet</strong>.</p>
+      <form onsubmit="generateReferralCover(event)">
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Full Name *</label><input type="text" id="refPatientName" required /></div>
+          <div class="form-group"><label>Patient Date of Birth *</label><input type="date" id="refPatientDob" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Patient Phone *</label><input type="tel" id="refPatientPhone" required /></div>
+          <div class="form-group"><label>Insurance Plan / Auth #</label><input type="text" id="refInsurance" placeholder="e.g., Medicare / BCBS" /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label>Referring Provider / Clinic *</label><input type="text" id="refProviderName" required /></div>
+          <div class="form-group"><label>Referring Office Phone / Fax *</label><input type="text" id="refProviderPhone" required /></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Urgency Level</label>
+            <select id="refUrgency">
+              <option>Routine Consultation</option>
+              <option>Urgent (Within 48–72 Hours — Please Also Call 904-579-3578)</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Reason for Referral</label><input type="text" id="refNotes" placeholder="e.g., CKD Stage 3b, Resistant HTN" /></div>
+        </div>
+        <button type="submit" class="btn btn-royal">Generate Printable Fax Cover Sheet</button>
+      </form>
+      <div id="refCoverPreview" class="intake-output" style="display:none;"></div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: LEGAL, PRIVACY & ACCESSIBILITY -->
   <div class="modal-backdrop" id="legalModal" onclick="closeModal('legalModal', event)">
     <div class="modal-card modal-lg">
       <button class="modal-close" onclick="closeModal('legalModal', event, true)">×</button>
