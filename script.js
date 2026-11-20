@@ -11,25 +11,299 @@ function toggleFontSize() {
   btn.textContent = document.documentElement.classList.contains('large-text') ? 'A-' : 'A+';
 }
 
-// Multi-Language Clinic Quick-Guide Switcher (EN / ES / Dari-Persian)
-function setLanguageGuide(lang, btnEl) {
+// ==========================================
+// BUILT-IN 4-LANGUAGE TRANSLATOR (EN / ES / FR / PERSIAN)
+// ==========================================
+const originalEnglishHTML = {};
+const siteTranslations = {
+  es: {
+    banner: "<strong>Idioma Español Activado:</strong> Atención especializada en riñones e hipertensión con el Dr. Ahmad S. Barakzoy en Orange Park, FL. Teléfono: <strong>(904) 579-3578</strong>.",
+    announcement: "<strong>Aviso de la Clínica:</strong> Aceptamos nuevos pacientes para consultas de nefrología e hipertensión en Orange Park y el noreste de Florida.",
+    top_hours: "<strong>Horario:</strong> Lun–Vie 8:00 AM – 5:00 PM",
+    top_call: "Llamar: (904) 579-3578",
+    top_portal: "Portal del Paciente eCW",
+    nav_home: "Inicio",
+    nav_physician: "Médico",
+    nav_services: "Servicios y Condiciones",
+    nav_patients: "Pacientes Nuevos y Seguros",
+    nav_tools: "Calculadora eGFR y Alimentos",
+    nav_education: "Educación",
+    nav_referring: "Médicos Referentes",
+    nav_faq: "Preguntas",
+    nav_forms: "Formularios",
+    nav_contact: "Contacto",
+    btn_book: "Pedir Cita",
+    hero_badge: "Especialista en Nefrología e Hipertensión • Orange Park, FL",
+    hero_title: "Cuidado Certificado y Preciso para sus Riñones y Presión Arterial.",
+    hero_lead: "Bienvenido a <strong>Barakzoy Nephrology</strong>. Dirigida por el <strong>Dr. Ahmad S. Barakzoy, M.D., FASN</strong>, nuestra clínica ofrece evaluación integral y manejo a largo plazo para enfermedad renal crónica, hipertensión resistente, trastornos electrolíticos, diálisis y seguimiento de trasplante.",
+    hero_cta_book: "Solicitar Cita",
+    hero_cta_tools: "Calcular eGFR y Riesgo Renal",
+    hero_cta_vcard: "📲 Guardar Contacto",
+    card_ins_title: "Seguros Aceptados",
+    card_ins_body: "Medicare, Medicare Advantage, Medicaid, BCBS, Aetna, Cigna, UnitedHealthcare, Tricare y planes comerciales principales.",
+    card_cond_title: "Condiciones Tratadas",
+    card_cond_body: "Enfermedad Renal Crónica (Etapas 1–5), Hipertensión, Nefropatía Diabética, Lesión Renal Aguda, Diálisis y Trasplante.",
+    card_hours_title: "Horario de Clínica",
+    card_hours_body: "<strong>Teléfono:</strong> Lun–Vie 8:00 AM – 5:00 PM<br /><strong>Consultas:</strong> Lun–Vie 9:00 AM – 5:00 PM",
+    model_badge: "Modelo Renal 3D Interactivo",
+    model_title: "Anatomía del Riñón y Flujo Vascular",
+    model_drag: "↻ Arrastre para Girar",
+    model_btn_full: "Riñón Completo",
+    model_btn_medulla: "Médula Interna",
+    model_btn_vascular: "Flujo Vascular",
+    qt1_title: "Calculadora eGFR 2021",
+    qt1_sub: "Conozca su Creatinina y Etapa",
+    qt2_title: "Cuestionario de 60 Segundos",
+    qt2_sub: "Evalúe su Salud Renal",
+    qt3_title: "Buscador de Alimentos",
+    qt3_sub: "Control de Sodio y Potasio",
+    qt4_title: "9 Formularios en Word",
+    qt4_sub: "Descargue Archivos .DOCX",
+    sec_doc_eyebrow: "Sobre el Médico",
+    sec_doc_sub: "Doble Certificación en Nefrología, Medicina Interna e Hipertensión Compleja.",
+    bio_heading: "Biografía y Filosofía de Atención al Paciente",
+    bio_text: "El Dr. Ahmad S. Barakzoy es un nefrólogo y médico internista certificado que atiende a pacientes en Orange Park, Fleming Island, Green Cove Springs y Jacksonville. Con más de 20 años de experiencia, se especializa en proteger la función renal y controlar la hipertensión.",
+    edu_heading: "Educación Médica, Residencia y Especialidad",
+    rounding_heading: "Directorio de Hospitales y Centros de Diálisis",
+    sec_srv_eyebrow: "Alcance Clínico",
+    sec_srv_title: "Condiciones Tratadas y Servicios Médicos",
+    sec_srv_sub: "Atención nefrológica integral en consultorio, hospitales y centros de diálisis.",
+    cond_box_title: "Condiciones que Diagnosticamos y Tratamos",
+    cond_box_sub: "Seleccione cualquier condición para solicitar una consulta con el Dr. Barakzoy.",
+    btn_sched_consult: "Programar Consulta",
+    srv_list_title: "Servicios Médicos y Clínicos Integrales",
+    sec_np_eyebrow: "Prepare su Visita",
+    sec_np_title: "Información para Pacientes Nuevos, Seguros y Facturación",
+    sec_np_sub: "Todo lo que necesita saber antes de su primera cita, cobertura de seguros y políticas.",
+    tab_np_guide: "Guía para Pacientes Nuevos",
+    tab_ins_guide: "Seguros y Facturación",
+    sec_tools_eyebrow: "Herramientas Interactivas",
+    sec_tools_title: "Calculadora eGFR, Cuestionario y Guía de Alimentos",
+    sec_tools_sub: "Comprenda sus resultados de laboratorio y consulte alimentos seguros para los riñones.",
+    calc_title: "Calculadora Interactiva de eGFR y Etapa Renal",
+    calc_sub: "Ingrese su creatinina sérica de un análisis de sangre reciente para estimar su función renal.",
+    calc_btn: "Calcular Mi eGFR y Etapa",
+    quiz_title: "¿Debo Consultar a un Nefrólogo? Cuestionario",
+    quiz_sub: "Marque las opciones que correspondan para generar una recomendación personalizada:",
+    quiz_btn: "Ver Mi Recomendación",
+    food_title: "Buscador de Alimentos Seguros y Sodio",
+    food_sub: "Busque alimentos comunes para verificar su contenido de sodio, potasio y fósforo.",
+    sec_edu_eyebrow: "Biblioteca Educativa",
+    sec_edu_title: "Guías de Salud Renal y Hojas de Control",
+    sec_edu_sub: "Explore guías revisadas por médicos sobre función renal, nutrición y control de presión arterial.",
+    ref_title: "Médicos Referentes",
+    portal_title: "Portal del Paciente eCW",
+    portal_btn: "Iniciar Sesión en el Portal eCW ↗",
+    faq_title: "Preguntas Frecuentes (FAQ)",
+    faq_sub: "Respuestas rápidas sobre citas, seguros, análisis de laboratorio y cuidado renal.",
+    forms_title: "Formularios Descargables para Pacientes",
+    forms_sub: "Descargue y complete sus formularios antes de llegar o use el registro electrónico.",
+    contact_title: "Contacte a Barakzoy Nephrology",
+    contact_sub: "Ubicado convenientemente en Orange Park con estacionamiento gratuito.",
+    inquiry_title: "Enviar una Consulta General"
+  },
+  fr: {
+    banner: "<strong>Langue Française Activée :</strong> Soins spécialisés des reins et de l'hypertension avec le Dr Ahmad S. Barakzoy à Orange Park, FL. Téléphone : <strong>(904) 579-3578</strong>.",
+    announcement: "<strong>Annonce du Cabinet :</strong> Nous acceptons de nouveaux patients en néphrologie et hypertension à Orange Park et dans le nord-est de la Floride.",
+    top_hours: "<strong>Horaires :</strong> Lun–Ven 8h00 – 17h00",
+    top_call: "Appeler : (904) 579-3578",
+    top_portal: "Portail Patient eCW",
+    nav_home: "Accueil",
+    nav_physician: "Médecin",
+    nav_services: "Services et Pathologies",
+    nav_patients: "Nouveaux Patients et Assurances",
+    nav_tools: "Calculateur DFGe et Alimentation",
+    nav_education: "Éducation",
+    nav_referring: "Médecins Référents",
+    nav_faq: "FAQ",
+    nav_forms: "Formulaires",
+    nav_contact: "Contact",
+    btn_book: "Prendre Rendez-vous",
+    hero_badge: "Spécialiste en Néphrologie et Hypertension • Orange Park, FL",
+    hero_title: "Soins Certifiés et Précis des Reins et de la Tension Artérielle.",
+    hero_lead: "Bienvenue chez <strong>Barakzoy Nephrology</strong>. Dirigé par le <strong>Dr Ahmad S. Barakzoy, M.D., FASN</strong>, notre cabinet assure l'évaluation complète et le suivi des maladies rénales, de l'hypertension résistante, des troubles électrolytiques, de la dialyse et des greffes.",
+    hero_cta_book: "Demander un Rendez-vous",
+    hero_cta_tools: "Calculer le DFGe et le Risque",
+    hero_cta_vcard: "📲 Enregistrer le Contact",
+    card_ins_title: "Assurances Acceptées",
+    card_ins_body: "Medicare, Medicare Advantage, Medicaid, BCBS, Aetna, Cigna, UnitedHealthcare, Tricare et principales mutuelles.",
+    card_cond_title: "Pathologies Traitées",
+    card_cond_body: "Maladie Rénale Chronique (Stades 1–5), Hypertension, Néphropathie Diabétique, Insuffisance Rénale Aiguë, Dialyse et Greffe.",
+    card_hours_title: "Horaires du Cabinet",
+    card_hours_body: "<strong>Téléphone :</strong> Lun–Ven 8h00 – 17h00<br /><strong>Consultations :</strong> Lun–Ven 9h00 – 17h00",
+    model_badge: "Modèle Rénal 3D Interactif",
+    model_title: "Anatomie du Rein et Flux Vasculaire",
+    model_drag: "↻ Glisser pour Pivoter",
+    model_btn_full: "Rein Complet",
+    model_btn_medulla: "Médulla Interne",
+    model_btn_vascular: "Flux Vasculaire",
+    qt1_title: "Calculateur DFGe 2021",
+    qt1_sub: "Évaluer Créatinine et Stade",
+    qt2_title: "Quiz Rénal 60 Secondes",
+    qt2_sub: "Vérifier Vos Facteurs de Risque",
+    qt3_title: "Guide Alimentaire Rénal",
+    qt3_sub: "Recherche Sodium et Potassium",
+    qt4_title: "9 Formulaires Word",
+    qt4_sub: "Télécharger les Fichiers .DOCX",
+    sec_doc_eyebrow: "À Propos du Médecin",
+    sec_doc_sub: "Double Certification en Néphrologie, Médecine Interne et Hypertension Complexe.",
+    bio_heading: "Biographie et Philosophie de Soins",
+    bio_text: "Le Dr Ahmad S. Barakzoy est un néphrologue et interniste certifié au service des patients d'Orange Park, Fleming Island, Green Cove Springs et Jacksonville. Avec plus de 20 ans d'expérience, il se spécialise dans la préservation de la fonction rénale et le contrôle de l'hypertension.",
+    edu_heading: "Formation Médicale, Internat et Spécialisation",
+    rounding_heading: "Répertoire des Hôpitaux et Centres de Dialyse",
+    sec_srv_eyebrow: "Domaine Clinique",
+    sec_srv_title: "Pathologies Traitées et Services Médicaux",
+    sec_srv_sub: "Soins néphrologiques complets en cabinet, à l'hôpital et en centre de dialyse.",
+    cond_box_title: "Pathologies Diagnostiquées et Traitées",
+    cond_box_sub: "Sélectionnez une pathologie ci-dessous pour demander une consultation avec le Dr Barakzoy.",
+    btn_sched_consult: "Planifier une Consultation",
+    srv_list_title: "Services Médicaux et Cliniques Complets",
+    sec_np_eyebrow: "Préparer Votre Visite",
+    sec_np_title: "Nouveaux Patients, Assurances et Facturation",
+    sec_np_sub: "Tout ce qu'il faut savoir avant votre premier rendez-vous, la couverture et nos politiques.",
+    tab_np_guide: "Guide Nouveaux Patients",
+    tab_ins_guide: "Assurances et Facturation",
+    sec_tools_eyebrow: "Outils Interactifs",
+    sec_tools_title: "Calculateur DFGe, Quiz et Guide Alimentaire",
+    sec_tools_sub: "Comprenez vos analyses sanguines et vérifiez les aliments adaptés aux reins.",
+    calc_title: "Calculateur Interactif DFGe et Stade Rénal",
+    calc_sub: "Entrez votre créatinine sérique pour estimer votre débit de filtration glomérulaire.",
+    calc_btn: "Calculer Mon DFGe et Stade",
+    quiz_title: "Dois-je Consulter un Néphrologue ? Quiz",
+    quiz_sub: "Cochez les éléments qui s'appliquent à vous pour obtenir une recommandation personnalisée :",
+    quiz_btn: "Voir Ma Recommandation",
+    food_title: "Vérificateur d'Aliments et de Sodium",
+    food_sub: "Recherchez des aliments courants pour vérifier leur teneur en sodium, potassium et phosphore.",
+    sec_edu_eyebrow: "Bibliothèque Éducative",
+    sec_edu_title: "Guides de Santé Rénale et Fiches de Suivi",
+    sec_edu_sub: "Consultez nos guides médicaux sur l'anatomie rénale, la nutrition et le suivi tensionnel.",
+    ref_title: "Médecins Référents",
+    portal_title: "Portail Patient eCW",
+    portal_btn: "Connexion au Portail Patient eCW ↗",
+    faq_title: "Foire Aux Questions (FAQ)",
+    faq_sub: "Réponses rapides concernant les rendez-vous, assurances, analyses et soins rénaux.",
+    forms_title: "Formulaires Patients Téléchargeables",
+    forms_sub: "Téléchargez et remplissez vos formulaires avant votre arrivée ou utilisez la pré-inscription en ligne.",
+    contact_title: "Contacter Barakzoy Nephrology",
+    contact_sub: "Idéalement situé à Orange Park avec parking gratuit de plain-pied.",
+    inquiry_title: "Envoyer une Demande Générale"
+  },
+  fa: {
+    banner: "<strong>زبان فارسی / دری فعال شد:</strong> تشخیص و تداوی تخصصی امراض گرده و فشار خون بلند توسط داکتر احمد شاه بارکزی (FASN) در اورنج پارک، فلوریدا. شماره تماس: <strong>(904) 579-3578</strong>",
+    announcement: "<strong>اطلاعیه کلینیک:</strong> پذیرش بیماران جدید برای مشاوره نفرولوژی و فشار خون بلند در اورنج پارک و شمال شرق فلوریدا جریان دارد.",
+    top_hours: "<strong>ساعات کاری:</strong> دوشنبه تا جمعه ۸:۰۰ صبح – ۵:۰۰ عصر",
+    top_call: "تماس: (904) 579-3578",
+    top_portal: "پورتال بیماران eCW",
+    nav_home: "صفحه اصلی",
+    nav_physician: "درباره داکتر",
+    nav_services: "خدمات و بیماری‌ها",
+    nav_patients: "بیماران جدید و بیمه",
+    nav_tools: "محاسبه‌گر eGFR و رژیم غذایی",
+    nav_education: "آموزش بیماران",
+    nav_referring: "داکتران ارجاع‌دهنده",
+    nav_faq: "سوالات متداول",
+    nav_forms: "فورم‌ها",
+    nav_contact: "تماس با ما",
+    btn_book: "گرفتن نوبت",
+    hero_badge: "متخصص امراض گرده (نفرولوژی) و فشار خون • اورنج پارک، فلوریدا",
+    hero_title: "مراقبت تخصصی و دقیق امراض گرده و فشار خون بلند.",
+    hero_lead: "به کلینیک <strong>نفرولوژی بارکزی</strong> خوش آمدید. تحت نظر <strong>داکتر احمد شاه بارکزی (M.D., FASN)</strong>، ما خدمات جامع تشخیصی و درمانی برای بیماری‌های مزمن گرده، فشار خون مقاوم، اختلالات الکترولیت، دیالیز و مراقبت‌های پیوند گرده را ارائه می‌دهیم.",
+    hero_cta_book: "درخواست نوبت ویزیت",
+    hero_cta_tools: "محاسبه eGFR و ارزیابی گرده",
+    hero_cta_vcard: "📲 ذخیره شماره کلینیک",
+    card_ins_title: "بیمه‌های مورد پذیرش",
+    card_ins_body: "Medicare، Medicare Advantage، Medicaid، BCBS، Aetna، Cigna، UnitedHealthcare، Tricare و بیمه‌های معتبر.",
+    card_cond_title: "بیماری‌های تحت درمان",
+    card_cond_body: "بیماری مزمن گرده (مراحل ۱ تا ۵)، فشار خون بلند، نفروپاتی دیابتی، نارسایی حاد گرده، دیالیز و مراقبت پیوند.",
+    card_hours_title: "ساعات کاری کلینیک",
+    card_hours_body: "<strong>تلفن:</strong> دوشنبه–جمعه ۸:۰۰ صبح تا ۵:۰۰ عصر<br /><strong>ویزیت:</strong> دوشنبه–جمعه ۹:۰۰ صبح تا ۵:۰۰ عصر",
+    model_badge: "مدل سه‌بعدی تعاملی گرده",
+    model_title: "آناتومی گرده و جریان خون",
+    model_drag: "↻ برای چرخش بکشید",
+    model_btn_full: "گرده کامل",
+    model_btn_medulla: "بخش داخلی",
+    model_btn_vascular: "رگ‌های خونی",
+    qt1_title: "محاسبه‌گر eGFR 2021",
+    qt1_sub: "بررسی کراتینین و مرحله گرده",
+    qt2_title: "آزمون ۶۰ ثانیه‌ای گرده",
+    qt2_sub: "ارزیابی عوامل خطر",
+    qt3_title: "بررسی غذاهای مفید",
+    qt3_sub: "جستجوی سدیم و پتاسیم",
+    qt4_title: "۹ فورم مایکروسافت ورد",
+    qt4_sub: "دانلود فایل‌های قابل ویرایش",
+    sec_doc_eyebrow: "درباره داکتر",
+    sec_doc_sub: "دارای بورد تخصصی دوگانه در نفرولوژی، داخله عمومی و فشار خون پیچیده.",
+    bio_heading: "زندگی‌نامه و فلسفه مراقبت از بیمار",
+    bio_text: "داکتر احمد شاه بارکزی متخصص بورد نفرولوژی و داخله عمومی با بیش از ۲۰ سال تجربه کلینیکی در مناطق اورنج پارک، فلمینگ آیلند و جکسون‌ویل است که در زمینه حفظ عملکرد گرده، کنترل فشار خون و مراقبت دیالیز فعالیت می‌کند.",
+    edu_heading: "تحصیلات طبی و دوره تخصصی",
+    rounding_heading: "فهرست شفاخانه‌ها و مراکز دیالیز همکار",
+    sec_srv_eyebrow: "حوزه خدمات کلینیکی",
+    sec_srv_title: "بیماری‌های تحت درمان و خدمات طبی",
+    sec_srv_sub: "مراقبت‌های جامع نفرولوژی در کلینیک، شفاخانه و مراکز دیالیز.",
+    cond_box_title: "بیماری‌هایی که تشخیص و درمان می‌کنیم",
+    cond_box_sub: "برای درخواست مشاوره با داکتر بارکزی روی هر بیماری کلیک کنید.",
+    btn_sched_consult: "تنظیم وقت مشاوره",
+    srv_list_title: "خدمات جامع طبی و کلینیکی",
+    sec_np_eyebrow: "آمادگی برای مراجعه",
+    sec_np_title: "اطلاعات بیماران جدید، بیمه و صورت‌حساب",
+    sec_np_sub: "هر آنچه قبل از اولین نوبت ویزیت باید درباره بیمه، معرفی‌نامه و مقررات کلینیک بدانید.",
+    tab_np_guide: "راهنمای بیماران جدید",
+    tab_ins_guide: "بیمه و امور مالی",
+    sec_tools_eyebrow: "ابزارهای تعاملی بیماران",
+    sec_tools_title: "محاسبه‌گر eGFR، آزمون خطر و بررسی مواد غذایی",
+    sec_tools_sub: "نتایج آزمایش خون خود را بررسی کنید و غذاهای مناسب برای سلامت گرده را بیابید.",
+    calc_title: "محاسبه‌گر تعاملی eGFR و مرحله بیماری گرده",
+    calc_sub: "مقدار کراتینین آزمایش خون خود را وارد کنید تا میزان تصفیه گرده محاسبه شود.",
+    calc_btn: "محاسبه eGFR و مرحله گرده",
+    quiz_title: "آیا باید به متخصص گرده مراجعه کنم؟",
+    quiz_sub: "موارد مرتبط با وضعیت خود را انتخاب کنید تا راهنمای شخصی دریافت نمایید:",
+    quiz_btn: "مشاهده توصیه پزشکی",
+    food_title: "بررسی‌کننده غذاهای مفید برای گرده و سدیم",
+    food_sub: "نام غذاها را جستجو کنید تا میزان سدیم، پتاسیم و فسفر آن‌ها را ببینید.",
+    sec_edu_eyebrow: "کتابخانه آموزشی بیماران",
+    sec_edu_title: "راهنمای سلامت گرده و جدول‌های پیگیری",
+    sec_edu_sub: "مطالب آموزشی تایید شده درباره عملکرد گرده، تغذیه و کنترل فشار خون.",
+    ref_title: "داکتران ارجاع‌دهنده (Referring Providers)",
+    portal_title: "پورتال آنلاین بیماران eCW",
+    portal_btn: "ورود به پورتال بیماران eCW ↗",
+    faq_title: "سوالات متداول بیماران (FAQ)",
+    faq_sub: "پاسخ‌های سریع درباره نوبت‌دهی، بیمه، آزمایش‌ها و مراقبت‌های گرده.",
+    forms_title: "فورم‌های قابل دانلود بیماران",
+    forms_sub: "فورم‌های مایکروسافت ورد را قبل از مراجعه دانلود و تکمیل کنید یا از فورم آنلاین استفاده نمایید.",
+    contact_title: "تماس با کلینیک نفرولوژی بارکزی",
+    contact_sub: "واقع در اورنج پارک با پارکینگ رایگان هم‌سطح برای بیماران.",
+    inquiry_title: "ارسال پیام یا سوال عمومی"
+  }
+};
+
+function changeSiteLanguage(lang, btnEl) {
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   if (btnEl) btnEl.classList.add('active');
 
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === 'fa') ? 'rtl' : 'ltr';
+
   const banner = document.getElementById('langBanner');
-  const textEl = document.getElementById('langBannerText');
+  const bannerText = document.getElementById('langBannerText');
 
   if (lang === 'en') {
     banner.style.display = 'none';
-  } else if (lang === 'es') {
+  } else {
     banner.style.display = 'block';
-    textEl.dir = 'ltr';
-    textEl.innerHTML = '<strong>Barakzoy Nephrology (Español):</strong> Atención certificada de riñones e hipertensión con el Dr. Ahmad S. Barakzoy. Ubicación: 2035 Professional Center Dr., Suite A, Orange Park, FL 32073. Teléfono: <strong>(904) 579-3578</strong>. Aceptamos Medicare, Medicaid y seguros comerciales.';
-  } else if (lang === 'fa') {
-    banner.style.display = 'block';
-    textEl.dir = 'rtl';
-    textEl.innerHTML = '<strong>کلینیک نفرولوژی و فشار خون داکتر احمد شاه بارکزی (FASN):</strong> تشخیص و تداوی تخصصی امراض گرده، فشار خون بلند، دیابت و مراقبت‌های دیالیز. آدرس: 2035 Professional Center Dr., Suite A, Orange Park, FL 32073 | شماره تماس: <strong>(904) 579-3578</strong>';
+    bannerText.innerHTML = siteTranslations[lang].banner;
   }
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (!originalEnglishHTML[key]) {
+      originalEnglishHTML[key] = el.innerHTML;
+    }
+    if (lang === 'en') {
+      el.innerHTML = originalEnglishHTML[key];
+    } else if (siteTranslations[lang] && siteTranslations[lang][key]) {
+      el.innerHTML = siteTranslations[lang][key];
+    }
+  });
 }
 
 // One-Tap Save Clinic Contact (.vcf vCard Download)
@@ -294,21 +568,27 @@ function calculateEGFR(e) {
   const egfrRaw = 142 * Math.pow(Math.min(ratio, 1), alpha) * Math.pow(Math.max(ratio, 1), -1.2) * Math.pow(0.9938, age) * sexFactor;
   const egfr = Math.round(egfrRaw);
 
+  let stageNum = 1;
   let stage = "Stage 1 (Normal or High eGFR)";
   let desc = "Kidney filtering rate is 90 or above. If you have urine protein, diabetes, or high blood pressure, proactive protection is recommended.";
   if (egfr < 15) {
+    stageNum = 5;
     stage = "Stage 5 (Kidney Failure / ESRD)";
     desc = "Kidney function is below 15 mL/min. Prompt nephrology care is essential to manage symptoms and coordinate dialysis or transplant options.";
   } else if (egfr < 30) {
+    stageNum = 4;
     stage = "Stage 4 (Severe Reduction)";
     desc = "Kidney function is between 15 and 29 mL/min. Close nephrology management helps protect remaining function and plan ahead safely.";
   } else if (egfr < 45) {
+    stageNum = 3;
     stage = "Stage 3b (Moderate-to-Severe Reduction)";
     desc = "Kidney function is between 30 and 44 mL/min. Regular nephrology visits focus on blood pressure, medication safety, and anemia/bone labs.";
   } else if (egfr < 60) {
+    stageNum = 3;
     stage = "Stage 3a (Mild-to-Moderate Reduction)";
     desc = "Kidney function is between 45 and 59 mL/min. Early specialist guidance can significantly slow progression.";
   } else if (egfr < 90) {
+    stageNum = 2;
     stage = "Stage 2 (Mild Reduction)";
     desc = "Kidney function is between 60 and 89 mL/min. Evaluated alongside urine protein (UACR) and blood pressure.";
   }
@@ -319,6 +599,13 @@ function calculateEGFR(e) {
     <div class="egfr-score-row">
       <span class="egfr-big-num">eGFR: ${egfr} <small style="font-size:0.8rem;font-weight:600;">mL/min/1.73m²</small></span>
       <span class="stage-pill-tag">${stage}</span>
+    </div>
+    <div class="stage-meter">
+      <div class="stage-seg ${stageNum === 1 ? 'active' : ''}">Stage 1</div>
+      <div class="stage-seg ${stageNum === 2 ? 'active' : ''}">Stage 2</div>
+      <div class="stage-seg ${stageNum === 3 ? 'active' : ''}">Stage 3</div>
+      <div class="stage-seg ${stageNum === 4 ? 'active' : ''}">Stage 4</div>
+      <div class="stage-seg ${stageNum === 5 ? 'active' : ''}">Stage 5</div>
     </div>
     <p style="margin-bottom:10px;">${desc}</p>
     <button class="btn btn-royal btn-sm" onclick="openBookingModal('Lab Review: eGFR ${egfr} (${stage})')">
