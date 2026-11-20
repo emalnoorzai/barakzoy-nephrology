@@ -11,6 +11,64 @@ function toggleFontSize() {
   btn.textContent = document.documentElement.classList.contains('large-text') ? 'A-' : 'A+';
 }
 
+// Multi-Language Clinic Quick-Guide Switcher (EN / ES / Dari-Persian)
+function setLanguageGuide(lang, btnEl) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+
+  const banner = document.getElementById('langBanner');
+  const textEl = document.getElementById('langBannerText');
+
+  if (lang === 'en') {
+    banner.style.display = 'none';
+  } else if (lang === 'es') {
+    banner.style.display = 'block';
+    textEl.dir = 'ltr';
+    textEl.innerHTML = '<strong>Barakzoy Nephrology (Español):</strong> Atención certificada de riñones e hipertensión con el Dr. Ahmad S. Barakzoy. Ubicación: 2035 Professional Center Dr., Suite A, Orange Park, FL 32073. Teléfono: <strong>(904) 579-3578</strong>. Aceptamos Medicare, Medicaid y seguros comerciales.';
+  } else if (lang === 'fa') {
+    banner.style.display = 'block';
+    textEl.dir = 'rtl';
+    textEl.innerHTML = '<strong>کلینیک نفرولوژی و فشار خون داکتر احمد شاه بارکزی (FASN):</strong> تشخیص و تداوی تخصصی امراض گرده، فشار خون بلند، دیابت و مراقبت‌های دیالیز. آدرس: 2035 Professional Center Dr., Suite A, Orange Park, FL 32073 | شماره تماس: <strong>(904) 579-3578</strong>';
+  }
+}
+
+// One-Tap Save Clinic Contact (.vcf vCard Download)
+function downloadClinicVCard() {
+  const vcard = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "N:Barakzoy;Ahmad;S.;Dr.;M.D., FASN",
+    "FN:Barakzoy Nephrology - Dr. Ahmad S. Barakzoy",
+    "ORG:Barakzoy Nephrology",
+    "TITLE:Board-Certified Nephrologist & Hypertension Specialist",
+    "TEL;TYPE=WORK,VOICE:+19045793578",
+    "TEL;TYPE=WORK,FAX:+19043758568",
+    "EMAIL;TYPE=PREF,INTERNET:BarakzoyNephrology@gmail.com",
+    "ADR;TYPE=WORK:;;2035 Professional Center Drive Suite A;Orange Park;FL;32073;USA",
+    "URL:https://barakzoynephrology.com",
+    "END:VCARD"
+  ].join("\n");
+
+  const blob = new Blob([vcard], { type: "text/vcard;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Barakzoy_Nephrology_Contact.vcf";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Hospital & Dialysis Center Rounding Filter
+function filterRounding(type, btnEl) {
+  document.querySelectorAll('.rounding-filters .filter-chip').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  document.querySelectorAll('#roundingGrid .round-item').forEach(item => {
+    item.style.display = (type === 'all' || item.dataset.type === type) ? 'block' : 'none';
+  });
+}
+
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const navLinks = document.getElementById('navLinks');
@@ -54,7 +112,6 @@ function init3DKidney() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Lighting
   scene.add(new THREE.AmbientLight(0xdbeafe, 0.9));
   const keyLight = new THREE.DirectionalLight(0x5eead4, 1.8);
   keyLight.position.set(4, 5, 5);
@@ -67,25 +124,17 @@ function init3DKidney() {
   kidneyGroup = new THREE.Group();
   scene.add(kidneyGroup);
 
-  // 1. Sculpted Anatomical Bean-Shaped Kidney Shell
   const geo = new THREE.SphereGeometry(1.32, 64, 64);
   const pos = geo.attributes.position;
   for (let i = 0; i < pos.count; i++) {
     let x = pos.getX(i);
     let y = pos.getY(i);
     let z = pos.getZ(i);
-
-    // Elongate vertically & flatten anterior-posteriorly
     y *= 1.42;
     z *= 0.62;
-
-    // C-curve bean silhouette
     x -= 0.28 * Math.cos((y / 2.0) * Math.PI * 0.85);
-
-    // Medial hilum indentation on +X inner side
     const hilum = Math.exp(-(y * y) * 3.2) * Math.max(0, x + 0.15);
     x -= hilum * 0.68;
-
     pos.setXYZ(i, x, y, z);
   }
   geo.computeVertexNormals();
@@ -103,7 +152,6 @@ function init3DKidney() {
   outerMesh = new THREE.Mesh(geo, outerMat);
   kidneyGroup.add(outerMesh);
 
-  // Subtle anatomical wireframe overlay
   const wireMat = new THREE.MeshBasicMaterial({
     color: 0x5eead4,
     wireframe: true,
@@ -112,7 +160,6 @@ function init3DKidney() {
   });
   outerMesh.add(new THREE.Mesh(geo, wireMat));
 
-  // 2. Internal Renal Medullary Pyramids
   medullaGroup = new THREE.Group();
   const pyramidMat = new THREE.MeshStandardMaterial({
     color: 0x0d9488,
@@ -120,8 +167,7 @@ function init3DKidney() {
     emissiveIntensity: 0.35,
     roughness: 0.35
   });
-  const angles = [-0.95, -0.45, 0, 0.45, 0.95];
-  angles.forEach(ang => {
+  [-0.95, -0.45, 0, 0.45, 0.95].forEach(ang => {
     const pyrGeo = new THREE.ConeGeometry(0.24, 0.62, 24);
     const pyr = new THREE.Mesh(pyrGeo, pyramidMat);
     pyr.position.set(-Math.cos(ang) * 0.58 - 0.1, Math.sin(ang) * 0.92, 0);
@@ -130,7 +176,6 @@ function init3DKidney() {
   });
   kidneyGroup.add(medullaGroup);
 
-  // 3. Renal Artery, Vein & Ureter Tubes
   vascularGroup = new THREE.Group();
   const arteryCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(1.85, 0.28, 0.12),
@@ -138,11 +183,10 @@ function init3DKidney() {
     new THREE.Vector3(0.15, 0.45, 0.05),
     new THREE.Vector3(-0.35, 0.85, 0)
   ]);
-  const arteryMesh = new THREE.Mesh(
+  vascularGroup.add(new THREE.Mesh(
     new THREE.TubeGeometry(arteryCurve, 32, 0.085, 16, false),
     new THREE.MeshStandardMaterial({ color: 0xe11d48, emissive: 0x881337, roughness: 0.3 })
-  );
-  vascularGroup.add(arteryMesh);
+  ));
 
   const veinCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(1.85, 0.0, -0.1),
@@ -150,11 +194,10 @@ function init3DKidney() {
     new THREE.Vector3(0.1, -0.35, -0.04),
     new THREE.Vector3(-0.35, -0.78, 0)
   ]);
-  const veinMesh = new THREE.Mesh(
+  vascularGroup.add(new THREE.Mesh(
     new THREE.TubeGeometry(veinCurve, 32, 0.09, 16, false),
     new THREE.MeshStandardMaterial({ color: 0x3b82f6, emissive: 0x1e3a8a, roughness: 0.3 })
-  );
-  vascularGroup.add(veinMesh);
+  ));
 
   const ureterCurve = new THREE.CatmullRomCurve3([
     new THREE.Vector3(0.28, -0.12, 0),
@@ -162,14 +205,12 @@ function init3DKidney() {
     new THREE.Vector3(0.95, -1.35, 0.08),
     new THREE.Vector3(1.02, -2.05, 0.08)
   ]);
-  const ureterMesh = new THREE.Mesh(
+  vascularGroup.add(new THREE.Mesh(
     new THREE.TubeGeometry(ureterCurve, 32, 0.075, 16, false),
     new THREE.MeshStandardMaterial({ color: 0x5eead4, emissive: 0x0d9488, roughness: 0.3 })
-  );
-  vascularGroup.add(ureterMesh);
+  ));
   kidneyGroup.add(vascularGroup);
 
-  // 4. Floating Micro-Filtration Particles
   const pCount = 70;
   const pGeo = new THREE.BufferGeometry();
   const pPositions = new Float32Array(pCount * 3);
@@ -185,7 +226,6 @@ function init3DKidney() {
   );
   kidneyGroup.add(particlesMesh);
 
-  // Mouse & Touch Drag Controls
   container.addEventListener('pointerdown', e => {
     isDragging = true;
     prevMouse = { x: e.clientX, y: e.clientY };
@@ -212,9 +252,7 @@ function init3DKidney() {
 
   function animate() {
     requestAnimationFrame(animate);
-    if (!isDragging) {
-      kidneyGroup.rotation.y += 0.006;
-    }
+    if (!isDragging) kidneyGroup.rotation.y += 0.006;
     particlesMesh.rotation.y -= 0.003;
     renderer.render(scene, camera);
   }
@@ -225,7 +263,6 @@ function setKidneyView(mode, btn) {
   document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   const caption = document.getElementById('kidneyCaption');
-
   if (!outerMesh) return;
 
   if (mode === 'full') {
@@ -240,7 +277,132 @@ function setKidneyView(mode, btn) {
   }
 }
 
-window.addEventListener('DOMContentLoaded', init3DKidney);
+// ==========================================
+// 1. 2021 CKD-EPI eGFR & CKD STAGE CALCULATOR
+// ==========================================
+function calculateEGFR(e) {
+  e.preventDefault();
+  const scr = parseFloat(document.getElementById('egfrCreatinine').value);
+  const age = parseInt(document.getElementById('egfrAge').value, 10);
+  const sex = document.getElementById('egfrSex').value;
+
+  const kappa = sex === 'female' ? 0.7 : 0.9;
+  const alpha = sex === 'female' ? -0.241 : -0.302;
+  const sexFactor = sex === 'female' ? 1.012 : 1.0;
+
+  const ratio = scr / kappa;
+  const egfrRaw = 142 * Math.pow(Math.min(ratio, 1), alpha) * Math.pow(Math.max(ratio, 1), -1.2) * Math.pow(0.9938, age) * sexFactor;
+  const egfr = Math.round(egfrRaw);
+
+  let stage = "Stage 1 (Normal or High eGFR)";
+  let desc = "Kidney filtering rate is 90 or above. If you have urine protein, diabetes, or high blood pressure, proactive protection is recommended.";
+  if (egfr < 15) {
+    stage = "Stage 5 (Kidney Failure / ESRD)";
+    desc = "Kidney function is below 15 mL/min. Prompt nephrology care is essential to manage symptoms and coordinate dialysis or transplant options.";
+  } else if (egfr < 30) {
+    stage = "Stage 4 (Severe Reduction)";
+    desc = "Kidney function is between 15 and 29 mL/min. Close nephrology management helps protect remaining function and plan ahead safely.";
+  } else if (egfr < 45) {
+    stage = "Stage 3b (Moderate-to-Severe Reduction)";
+    desc = "Kidney function is between 30 and 44 mL/min. Regular nephrology visits focus on blood pressure, medication safety, and anemia/bone labs.";
+  } else if (egfr < 60) {
+    stage = "Stage 3a (Mild-to-Moderate Reduction)";
+    desc = "Kidney function is between 45 and 59 mL/min. Early specialist guidance can significantly slow progression.";
+  } else if (egfr < 90) {
+    stage = "Stage 2 (Mild Reduction)";
+    desc = "Kidney function is between 60 and 89 mL/min. Evaluated alongside urine protein (UACR) and blood pressure.";
+  }
+
+  const out = document.getElementById('egfrOutput');
+  out.style.display = 'block';
+  out.innerHTML = `
+    <div class="egfr-score-row">
+      <span class="egfr-big-num">eGFR: ${egfr} <small style="font-size:0.8rem;font-weight:600;">mL/min/1.73m²</small></span>
+      <span class="stage-pill-tag">${stage}</span>
+    </div>
+    <p style="margin-bottom:10px;">${desc}</p>
+    <button class="btn btn-royal btn-sm" onclick="openBookingModal('Lab Review: eGFR ${egfr} (${stage})')">
+      Discuss This Result With Dr. Barakzoy →
+    </button>
+  `;
+}
+
+// ==========================================
+// 2. 60-SECOND KIDNEY SELF-ASSESSMENT QUIZ
+// ==========================================
+function evaluateKidneyQuiz(e) {
+  e.preventDefault();
+  const checked = Array.from(document.querySelectorAll('#quizForm input:checked')).map(cb => cb.value);
+  const out = document.getElementById('quizOutput');
+  out.style.display = 'block';
+
+  if (checked.length === 0) {
+    out.innerHTML = `
+      <strong>Low Immediate Risk Indicators Selected</strong>
+      <p style="margin:6px 0 10px;">You did not select major kidney risk factors. Continue routine annual blood pressure and metabolic checks with your primary care physician.</p>
+      <button class="btn btn-outline-royal btn-sm" onclick="openBookingModal('Preventive Kidney Checkup')">Schedule Preventive Checkup</button>
+    `;
+  } else {
+    const summaryText = checked.join("; ");
+    out.innerHTML = `
+      <strong>Nephrology Consultation Recommended (${checked.length} Factor${checked.length > 1 ? 's' : ''} Selected)</strong>
+      <p style="margin:6px 0 8px;">Because you noted: <em>${summaryText}</em>, an evaluation with Dr. Barakzoy can help protect your kidney function.</p>
+      <p style="font-size:0.82rem; margin-bottom:10px;"><strong>What to bring:</strong> Recent CMP/BMP blood test, urinalysis, and your current blood pressure medication list.</p>
+      <button class="btn btn-royal btn-sm" onclick="openBookingModal('Self-Assessment: ${summaryText.replace(/'/g, '')}')">
+        Request Consultation With My Quiz Summary →
+      </button>
+    `;
+  }
+}
+
+// ==========================================
+// 3. KIDNEY-SAFE FOOD & SODIUM CHECKER
+// ==========================================
+const kidneyFoods = [
+  { name: "Blueberries & Strawberries", cat: "Produce", status: "Kidney-Friendly", cls: "status-safe", note: "Naturally low in sodium, potassium, and phosphorus; rich in antioxidants." },
+  { name: "Red Bell Peppers & Cauliflower", cat: "Produce", status: "Kidney-Friendly", cls: "status-safe", note: "Excellent low-potassium vegetables; roast with garlic and olive oil instead of salt." },
+  { name: "Bananas & Oranges", cat: "Produce", status: "Moderate Portion", cls: "status-mod", note: "High in potassium. Safe in early CKD unless Dr. Barakzoy advises a potassium limit." },
+  { name: "Potatoes & Tomatoes", cat: "Produce", status: "Moderate Portion", cls: "status-mod", note: "Higher potassium; leaching/boiling potatoes lowers potassium if needed." },
+  { name: "Fresh Skinless Chicken Breast", cat: "Proteins", status: "Kidney-Friendly", cls: "status-safe", note: "Clean, low-sodium lean protein. Avoid pre-seasoned or injected poultry." },
+  { name: "Egg Whites & Fresh Fish", cat: "Proteins", status: "Kidney-Friendly", cls: "status-safe", note: "High-quality protein with lower phosphorus than egg yolks or processed meats." },
+  { name: "Deli Meats, Bacon & Hot Dogs", cat: "Proteins", status: "Limit (High Sodium)", cls: "status-limit", note: "Very high in sodium and phosphate additives that raise blood pressure and strain kidneys." },
+  { name: "Water & Unsweetened Herbal Tea", cat: "Pantry & Drinks", status: "Kidney-Friendly", cls: "status-safe", note: "Best daily hydration choices unless your physician has set a fluid restriction." },
+  { name: "Dark Colas & Canned Iced Teas", cat: "Pantry & Drinks", status: "Limit (Phosphorus)", cls: "status-limit", note: "Contain phosphoric acid additives that absorb rapidly. Swap for clear sparkling water." },
+  { name: "Canned Soups & Instant Noodles", cat: "Pantry & Drinks", status: "Limit (High Sodium)", cls: "status-limit", note: "A single can often exceeds 800–1,200 mg sodium. Choose 'No Salt Added' or homemade." },
+  { name: "White Rice, Pasta & Sourdough", cat: "Pantry & Drinks", status: "Kidney-Friendly", cls: "status-safe", note: "Naturally lower in phosphorus and potassium than bran or whole-grain processed mixes." },
+  { name: "Garlic, Lemon & Herb Blends", cat: "Pantry & Drinks", status: "Kidney-Friendly", cls: "status-safe", note: "Flavor food without table salt. Avoid potassium-chloride 'salt substitutes' unless approved." }
+];
+
+let currentFoodCat = "all";
+
+function setFoodCategory(cat, btnEl) {
+  currentFoodCat = cat;
+  document.querySelectorAll('.food-cat-pills .filter-chip').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  renderFoodList();
+}
+
+function renderFoodList() {
+  const grid = document.getElementById('foodGrid');
+  if (!grid) return;
+  const q = (document.getElementById('foodSearchInput')?.value || "").toLowerCase();
+
+  const filtered = kidneyFoods.filter(item => {
+    const matchCat = currentFoodCat === "all" || item.cat === currentFoodCat;
+    const matchText = item.name.toLowerCase().includes(q) || item.note.toLowerCase().includes(q);
+    return matchCat && matchText;
+  });
+
+  grid.innerHTML = filtered.length ? filtered.map(f => `
+    <div class="food-card">
+      <div class="food-card-top">
+        <strong>${f.name}</strong>
+        <span class="food-status ${f.cls}">${f.status}</span>
+      </div>
+      <p>${f.note}</p>
+    </div>
+  `).join("") : `<p style="color:var(--text-muted);">No matching food found—try searching another ingredient.</p>`;
+}
 
 // New Patient vs Insurance Tab Switcher
 function switchPatientTab(tabId, btnEl) {
@@ -250,7 +412,7 @@ function switchPatientTab(tabId, btnEl) {
   btnEl.classList.add('active');
 }
 
-// 12 Kidney Health Educational Guides
+// 12 Kidney Health Educational Guides + Audio Read-Aloud
 const eduTopics = [
   {
     title: "1. What Do Kidneys Do?",
@@ -334,12 +496,34 @@ const eduTopics = [
 ];
 
 function selectEduTopic(index, btnEl) {
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  const listenBtn = document.getElementById('listenGuideBtn');
+  if (listenBtn) listenBtn.textContent = "🔊 Listen to Guide";
+
   document.querySelectorAll('.edu-topic-btn').forEach(b => b.classList.remove('active'));
   if (btnEl) btnEl.classList.add('active');
   const item = eduTopics[index];
   document.getElementById('eduReaderContent').innerHTML = `<h3>${item.title}</h3>${item.html}`;
 }
-selectEduTopic(0, document.querySelector('.edu-topic-btn'));
+
+function toggleReadAloud() {
+  if (!('speechSynthesis' in window)) {
+    alert("Audio read-aloud is not supported in this browser.");
+    return;
+  }
+  const btn = document.getElementById('listenGuideBtn');
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    btn.textContent = "🔊 Listen to Guide";
+    return;
+  }
+  const textToRead = document.getElementById('eduReaderContent').innerText;
+  const utterance = new SpeechSynthesisUtterance(textToRead);
+  utterance.rate = 0.95;
+  utterance.onend = () => { btn.textContent = "🔊 Listen to Guide"; };
+  btn.textContent = "⏹ Stop Reading";
+  window.speechSynthesis.speak(utterance);
+}
 
 // Interactive Patient Tools Modal
 function openToolModal(toolType) {
@@ -410,6 +594,10 @@ function openElectronicFormModal() {
   document.getElementById('electronicFormModal').classList.add('open');
 }
 
+function openReferralCoverModal() {
+  document.getElementById('referralCoverModal').classList.add('open');
+}
+
 function closeModal(id, event, force = false) {
   if (force || event.target.id === id) {
     document.getElementById(id).classList.remove('open');
@@ -428,6 +616,25 @@ function generateIntakeSummary(e) {
     <p><strong>Insurance:</strong> ${document.getElementById('efIns').value} | <strong>Referring MD:</strong> ${document.getElementById('efRef').value || 'Self-Referred'}</p>
     <p><strong>Reason for Visit:</strong> ${document.getElementById('efReason').value}</p>
     <button class="btn btn-teal btn-sm" style="margin-top:10px;" onclick="window.print()">Print Summary for Check-In</button>
+  `;
+}
+
+// Referring Provider Fax Cover Sheet Generator
+function generateReferralCover(e) {
+  e.preventDefault();
+  const out = document.getElementById('refCoverPreview');
+  out.style.display = 'block';
+  out.innerHTML = `
+    <h4>CONFIDENTIAL MEDICAL REFERRAL FAX COVER SHEET</h4>
+    <p><strong>TO:</strong> Barakzoy Nephrology — Dr. Ahmad S. Barakzoy, M.D., FASN &nbsp;|&nbsp; <strong>FAX: (904) 375-8568</strong> &nbsp;|&nbsp; Tel: (904) 579-3578</p>
+    <hr style="margin:8px 0;border:0;border-top:1px solid #93C5FD;" />
+    <p><strong>Patient Name:</strong> ${document.getElementById('refPatientName').value} &nbsp;|&nbsp; <strong>DOB:</strong> ${document.getElementById('refPatientDob').value}</p>
+    <p><strong>Patient Phone:</strong> ${document.getElementById('refPatientPhone').value} &nbsp;|&nbsp; <strong>Insurance / Auth #:</strong> ${document.getElementById('refInsurance').value || 'Attached'}</p>
+    <p><strong>Referring Provider:</strong> ${document.getElementById('refProviderName').value} (${document.getElementById('refProviderPhone').value})</p>
+    <p><strong>Urgency:</strong> ${document.getElementById('refUrgency').value}</p>
+    <p><strong>Clinical Reason:</strong> ${document.getElementById('refNotes').value || 'See attached clinical notes'}</p>
+    <p style="font-size:0.8rem;margin-top:6px;"><strong>Enclosed Checklist:</strong> [ ] Demographics &amp; Insurance Card &nbsp; [ ] CMP/BMP &amp; CBC &nbsp; [ ] Urinalysis / UACR &nbsp; [ ] Renal Ultrasound &amp; Progress Notes</p>
+    <button class="btn btn-royal btn-sm" style="margin-top:10px;" onclick="window.print()">Print Fax Cover Sheet</button>
   `;
 }
 
@@ -535,7 +742,7 @@ const legalDocs = {
   hipaa: `<h3>HIPAA Notice of Privacy Practices</h3><p>Ahmad S. Barakzoy, M.D., LLC is committed to safeguarding your Protected Health Information (PHI) in full compliance with the Health Insurance Portability and Accountability Act (HIPAA). Full printed copies of our Notice of Privacy Practices are available at our Orange Park clinic and in our Forms section.</p>`,
   terms: `<h3>Website Terms of Use</h3><p>Content on barakzoynephrology.com is provided for general informational and patient convenience purposes only. Use of this website does not establish a physician-patient relationship until an in-person or formal clinical evaluation occurs.</p>`,
   disclaimer: `<h3>Medical Disclaimer</h3><p>The educational materials on this website are not a substitute for professional medical advice, diagnosis, or treatment. Never disregard professional medical advice or delay seeking care because of something you read online. In a medical emergency, call 911 immediately.</p>`,
-  accessibility: `<h3>Accessibility Statement</h3><p>Barakzoy Nephrology strives to make our digital experience accessible to all patients, including individuals using screen readers or enlarged text (use the <strong>A+</strong> button in the top bar). If you need assistance accessing any form or information, please call <strong>(904) 579-3578</strong>.</p>`,
+  accessibility: `<h3>Accessibility Statement</h3><p>Barakzoy Nephrology strives to make our digital experience accessible to all patients, including individuals using screen readers, audio read-aloud, or enlarged text (use the <strong>A+</strong> button in the top bar). If you need assistance accessing any form or information, please call <strong>(904) 579-3578</strong>.</p>`,
   gfe: `<h3>Good Faith Estimate &amp; Non-Discrimination Notice</h3><p>Under the federal No Surprises Act, uninsured and self-pay patients have the right to request a Good Faith Estimate of expected charges prior to scheduled care. Barakzoy Nephrology complies with applicable federal civil rights laws and does not discriminate on the basis of race, color, national origin, age, disability, or sex.</p>`
 };
 
@@ -543,3 +750,10 @@ function openLegalModal(type) {
   document.getElementById('legalModalBody').innerHTML = legalDocs[type];
   document.getElementById('legalModal').classList.add('open');
 }
+
+// Initialize interactive modules on load
+window.addEventListener('DOMContentLoaded', () => {
+  init3DKidney();
+  renderFoodList();
+  selectEduTopic(0, document.querySelector('.edu-topic-btn'));
+});
