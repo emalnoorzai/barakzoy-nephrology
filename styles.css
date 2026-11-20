@@ -57,7 +57,7 @@ a {
   padding: 0 22px;
 }
 
-/* Announcement, Top Utility & Multi-Language Bar */
+/* Announcement, Top Utility & 4-Language Bar */
 .announcement-bar {
   background: linear-gradient(90deg, var(--navy-mid), var(--royal-dark));
   color: #E2E8F0;
@@ -112,8 +112,9 @@ a {
 
 .lang-switcher {
   display: inline-flex;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 7px;
   padding: 2px;
   gap: 2px;
 }
@@ -122,11 +123,16 @@ a {
   background: transparent;
   border: none;
   color: #CBD5E1;
-  font-size: 0.74rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lang-btn:hover {
+  color: #FFFFFF;
 }
 
 .lang-btn.active {
@@ -154,7 +160,7 @@ a {
   color: #FFFFFF;
   border: none;
   border-radius: 6px;
-  padding: 4px 10px;
+  padding: 5px 12px;
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
@@ -328,7 +334,7 @@ a {
 /* Hero & 3D Kidney Stage */
 .hero {
   position: relative;
-  padding: 58px 0 74px;
+  padding: 58px 0 64px;
   background: radial-gradient(circle at 85% 20%, rgba(13, 148, 136, 0.08), transparent 45%),
               linear-gradient(180deg, #EEF5FD 0%, #FFFFFF 100%);
   overflow: hidden;
@@ -419,6 +425,52 @@ a {
   font-size: 0.82rem;
   color: var(--text-muted);
   line-height: 1.45;
+}
+
+/* Quick-Launch Clinical Strip */
+.quick-strip {
+  background: var(--navy);
+  padding: 18px 0;
+  border-top: 2px solid var(--teal);
+}
+
+.quick-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.quick-tile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(94, 234, 212, 0.22);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #FFFFFF;
+  transition: all 0.2s;
+}
+
+.quick-tile:hover {
+  background: rgba(29, 78, 216, 0.35);
+  border-color: #5EEAD4;
+  transform: translateY(-2px);
+}
+
+.qt-icon {
+  font-size: 1.5rem;
+}
+
+.quick-tile strong {
+  display: block;
+  font-size: 0.88rem;
+  color: #5EEAD4;
+}
+
+.quick-tile span {
+  font-size: 0.76rem;
+  color: #CBD5E1;
 }
 
 /* 3D Kidney Stage Card */
@@ -583,7 +635,7 @@ a {
 .overflow-hidden { overflow: hidden; }
 .mb-24 { margin-bottom: 24px; }
 
-/* Physician Showcase (With Top-Anchored Portrait Framing) */
+/* Physician Showcase (Full-Head Top-Anchored Portrait Framing) */
 .physician-showcase-layout {
   display: grid;
   grid-template-columns: 0.78fr 1.22fr;
@@ -1011,7 +1063,9 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .egfr-big-num {
@@ -1028,6 +1082,28 @@ a {
   font-size: 0.78rem;
   padding: 4px 10px;
   border-radius: 999px;
+}
+
+.stage-meter {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.stage-seg {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 2px;
+  border-radius: 6px;
+  background: #E2E8F0;
+  color: #475569;
+}
+
+.stage-seg.active {
+  background: var(--royal);
+  color: #FFFFFF;
 }
 
 .calc-disclaimer {
@@ -1631,7 +1707,7 @@ input, select, textarea {
   .hero-grid, .physician-showcase-layout, .two-col-cards, .interactive-duo-grid, .anatomy-diagram-card, .edu-layout, .dual-portal-grid, .contact-layout, .footer-top {
     grid-template-columns: 1fr;
   }
-  .home-overview-grid, .tools-grid-3, .forms-grid-3, .rounding-grid {
+  .home-overview-grid, .quick-strip-grid, .tools-grid-3, .forms-grid-3, .rounding-grid {
     grid-template-columns: 1fr;
   }
 }
